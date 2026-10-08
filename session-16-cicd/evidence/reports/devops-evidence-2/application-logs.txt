@@ -1,0 +1,5 @@
+{"timestamp":"2026-10-08T15:32:49.637Z","traceId":"1513587d-35f1-493e-ba01-bc80baeb426f","method":"GET","path":"/healthz","status":200}
+{"timestamp":"2026-10-08T15:32:49.883Z","traceId":"12d863c2-520b-4666-990b-d31cc0f7e0ee","method":"GET","path":"/readyz","status":200}
+{"timestamp":"2026-10-08T15:32:55.621Z","traceId":"c27ee051-eb7c-466d-8547-e1c63f066f6d","method":"GET","path":"/healthz","status":200}
+{"timestamp":"2026-10-08T15:32:55.628Z","traceId":"81c72afc-098c-4090-bf3b-562afa8a3295","method":"GET","path":"/api/info","status":200}
+{"timestamp":"2026-10-08T15:32:55.634Z","traceId":"56a565f8-d46d-4f75-a0f8-97a9e9570ddd","method":"GET","path":"/metrics","status":200}

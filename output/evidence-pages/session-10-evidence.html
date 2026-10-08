@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Deployment strategies and Pod lifecycle</title>
+<style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
+<h1>Deployment strategies and Pod lifecycle</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
+<p>Source: <a href="../../session-10-deployments/evidence/run.txt">session-10-deployments/evidence/run.txt</a> · Last 52 nonempty lines of 739</p>
+<pre>Labels:           &lt;none&gt;
+Annotations:      &lt;none&gt;
+Status:           Pending
+IP:
+IPs:              &lt;none&gt;
+Containers:
+  demo:
+    Image:      busybox:1.37
+    Port:       &lt;none&gt;
+    Host Port:  &lt;none&gt;
+    Command:
+      sh
+      -c
+      sleep 3600
+    Limits:
+      cpu:     100m
+      memory:  32Mi
+    Requests:
+      cpu:        5m
+      memory:     8Mi
+    Environment:  &lt;none&gt;
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-4df7t (ro)
+Conditions:
+  Type           Status
+  PodScheduled   False
+Volumes:
+  kube-api-access-4df7t:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              homework/nonexistent=true
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  8s    default-scheduler  0/1 nodes are available: 1 node(s) didn&#x27;t match Pod&#x27;s node affinity/selector. no new claims to deallocate, preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+$ kubectl --context devops-homework -n hw10 logs life-succeeded
+success
+$ kubectl --context devops-homework -n hw10 logs life-failed
+intentional-failure
+$ kubectl --context devops-homework -n hw10 delete pod life-pending life-running
+pod &quot;life-pending&quot; deleted from hw10 namespace
+pod &quot;life-running&quot; deleted from hw10 namespace
+**********************
+PowerShell transcript end
+End time: 20261008210505
+**********************</pre></html>

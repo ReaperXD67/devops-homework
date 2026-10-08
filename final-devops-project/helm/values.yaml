@@ -1,0 +1,26 @@
+replicaCount: 2
+image:
+  repository: ghcr.io/reaperxd67/devops-homework
+  tag: latest
+  pullPolicy: IfNotPresent
+appVersion: "1.0.0"
+existingSecret: app-secret
+secretKey: token
+service:
+  port: 80
+ingress:
+  enabled: false
+  className: nginx
+  host: devops-helm.local
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 60
+resources:
+  requests:
+    cpu: 50m
+    memory: 32Mi
+  limits:
+    cpu: 250m
+    memory: 128Mi

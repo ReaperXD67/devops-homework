@@ -1,0 +1,11 @@
+NAME                              READY   STATUS        RESTARTS   AGE   IP           NODE                      NOMINATED NODE   READINESS GATES
+pod/devops-app-56ff45bb5d-4pccg   1/1     Terminating   0          6s    10.244.0.6   devops-ci-control-plane   <none>           <none>
+pod/devops-app-56ff45bb5d-zmngp   1/1     Terminating   0          6s    10.244.0.5   devops-ci-control-plane   <none>           <none>
+pod/devops-app-6c59d9956b-mdxpz   1/1     Running       0          4s    10.244.0.8   devops-ci-control-plane   <none>           <none>
+pod/devops-app-6c59d9956b-mstq4   1/1     Running       0          6s    10.244.0.7   devops-ci-control-plane   <none>           <none>
+
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+service/devops-app   ClusterIP   10.96.219.143   <none>        80/TCP    6s    app=devops-app
+
+NAME                                             REFERENCE               TARGETS              MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/devops-app   Deployment/devops-app   cpu: <unknown>/60%   2         4         0          6s

@@ -1,0 +1,3 @@
+Release {{ .Release.Name }} is installed in namespace {{ .Release.Namespace }}.
+Check its response:
+  kubectl --context devops-homework -n {{ .Release.Namespace }} exec deployment/{{ .Release.Name }} -- wget -qO- http://{{ .Release.Name }}

@@ -1,0 +1,194 @@
+# Session 4: Networking commands
+
+**Student:** Aman · **Executed:** 8 October 2026
+
+The exercise captures networking command output and explains the observation for each command. The brief names a `devops-hero` repository without supplying its URL; the instructor account in its other reference (`Nency-kRavaliya`) returned GitHub 404 when checked. These hands-on exercises cover the standard diagnostic commands; they do not claim that an unavailable upstream checklist was verified.
+
+## Run
+
+From the repository root after building the [foundations image](../session-01-02-linux/Dockerfile):
+
+```bash
+docker run --rm --hostname networking-lab -v "$PWD:/work:ro" \
+  devops-homework-foundations:local bash /work/session-04-networking/networking-lab.sh
+```
+
+The script prints each command and its actual exit status. Timeouts are bounded so a network that blocks ICMP does not hang the exercise. Addresses are the disposable Docker network's addresses and public DNS responses at execution time.
+
+## What each command tells me
+
+| Command | Understanding |
+|---|---|
+| `hostname` | The current network namespace's hostname; here it is the explicit lab name |
+| `ip -brief address` | Which interfaces are up and which IP addresses they have |
+| `ip route` | The default gateway and directly connected subnet |
+| `ip route get 1.1.1.1` | The interface, source and next hop selected for a destination |
+| `ping -c 3 -W 2 127.0.0.1` | Local IP stack responds to ICMP echo |
+| `ping ... example.com` | Tests DNS plus remote ICMP; lost replies can mean filtering, not a failed website |
+| `dig example.com A +noall +answer` | DNS A-record answers and remaining TTL |
+| `nslookup example.com` | Resolver used and the returned addresses |
+| `getent ahostsv4 example.com` | Name lookup through the OS name service switch |
+| `cat /etc/resolv.conf` | Resolver configuration provided to the container |
+| `curl --head https://example.com` | Resolves a host, connects, negotiates TLS and returns HTTP response headers |
+| `wget --spider https://example.com` | Checks resource reachability without downloading the page as a file |
+| `nc -vz -w 10 example.com 443` | Tests a TCP connection to the HTTPS port; it does not itself validate HTTP or TLS |
+| `ss -tunlp` | Listening TCP/UDP sockets and processes; an idle container may have none |
+| `netstat -rn` | Legacy routing table view, comparable to `ip route` |
+| `traceroute -m 5 -w 1 -q 1 example.com` | Up to five route hops; `*` means no reply within the deadline, not proof of a broken hop |
+
+Troubleshooting order: inspect interface/address and route, test local connectivity, resolve DNS, test the destination TCP port, then inspect HTTP/TLS. A successful HTTP response is stronger evidence of website access than ICMP alone. [curl reference](https://curl.se/docs/manpage.html), [iproute2 project](https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/).
+
+## Recorded command output
+
+The initially empty [commands-and-output.md](commands-and-output.md) was populated with the actual run. [Raw output](evidence/output.txt) preserves the same transcript. Loopback and public ICMP succeeded, DNS resolved two IPv4 addresses, HTTPS returned 200, and TCP port 443 accepted the connection. The first traceroute hop replied; hops 2–5 timed out. An idle lab container had no listening application sockets. Networking measurements are environment-specific.
+
+```text
+
+$ date -u
+Thu Oct  8 15:25:47 UTC 2026
+[exit status: 0]
+
+$ hostname
+networking-lab
+[exit status: 0]
+
+$ ip -brief address
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0@if55        UP             172.17.0.2/16 
+[exit status: 0]
+
+$ ip route
+default via 172.17.0.1 dev eth0 
+172.17.0.0/16 dev eth0 proto kernel scope link src 172.17.0.2 
+[exit status: 0]
+
+$ ip route get 1.1.1.1
+1.1.1.1 via 172.17.0.1 dev eth0 src 172.17.0.2 uid 0 
+    cache 
+[exit status: 0]
+
+$ ping -c 3 -W 2 127.0.0.1
+PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data.
+64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=1.09 ms
+64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.034 ms
+64 bytes from 127.0.0.1: icmp_seq=3 ttl=64 time=0.022 ms
+
+--- 127.0.0.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2026ms
+rtt min/avg/max/mdev = 0.022/0.383/1.093/0.502 ms
+[exit status: 0]
+
+$ ping -c 3 -W 2 example.com
+PING example.com (172.66.147.243) 56(84) bytes of data.
+64 bytes from 172.66.147.243: icmp_seq=1 ttl=63 time=34.7 ms
+64 bytes from 172.66.147.243: icmp_seq=2 ttl=63 time=22.0 ms
+64 bytes from 172.66.147.243: icmp_seq=3 ttl=63 time=50.2 ms
+
+--- example.com ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2261ms
+rtt min/avg/max/mdev = 22.011/35.639/50.227/11.539 ms
+[exit status: 0]
+
+$ dig example.com A +noall +answer
+example.com.		152	IN	A	172.66.147.243
+example.com.		152	IN	A	104.20.23.154
+[exit status: 0]
+
+$ nslookup example.com
+Server:		192.168.65.7
+Address:	192.168.65.7#53
+
+Non-authoritative answer:
+Name:	example.com
+Address: 172.66.147.243
+Name:	example.com
+Address: 104.20.23.154
+
+[exit status: 0]
+
+$ getent ahostsv4 example.com
+172.66.147.243  STREAM example.com
+172.66.147.243  DGRAM  
+172.66.147.243  RAW    
+104.20.23.154   STREAM 
+104.20.23.154   DGRAM  
+104.20.23.154   RAW    
+[exit status: 0]
+
+$ cat /etc/resolv.conf
+# Generated by Docker Engine.
+# This file can be edited; Docker Engine will not make further changes once it
+# has been modified.
+
+nameserver 192.168.65.7
+
+# Based on host file: '/etc/resolv.conf' (legacy)
+# Overrides: []
+[exit status: 0]
+
+$ curl --head --max-time 20 https://example.com
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+HTTP/2 200 
+date: Thu, 08 Oct 2026 15:25:55 GMT
+content-type: text/html; charset=utf-8
+server: cloudflare
+last-modified: Sun, 04 Oct 2026 20:44:03 GMT
+allow: GET, HEAD
+accept-ranges: bytes
+age: 11618
+cf-cache-status: HIT
+cf-ray: a47629359dad442d-BOM
+alt-svc: h3=":443"; ma=86400
+
+[exit status: 0]
+
+$ wget --spider --timeout=20 https://example.com
+Spider mode enabled. Check if remote file exists.
+--2026-10-08 15:25:51--  https://example.com/
+Resolving example.com (example.com)... 172.66.147.243, 104.20.23.154
+Connecting to example.com (example.com)|172.66.147.243|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Remote file exists and could contain further links,
+but recursion is disabled -- not retrieving.
+
+[exit status: 0]
+
+$ nc -vz -w 10 example.com 443
+Connection to example.com (172.66.147.243) 443 port [tcp/*] succeeded!
+[exit status: 0]
+
+$ ss -tunlp
+Netid State Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+[exit status: 0]
+
+$ netstat -rn
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+0.0.0.0         172.17.0.1      0.0.0.0         UG        0 0          0 eth0
+172.17.0.0      0.0.0.0         255.255.0.0     U         0 0          0 eth0
+[exit status: 0]
+
+$ traceroute -m 5 -w 1 -q 1 example.com
+traceroute to example.com (172.66.147.243), 5 hops max, 60 byte packets
+ 1  172.17.0.1 (172.17.0.1)  0.652 ms
+ 2  *
+ 3  *
+ 4  *
+ 5  *
+[exit status: 0]
+
+The external route/ICMP results reflect this Docker Desktop network.
+
+```
+
+
+## Screenshot of captured output
+
+This browser screenshot renders an excerpt from the linked actual command log. Full output remains available in the evidence files above.
+
+![Networking fundamentals: actual captured output](../output/playwright/session-04-evidence.png)

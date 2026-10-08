@@ -1,0 +1,60 @@
+Captured at 2026-10-08T15:32:30.9846760Z
+$ C:\Users\Aman\AppData\Local\Temp\devops-tools\flux-2.9.6\flux.exe get sources git --context devops-homework
+NAME           	REVISION          	SUSPENDED	READY	MESSAGE                                           
+devops-homework	main@sha1:fc117d49	False    	True 	stored artifact for revision 'main@sha1:fc117d49'	
+$ C:\Users\Aman\AppData\Local\Temp\devops-tools\flux-2.9.6\flux.exe get kustomizations --context devops-homework
+NAME         	REVISION          	SUSPENDED	READY	MESSAGE                              
+homework-demo	main@sha1:fc117d49	False    	True 	Applied revision: main@sha1:fc117d49	
+$ kubectl --context devops-homework -n devops-gitops get configmap gitops-demo -o yaml
+apiVersion: v1
+data:
+  environment: minikube-homework
+  message: Git is the source of truth
+  owner: Aman
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2026-10-08T15:32:16Z"
+  labels:
+    kustomize.toolkit.fluxcd.io/name: homework-demo
+    kustomize.toolkit.fluxcd.io/namespace: flux-system
+  name: gitops-demo
+  namespace: devops-gitops
+  resourceVersion: "2743"
+  uid: e0756149-5322-4485-98ae-4af7a3ba0956
+$ kubectl replace -f <temporary ConfigMap with manual drift>
+configmap/gitops-demo replaced
+$ kubectl --context devops-homework -n devops-gitops get configmap gitops-demo -o jsonpath={.data.message}
+MANUAL DRIFT - should be reverted by Flux
+
+Waiting for automatic reconciliation; no kubectl apply or manual flux reconcile is run.
+2026-10-08T15:32:36.8629536Z observed message: MANUAL DRIFT - should be reverted by Flux
+2026-10-08T15:32:41.9749741Z observed message: MANUAL DRIFT - should be reverted by Flux
+2026-10-08T15:32:47.0689130Z observed message: MANUAL DRIFT - should be reverted by Flux
+2026-10-08T15:32:52.1696844Z observed message: Git is the source of truth
+$ C:\Users\Aman\AppData\Local\Temp\devops-tools\flux-2.9.6\flux.exe get kustomizations --context devops-homework
+NAME         	REVISION          	SUSPENDED	READY	MESSAGE                              
+homework-demo	main@sha1:fc117d49	False    	True 	Applied revision: main@sha1:fc117d49	
+$ kubectl --context devops-homework -n flux-system logs deployment/kustomize-controller --since=3m --tail=30
+{"level":"info","ts":"2026-10-08T15:30:25.588Z","logger":"setup","msg":"starting manager"}
+{"level":"info","ts":"2026-10-08T15:30:25.588Z","logger":"controller-runtime.metrics","msg":"Starting metrics server"}
+{"level":"info","ts":"2026-10-08T15:30:25.588Z","logger":"controller-runtime.metrics","msg":"Serving metrics server","bindAddress":":8080","secure":false}
+{"level":"info","ts":"2026-10-08T15:30:25.588Z","msg":"starting server","name":"health probe","addr":"[::]:9440"}
+{"level":"info","ts":"2026-10-08T15:30:25.689Z","logger":"runtime","msg":"Attempting to acquire leader lease...","lock":"flux-system/kustomize-controller-leader-election"}
+{"level":"info","ts":"2026-10-08T15:30:25.695Z","logger":"runtime","msg":"Successfully acquired lease","lock":"flux-system/kustomize-controller-leader-election"}
+{"level":"info","ts":"2026-10-08T15:30:25.696Z","msg":"Starting EventSource","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","source":"kind source: *v1.PartialObjectMetadata[v1 Secret]"}
+{"level":"info","ts":"2026-10-08T15:30:25.696Z","msg":"Starting EventSource","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","source":"kind source: *v1.Kustomization"}
+{"level":"info","ts":"2026-10-08T15:30:25.696Z","msg":"Starting EventSource","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","source":"kind source: *v1.Bucket"}
+{"level":"info","ts":"2026-10-08T15:30:25.696Z","msg":"Starting EventSource","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","source":"kind source: *v1.GitRepository"}
+{"level":"info","ts":"2026-10-08T15:30:25.696Z","msg":"Starting EventSource","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","source":"kind source: *v1.PartialObjectMetadata[v1 ConfigMap]"}
+{"level":"info","ts":"2026-10-08T15:30:25.696Z","msg":"Starting EventSource","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","source":"kind source: *v1.OCIRepository"}
+{"level":"info","ts":"2026-10-08T15:30:25.897Z","msg":"Starting Controller","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization"}
+{"level":"info","ts":"2026-10-08T15:30:25.897Z","msg":"Starting workers","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","worker count":4}
+{"level":"info","ts":"2026-10-08T15:32:15.005Z","msg":"metadata.finalizers: \"finalizers.fluxcd.io\": prefer a domain-qualified finalizer name including a path (/) to avoid accidental conflicts with other finalizer writers","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","Kustomization":{"name":"homework-demo","namespace":"flux-system"},"namespace":"flux-system","name":"homework-demo","reconcileID":"22477d1f-6e5e-40d5-ac25-7121a8540e53"}
+{"level":"info","ts":"2026-10-08T15:32:15.756Z","msg":"Source artifact not found, retrying in 30s","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","Kustomization":{"name":"homework-demo","namespace":"flux-system"},"namespace":"flux-system","name":"homework-demo","reconcileID":"313011d5-41ef-4428-85f6-4328d35fed94"}
+{"level":"info","ts":"2026-10-08T15:32:16.559Z","msg":"server-side apply completed","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","Kustomization":{"name":"homework-demo","namespace":"flux-system"},"namespace":"flux-system","name":"homework-demo","reconcileID":"f3dac00b-5372-4679-8bf2-3ff89820fbf4","output":{"ConfigMap/devops-gitops/gitops-demo":"created","Namespace/devops-gitops":"created"},"revision":"main@sha1:fc117d495fbe37568d8a72f06838d61e8946af1a"}
+{"level":"info","ts":"2026-10-08T15:32:16.623Z","msg":"Reconciliation finished in 306.674405ms, next run in 30s","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","Kustomization":{"name":"homework-demo","namespace":"flux-system"},"namespace":"flux-system","name":"homework-demo","reconcileID":"f3dac00b-5372-4679-8bf2-3ff89820fbf4","revision":"main@sha1:fc117d495fbe37568d8a72f06838d61e8946af1a"}
+{"level":"info","ts":"2026-10-08T15:32:17.342Z","msg":"server-side apply completed","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","Kustomization":{"name":"homework-demo","namespace":"flux-system"},"namespace":"flux-system","name":"homework-demo","reconcileID":"7d69354d-be37-47a8-b3c8-4b42b5ed4c71","output":{"ConfigMap/devops-gitops/gitops-demo":"unchanged","Namespace/devops-gitops":"unchanged"},"revision":"main@sha1:fc117d495fbe37568d8a72f06838d61e8946af1a"}
+{"level":"info","ts":"2026-10-08T15:32:17.401Z","msg":"Reconciliation finished in 189.466689ms, next run in 30s","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","Kustomization":{"name":"homework-demo","namespace":"flux-system"},"namespace":"flux-system","name":"homework-demo","reconcileID":"7d69354d-be37-47a8-b3c8-4b42b5ed4c71","revision":"main@sha1:fc117d495fbe37568d8a72f06838d61e8946af1a"}
+{"level":"info","ts":"2026-10-08T15:32:47.313Z","msg":"server-side apply completed","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","Kustomization":{"name":"homework-demo","namespace":"flux-system"},"namespace":"flux-system","name":"homework-demo","reconcileID":"7050648d-6fd3-4281-9fa7-8558fd75570d","output":{"ConfigMap/devops-gitops/gitops-demo":"configured","Namespace/devops-gitops":"unchanged"},"revision":"main@sha1:fc117d495fbe37568d8a72f06838d61e8946af1a"}
+{"level":"info","ts":"2026-10-08T15:32:47.358Z","msg":"Reconciliation finished in 162.797114ms, next run in 30s","controller":"kustomization","controllerGroup":"kustomize.toolkit.fluxcd.io","controllerKind":"Kustomization","Kustomization":{"name":"homework-demo","namespace":"flux-system"},"namespace":"flux-system","name":"homework-demo","reconcileID":"7050648d-6fd3-4281-9fa7-8558fd75570d","revision":"main@sha1:fc117d495fbe37568d8a72f06838d61e8946af1a"}
+PASS: Flux automatically corrected manual drift to the value in Git.

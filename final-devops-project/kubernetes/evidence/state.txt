@@ -1,0 +1,43 @@
+Captured UTC: 2026-10-08T15:37:03.874667+00:00
+
+$ kubectl --context devops-homework -n devops-final get pods,svc,ingress,hpa -o wide
+NAME                              READY   STATUS         RESTARTS   AGE     IP             NODE              NOMINATED NODE   READINESS GATES
+pod/devops-app-7986bf9bbf-9k8ss   0/1     ErrImagePull   0          32s     10.244.0.117   devops-homework   <none>           <none>
+pod/devops-app-79c6fcf5fd-49vsr   1/1     Running        0          7m28s   10.244.0.13    devops-homework   <none>           <none>
+pod/devops-app-79c6fcf5fd-7smnn   1/1     Running        0          7m31s   10.244.0.12    devops-homework   <none>           <none>
+
+NAME                 TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE     SELECTOR
+service/devops-app   ClusterIP   10.100.188.189   <none>        80/TCP    7m31s   app=devops-app
+
+NAME                                   CLASS   HOSTS          ADDRESS        PORTS   AGE
+ingress.networking.k8s.io/devops-app   nginx   devops.local   192.168.49.2   80      7m31s
+
+NAME                                             REFERENCE               TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/devops-app   Deployment/devops-app   cpu: 4%/60%   2         4         2          7m31s
+
+Exit code: 0
+
+$ kubectl --context devops-homework -n devops-final top pods
+NAME                          CPU(cores)   MEMORY(bytes)   
+devops-app-79c6fcf5fd-49vsr   1m           17Mi            
+devops-app-79c6fcf5fd-7smnn   3m           32Mi            
+
+Exit code: 0
+
+$ kubectl --context devops-homework -n devops-final exec deployment/devops-app -- node -e fetch('http://localhost:8080/api/info').then(r=>r.text()).then(console.log)
+{"application":"DevOps homework","author":"Aman Kumar","enrollment":"10275","version":"1.0.0"}
+
+Exit code: 0
+
+$ kubectl --context devops-homework -n devops-final logs deployment/devops-app --tail=8
+{"timestamp":"2026-10-08T15:36:33.198Z","traceId":"55aa368e-13ff-4160-82ab-d1c95fcb8058","method":"GET","path":"/healthz","status":200}
+{"timestamp":"2026-10-08T15:36:35.812Z","traceId":"6c9b5d41-42cc-4160-95d0-d3d6767fcf05","method":"GET","path":"/readyz","status":200}
+{"timestamp":"2026-10-08T15:36:43.199Z","traceId":"17f1bb73-5328-4d70-a49b-b0e6ed42daed","method":"GET","path":"/healthz","status":200}
+{"timestamp":"2026-10-08T15:36:45.811Z","traceId":"7b3a684b-2661-40ea-bd00-131a1117c957","method":"GET","path":"/readyz","status":200}
+{"timestamp":"2026-10-08T15:36:53.197Z","traceId":"58825fb4-ba7a-4b08-b08e-cfdaf28b97e2","method":"GET","path":"/healthz","status":200}
+{"timestamp":"2026-10-08T15:36:55.811Z","traceId":"470d2a96-5fc6-49fc-a93d-76d18923358f","method":"GET","path":"/readyz","status":200}
+{"timestamp":"2026-10-08T15:37:03.197Z","traceId":"339667c2-c386-4404-91c6-3128af5c83b3","method":"GET","path":"/healthz","status":200}
+{"timestamp":"2026-10-08T15:37:04.614Z","traceId":"92f9d4ae-3c2b-4ca0-a350-da92fb983c5c","method":"GET","path":"/api/info","status":200}
+Found 3 pods, using pod/devops-app-79c6fcf5fd-7smnn
+
+Exit code: 0

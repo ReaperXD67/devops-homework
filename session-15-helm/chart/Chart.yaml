@@ -1,0 +1,6 @@
+apiVersion: v2
+name: homework-web
+description: Small versioned web application for Helm install, upgrade and rollback practice
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

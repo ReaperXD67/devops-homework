@@ -1,0 +1,8 @@
+Warning: resource configmaps/final-app-config is missing the kubectl.kubernetes.io/last-applied-configuration annotation which is required by kubectl apply. kubectl apply should only be used on resources created declaratively by either kubectl create --save-config or kubectl apply. The missing annotation will be patched automatically.
+Warning: resource services/final-app is missing the kubectl.kubernetes.io/last-applied-configuration annotation which is required by kubectl apply. kubectl apply should only be used on resources created declaratively by either kubectl create --save-config or kubectl apply. The missing annotation will be patched automatically.
+configmap/final-app-config configured (server dry run)
+service/final-app configured (server dry run)
+Warning: resource deployments/final-app is missing the kubectl.kubernetes.io/last-applied-configuration annotation which is required by kubectl apply. kubectl apply should only be used on resources created declaratively by either kubectl create --save-config or kubectl apply. The missing annotation will be patched automatically.
+deployment.apps/final-app configured (server dry run)
+horizontalpodautoscaler.autoscaling/final-app created (server dry run)
+ingress.networking.k8s.io/final-app created (server dry run)

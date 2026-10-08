@@ -1,0 +1,9 @@
+Release {{ .Release.Name }} is deployed in {{ .Release.Namespace }}.
+The existing Secret {{ .Values.existingSecret }} must contain key {{ .Values.secretKey }}.
+
+Check application readiness:
+  helm test {{ .Release.Name }} --namespace {{ .Release.Namespace }} --logs
+
+Open a local tunnel:
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "devops.name" . }} 18081:{{ .Values.service.port }}
+  curl http://127.0.0.1:18081/api/info

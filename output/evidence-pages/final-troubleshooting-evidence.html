@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Final application failure recovery</title>
+<style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
+<h1>Final application failure recovery</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
+<p>Source: <a href="../../final-devops-project/troubleshooting/evidence/output.txt">final-devops-project/troubleshooting/evidence/output.txt</a> · Last 52 nonempty lines of 356</p>
+<pre>{&quot;timestamp&quot;:&quot;2026-10-08T15:37:43.034Z&quot;,&quot;traceId&quot;:&quot;e2e56324-b95e-4444-afe8-d3a6f2ee0314&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/missing-readiness-drill&quot;,&quot;status&quot;:404}
+{&quot;timestamp&quot;:&quot;2026-10-08T15:37:45.034Z&quot;,&quot;traceId&quot;:&quot;39a8f80f-b4b3-4b70-8bd5-eb6f4ee5a32a&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/missing-readiness-drill&quot;,&quot;status&quot;:404}
+{&quot;timestamp&quot;:&quot;2026-10-08T15:37:46.094Z&quot;,&quot;traceId&quot;:&quot;a8d2a2c2-437f-40e8-8cd4-d87796a88876&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/healthz&quot;,&quot;status&quot;:200}
+[exit status: 0]
+$ kubectl --context devops-homework -n devops-final events --for pod/devops-app-58f685ccb5-95cnp
+LAST SEEN           TYPE      REASON      OBJECT                            MESSAGE
+31s                 Normal    Scheduled   Pod/devops-app-58f685ccb5-95cnp   Successfully assigned devops-final/devops-app-58f685ccb5-95cnp to devops-homework
+30s                 Normal    Pulled      Pod/devops-app-58f685ccb5-95cnp   Container image &quot;devops-final:local&quot; already present on machine
+30s                 Normal    Created     Pod/devops-app-58f685ccb5-95cnp   Created container: app
+30s                 Normal    Started     Pod/devops-app-58f685ccb5-95cnp   Started container app
+1s (x14 over 27s)   Warning   Unhealthy   Pod/devops-app-58f685ccb5-95cnp   Readiness probe failed: HTTP probe failed with statuscode: 404
+[exit status: 0]
+FIX: restore the original /readyz readiness probe and timings.
+Patch: [{&quot;value&quot;:{&quot;failureThreshold&quot;:3,&quot;httpGet&quot;:{&quot;path&quot;:&quot;/readyz&quot;,&quot;port&quot;:&quot;http&quot;,&quot;scheme&quot;:&quot;HTTP&quot;},&quot;periodSeconds&quot;:10,&quot;successThreshold&quot;:1,&quot;timeoutSeconds&quot;:1},&quot;op&quot;:&quot;replace&quot;,&quot;path&quot;:&quot;/spec/template/spec/containers/0/readinessProbe&quot;}]
+$ kubectl --context devops-homework -n devops-final patch deployment devops-app --type=json --patch-file C:\Users\Aman\AppData\Local\Temp\devops-drill-9a9659946c44479d9bfc8659258e77af.json
+deployment.apps/devops-app patched
+[exit status: 0]
+$ kubectl --context devops-homework -n devops-final rollout status deployment/devops-app --timeout=90s
+deployment &quot;devops-app&quot; successfully rolled out
+[exit status: 0]
+$ kubectl --context devops-homework -n devops-final exec deployment/devops-app -- node -e fetch(&#x27;http://devops-app/healthz&#x27;,{signal:AbortSignal.timeout(5000)}).then(async r=&gt;{console.log(&#x27;HTTP &#x27;+r.status);console.log(await r.text());if(!r.ok)process.exitCode=1}).catch(e=&gt;{console.error(e.message);console.error(e.cause?.code||&#x27;&#x27;);process.exitCode=1})
+HTTP 200
+{&quot;status&quot;:&quot;ok&quot;}
+[exit status: 0]
+PASS: all three faults were diagnosed, repaired, and verified.
+=== FINAL RESTORATION (also runs on an error) ===
+Patch: [{&quot;value&quot;:{&quot;app&quot;:&quot;devops-app&quot;},&quot;op&quot;:&quot;replace&quot;,&quot;path&quot;:&quot;/spec/selector&quot;}]
+$ kubectl --context devops-homework -n devops-final patch service devops-app --type=json --patch-file C:\Users\Aman\AppData\Local\Temp\devops-drill-016becc208f24041a4ffd74ed840aa8a.json
+service/devops-app patched (no change)
+[exit status: 0]
+Patch: [{&quot;value&quot;:&quot;devops-final:local&quot;,&quot;op&quot;:&quot;replace&quot;,&quot;path&quot;:&quot;/spec/template/spec/containers/0/image&quot;},{&quot;value&quot;:{&quot;failureThreshold&quot;:3,&quot;httpGet&quot;:{&quot;path&quot;:&quot;/readyz&quot;,&quot;port&quot;:&quot;http&quot;,&quot;scheme&quot;:&quot;HTTP&quot;},&quot;periodSeconds&quot;:10,&quot;successThreshold&quot;:1,&quot;timeoutSeconds&quot;:1},&quot;op&quot;:&quot;replace&quot;,&quot;path&quot;:&quot;/spec/template/spec/containers/0/readinessProbe&quot;}]
+$ kubectl --context devops-homework -n devops-final patch deployment devops-app --type=json --patch-file C:\Users\Aman\AppData\Local\Temp\devops-drill-b3a0d7a77f4a4e5db7e506e23648eb8e.json
+deployment.apps/devops-app patched (no change)
+[exit status: 0]
+$ kubectl --context devops-homework -n devops-final rollout status deployment/devops-app --timeout=90s
+deployment &quot;devops-app&quot; successfully rolled out
+[exit status: 0]
+$ kubectl --context devops-homework -n devops-final get deployment,pods -o wide
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS   IMAGES               SELECTOR
+deployment.apps/devops-app   2/2     2            2           8m15s   app          devops-final:local   app=devops-app
+NAME                              READY   STATUS    RESTARTS   AGE     IP            NODE              NOMINATED NODE   READINESS GATES
+pod/devops-app-79c6fcf5fd-49vsr   1/1     Running   0          8m12s   10.244.0.13   devops-homework   &lt;none&gt;           &lt;none&gt;
+pod/devops-app-79c6fcf5fd-7smnn   1/1     Running   0          8m15s   10.244.0.12   devops-homework   &lt;none&gt;           &lt;none&gt;
+[exit status: 0]
+$ kubectl --context devops-homework -n devops-final exec deployment/devops-app -- node -e fetch(&#x27;http://devops-app/healthz&#x27;,{signal:AbortSignal.timeout(5000)}).then(async r=&gt;{console.log(&#x27;HTTP &#x27;+r.status);console.log(await r.text());if(!r.ok)process.exitCode=1}).catch(e=&gt;{console.error(e.message);console.error(e.cause?.code||&#x27;&#x27;);process.exitCode=1})
+HTTP 200
+{&quot;status&quot;:&quot;ok&quot;}
+[exit status: 0]
+$ kubectl --context devops-homework -n devops-final exec deployment/devops-app -- node -e fetch(&#x27;http://devops-app/api/info&#x27;).then(async r=&gt;{console.log(&#x27;HTTP &#x27;+r.status);console.log(await r.text());if(!r.ok)process.exitCode=1})
+HTTP 200
+{&quot;application&quot;:&quot;DevOps homework&quot;,&quot;author&quot;:&quot;Aman Kumar&quot;,&quot;enrollment&quot;:&quot;10275&quot;,&quot;version&quot;:&quot;1.0.0&quot;}
+[exit status: 0]</pre></html>

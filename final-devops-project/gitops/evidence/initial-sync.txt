@@ -1,0 +1,8 @@
+► annotating GitRepository devops-homework in flux-system namespace
+✔ GitRepository annotated
+◎ waiting for GitRepository reconciliation
+✔ fetched revision main@sha1:fc117d495fbe37568d8a72f06838d61e8946af1a
+► annotating Kustomization homework-demo in flux-system namespace
+✔ Kustomization annotated
+◎ waiting for Kustomization reconciliation
+✔ applied revision main@sha1:fc117d495fbe37568d8a72f06838d61e8946af1a

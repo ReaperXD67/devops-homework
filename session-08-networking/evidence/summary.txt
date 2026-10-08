@@ -1,0 +1,59 @@
+Captured UTC: 2026-10-08T15:36:56.073231+00:00
+
+$ docker network ls --filter name=devops-network
+NETWORK ID     NAME                      DRIVER    SCOPE
+80a279c446dc   devops-network_data       bridge    local
+aa93b3bc4fb1   devops-network_front      bridge    local
+f81b8c366f14   devops-network_isolated   bridge    local
+
+Exit code: 0
+
+$ docker compose -f session-08-networking/compose.yaml exec -T frontend ping -c 2 backend
+PING backend (172.26.0.3): 56 data bytes
+64 bytes from 172.26.0.3: seq=0 ttl=64 time=0.232 ms
+64 bytes from 172.26.0.3: seq=1 ttl=64 time=0.086 ms
+
+--- backend ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.086/0.159/0.232 ms
+
+Exit code: 0
+
+$ docker compose -f session-08-networking/compose.yaml exec -T backend ping -c 2 database
+PING database (172.27.0.2): 56 data bytes
+64 bytes from 172.27.0.2: seq=0 ttl=64 time=0.225 ms
+64 bytes from 172.27.0.2: seq=1 ttl=64 time=0.097 ms
+
+--- database ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.097/0.161/0.225 ms
+
+Exit code: 0
+
+$ docker compose -f session-08-networking/compose.yaml exec -T frontend ping -c 1 database
+ping: bad address 'database'
+
+Exit code: 1
+
+$ docker exec devops-host-network-lab docker inspect apache-host --format {{.HostConfig.NetworkMode}}
+host
+
+Exit code: 0
+
+$ docker exec devops-host-network-lab wget -qO- http://127.0.0.1:80
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>It works! Apache httpd</title>
+</head>
+<body>
+<p>It works!</p>
+</body>
+</html>
+
+Exit code: 0
+
+$ curl.exe --fail --silent http://127.0.0.1:8181
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Bind mount demo</title><h1>Hello students</h1></html>
+
+Exit code: 0

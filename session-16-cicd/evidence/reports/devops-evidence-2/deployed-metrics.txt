@@ -1,0 +1,12 @@
+# HELP app_requests_total HTTP requests received
+# TYPE app_requests_total counter
+app_requests_total 5
+# HELP process_resident_memory_bytes Resident memory
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 59691008
+# HELP process_cpu_seconds_total Process CPU time
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 0.06951
+# HELP app_uptime_seconds Uptime
+# TYPE app_uptime_seconds gauge
+app_uptime_seconds 7.665

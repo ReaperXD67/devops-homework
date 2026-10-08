@@ -1,0 +1,36 @@
+Exact excerpts from actual run.txt and final-state.txt.
+
+$ kubectl --context devops-homework -n hw13 exec volume-demo -- cat /data/sentinel.txt
+survives-pod-deletion
+$ kubectl --context devops-homework -n hw13 get hpa
+NAME         REFERENCE               TARGETS              MINPODS   MAXPODS   REPLICAS   AGE
+php-apache   Deployment/php-apache   cpu: <unknown>/50%   1         4         1          7m16s
+$ kubectl --context devops-homework -n hw13 get hpa
+NAME         REFERENCE               TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+php-apache   Deployment/php-apache   cpu: 205%/50%   1         4         4          8m32s
+$ kubectl --context devops-homework -n hw13 top pods
+NAME                          CPU(cores)   MEMORY(bytes)
+load-generator                15m          1Mi
+php-apache-6c55796754-6ltxl   105m         12Mi
+php-apache-6c55796754-8vb4n   128m         11Mi
+php-apache-6c55796754-sh5l7   176m         12Mi
+php-apache-6c55796754-sr9bm   97m          11Mi
+volume-demo                   0m           0Mi
+
+After load removal and scale-down:
+
+$ kubectl --context devops-homework -n hw13 get hpa
+NAME         REFERENCE               TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+php-apache   Deployment/php-apache   cpu: 1%/50%   1         4         1          13m
+$ kubectl --context devops-homework -n hw13 get deployment php-apache
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+php-apache   1/1     1            1           13m
+$ kubectl --context devops-homework -n hw13 get pods
+NAME                          READY   STATUS      RESTARTS   AGE
+hostpath-demo                 0/1     Completed   0          13m
+php-apache-6c55796754-sh5l7   1/1     Running     0          7m18s
+volume-demo                   1/1     Running     0          6m30s
+$ kubectl --context devops-homework -n hw13 top pods
+NAME                          CPU(cores)   MEMORY(bytes)   
+php-apache-6c55796754-sh5l7   1m           12Mi            
+volume-demo                   0m           0Mi             

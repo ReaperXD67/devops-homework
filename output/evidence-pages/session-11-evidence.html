@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Kubernetes Services and DNS</title>
+<style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
+<h1>Kubernetes Services and DNS</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
+<p>Source: <a href="../../session-11-services/evidence/run.txt">session-11-services/evidence/run.txt</a> · Last 52 nonempty lines of 142</p>
+<pre>        health {
+           lameduck 5s
+        }
+        ready
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
+           pods insecure
+           fallthrough in-addr.arpa ip6.arpa
+           ttl 30
+        }
+        prometheus :9153
+        hosts {
+           192.168.65.254 host.minikube.internal
+           fallthrough
+        }
+        forward . /etc/resolv.conf {
+           max_concurrent 1000
+        }
+        cache 30 {
+           disable success cluster.local
+           disable denial cluster.local
+        }
+        loop
+        reload
+        loadbalance
+    }
+kind: ConfigMap
+metadata:
+  creationTimestamp: &quot;2026-10-08T15:25:18Z&quot;
+  name: coredns
+  namespace: kube-system
+  resourceVersion: &quot;350&quot;
+  uid: ba544c1b-f9d1-4cc2-b4c0-2c8ca2df0503
+$ kubectl --context devops-homework -n kube-system logs deployment/coredns --tail=15
+[INFO] 10.244.0.65:58246 - 45657 &quot;AAAA IN php-apache.hw13.svc.cluster.local. udp 51 false 512&quot; NOERROR qr,aa,rd 144 0.000431723s
+[INFO] 10.244.0.22:59921 - 21321 &quot;AAAA IN loadbalancer.hw11.svc.cluster.local. udp 53 false 512&quot; NOERROR qr,aa,rd 146 0.000212552s
+[INFO] 10.244.0.22:59921 - 19530 &quot;A IN loadbalancer.hw11.svc.cluster.local. udp 53 false 512&quot; NOERROR qr,aa,rd 104 0.000241307s
+[INFO] 10.244.0.65:52571 - 12836 &quot;AAAA IN php-apache.hw13.svc.cluster.local. udp 51 false 512&quot; NOERROR qr,aa,rd 144 0.000246146s
+[INFO] 10.244.0.65:52571 - 59688 &quot;A IN php-apache.hw13.svc.cluster.local. udp 51 false 512&quot; NOERROR qr,aa,rd 100 0.000343149s
+[INFO] 10.244.0.89:36527 - 22116 &quot;AAAA IN rolling.hw10.svc.cluster.local. udp 48 false 512&quot; NOERROR qr,aa,rd 141 0.00170914s
+[INFO] 10.244.0.89:36527 - 21795 &quot;A IN rolling.hw10.svc.cluster.local. udp 48 false 512&quot; NOERROR qr,aa,rd 94 0.001790733s
+[INFO] 10.244.0.65:37556 - 18763 &quot;AAAA IN php-apache.hw13.svc.cluster.local. udp 51 false 512&quot; NOERROR qr,aa,rd 144 0.000294497s
+[INFO] 10.244.0.65:37556 - 57929 &quot;A IN php-apache.hw13.svc.cluster.local. udp 51 false 512&quot; NOERROR qr,aa,rd 100 0.000371125s
+[INFO] 10.244.0.65:45466 - 5283 &quot;AAAA IN php-apache.hw13.svc.cluster.local. udp 51 false 512&quot; NOERROR qr,aa,rd 144 0.000255884s
+[INFO] 10.244.0.65:45466 - 35745 &quot;A IN php-apache.hw13.svc.cluster.local. udp 51 false 512&quot; NOERROR qr,aa,rd 100 0.000331927s
+[INFO] 10.244.0.65:38187 - 26967 &quot;AAAA IN php-apache.hw13.svc.cluster.local. udp 51 false 512&quot; NOERROR qr,aa,rd 144 0.000267707s
+[INFO] 10.244.0.65:38187 - 36691 &quot;A IN php-apache.hw13.svc.cluster.local. udp 51 false 512&quot; NOERROR qr,aa,rd 100 0.000371593s
+[INFO] 10.244.0.65:38812 - 18709 &quot;AAAA IN php-apache.hw13.svc.cluster.local. udp 51 false 512&quot; NOERROR qr,aa,rd 144 0.000214186s
+[INFO] 10.244.0.65:38812 - 34327 &quot;A IN php-apache.hw13.svc.cluster.local. udp 51 false 512&quot; NOERROR qr,aa,rd 100 0.000278517s
+**********************
+PowerShell transcript end
+End time: 20261008210355
+**********************</pre></html>

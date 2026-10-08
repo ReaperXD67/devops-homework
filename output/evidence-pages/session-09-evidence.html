@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Kubernetes fundamentals</title>
+<style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
+<h1>Kubernetes fundamentals</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
+<p>Source: <a href="../../session-09-kubernetes/evidence/run.txt">session-09-kubernetes/evidence/run.txt</a> · Last 52 nonempty lines of 192</p>
+<pre>10.244.0.1 - - [08/Oct/2026:15:33:21 +0000] &quot;GET / HTTP/1.1&quot; 200 20 &quot;-&quot; &quot;kube-probe/1.34&quot; &quot;-&quot;
+$ kubectl --context devops-homework -n hw9 exec deployment/web -- wget -qO- http://127.0.0.1
+Hello Kubernetes v1
+$ kubectl --context devops-homework -n hw9 scale deployment web --replicas=3
+deployment.apps/web scaled
+$ kubectl --context devops-homework -n hw9 rollout status deployment/web --timeout=120s
+Waiting for deployment &quot;web&quot; rollout to finish: 2 of 3 updated replicas are available...
+deployment &quot;web&quot; successfully rolled out
+$ kubectl --context devops-homework -n hw9 get pods
+NAME                   READY   STATUS    RESTARTS   AGE
+web-746f8ff5d9-5glvq   1/1     Running   0          2m17s
+web-746f8ff5d9-7vggp   1/1     Running   0          2m22s
+web-746f8ff5d9-9mtx4   1/1     Running   0          5s
+$ kubectl --context devops-homework -n hw9 set env deployment/web VERSION=Hello Kubernetes v2
+deployment.apps/web env updated
+$ kubectl --context devops-homework -n hw9 rollout status deployment/web --timeout=120s
+Waiting for deployment &quot;web&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;web&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;web&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;web&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;web&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;web&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;web&quot; rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment &quot;web&quot; rollout to finish: 1 old replicas are pending termination...
+deployment &quot;web&quot; successfully rolled out
+$ kubectl --context devops-homework -n hw9 rollout history deployment/web
+deployment.apps/web
+REVISION  CHANGE-CAUSE
+3         &lt;none&gt;
+4         &lt;none&gt;
+$ kubectl --context devops-homework -n hw9 exec deployment/web -- wget -qO- http://web.hw9.svc.cluster.local
+Hello Kubernetes v2
+$ kubectl --context devops-homework -n hw9 rollout undo deployment/web
+deployment.apps/web rolled back
+$ kubectl --context devops-homework -n hw9 rollout status deployment/web --timeout=120s
+Waiting for deployment &quot;web&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;web&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;web&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;web&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;web&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;web&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;web&quot; rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment &quot;web&quot; rollout to finish: 1 old replicas are pending termination...
+deployment &quot;web&quot; successfully rolled out
+$ kubectl --context devops-homework -n hw9 exec deployment/web -- wget -qO- http://web
+Hello Kubernetes v1
+$ kubectl --context devops-homework -n hw9 scale deployment web --replicas=1
+deployment.apps/web scaled
+**********************
+PowerShell transcript end
+End time: 20261008210347
+**********************</pre></html>

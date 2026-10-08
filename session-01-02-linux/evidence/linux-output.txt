@@ -1,0 +1,149 @@
++ date -u
+Thu Oct  8 15:25:46 UTC 2026
++ cat /etc/os-release
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+++ mktemp -d /tmp/linux-homework.XXXXXX
++ lab_dir=/tmp/linux-homework.4I3Klv
++ cd /tmp/linux-homework.4I3Klv
++ printf 'Linux links demonstration\n'
++ ln original.txt hard.txt
++ ln -s original.txt soft.txt
++ ls -li original.txt hard.txt soft.txt
+1385627 -rw-r--r-- 2 root root 26 Oct  8 15:25 hard.txt
+1385627 -rw-r--r-- 2 root root 26 Oct  8 15:25 original.txt
+1385628 lrwxrwxrwx 1 root root 12 Oct  8 15:25 soft.txt -> original.txt
++ stat -c '%n inode=%i links=%h type=%F' original.txt hard.txt soft.txt
+original.txt inode=1385627 links=2 type=regular file
+hard.txt inode=1385627 links=2 type=regular file
+soft.txt inode=1385628 links=1 type=symbolic link
++ cat soft.txt hard.txt
+Linux links demonstration
+Linux links demonstration
++ rm original.txt
++ cat hard.txt
+Linux links demonstration
++ cat soft.txt
+cat: soft.txt: No such file or directory
+Expected: symbolic link is dangling after original path removal.
++ echo 'Expected: symbolic link is dangling after original path removal.'
++ printf 'Content survives through hard link: '
++ cat hard.txt
+Content survives through hard link: Linux links demonstration
++ rm soft.txt hard.txt
++ ls -la
+total 8
+drwx------ 2 root root 4096 Oct  8 15:25 .
+drwxrwxrwt 1 root root 4096 Oct  8 15:25 ..
++ adduser --disabled-password --gecos 'Homework test user' studentdemo
+info: Adding user `studentdemo' ...
+info: Selecting UID/GID from range 1000 to 59999 ...
+info: Adding new group `studentdemo' (1001) ...
+info: Adding new user `studentdemo' (1001) with group `studentdemo (1001)' ...
+info: Creating home directory `/home/studentdemo' ...
+info: Copying files from `/etc/skel' ...
+info: Adding new user `studentdemo' to supplemental / extra groups `users' ...
+info: Adding user `studentdemo' to group `users' ...
++ id studentdemo
+uid=1001(studentdemo) gid=1001(studentdemo) groups=1001(studentdemo),100(users)
++ getent passwd studentdemo
++ ls -ld /home/studentdemo
+studentdemo:x:1001:1001:Homework test user,,,:/home/studentdemo:/bin/bash
+drwxr-x--- 2 studentdemo studentdemo 4096 Oct  8 15:25 /home/studentdemo
++ deluser --remove-home studentdemo
+info: Looking for files to backup/remove ...
+info: Removing files ...
+warn: `/usr/bin/crontab' not executed. Skipping crontab removal. Package `cron' required.
+info: Removing user `studentdemo' ...
++ id studentdemo
+id: 'studentdemo': no such user
+Verified: disposable test account removed.
++ echo 'Verified: disposable test account removed.'
++ journalctl --version
++ head -n 1
+systemd 255 (255.4-1ubuntu8.17)
++ journalctl --no-pager -n 5
+-- No entries --
+No journal files were found.
++ journalctl -u ssh.service --no-pager -n 5
+-- No entries --
+No journal files were found.
++ mkdir notes
++ touch notes/empty.txt
+/tmp/linux-homework.4I3Klv
++ printf 'linux\ndocker\nlinux\nkubernetes\n'
++ pwd
++ ls -lah notes
+total 12K
+drwxr-xr-x 2 root root 4.0K Oct  8 15:25 .
+drwx------ 3 root root 4.0K Oct  8 15:25 ..
+-rw-r--r-- 1 root root    0 Oct  8 15:25 empty.txt
+-rw-r--r-- 1 root root   30 Oct  8 15:25 topics.txt
++ cp notes/topics.txt notes/copy.txt
++ mv notes/copy.txt notes/renamed.txt
++ cat notes/topics.txt
+linux
+docker
+linux
+kubernetes
++ head -n 2 notes/topics.txt
+linux
+docker
++ tail -n 2 notes/topics.txt
+linux
+kubernetes
++ grep -n linux notes/topics.txt
+1:linux
+3:linux
++ sort notes/topics.txt
++ uniq -c
+      1 docker
+      1 kubernetes
+      2 linux
++ wc -l notes/topics.txt
+4 notes/topics.txt
++ find notes -type f -name '*.txt'
+notes/empty.txt
+notes/renamed.txt
+notes/topics.txt
++ chmod 640 notes/renamed.txt
++ ls -l notes/renamed.txt
+-rw-r----- 1 root root 30 Oct  8 15:25 notes/renamed.txt
++ du -sh notes
+12K	notes
++ df -h /
+Filesystem      Size  Used Avail Use% Mounted on
+overlay        1007G  102G  854G  11% /
++ free -m
+               total        used        free      shared  buff/cache   available
+Mem:            9944        2582          87          43        7516        7362
+Swap:           8192           0        8191
++ ps -eo pid,comm,args
++ head -n 10
+    PID COMMAND         COMMAND
+      1 bash            bash /work/session-01-02-linux/linux-lab.sh
+     98 ps              ps -eo pid,comm,args
+     99 head            head -n 10
++ uname -srm
+Linux 6.18.33.1-microsoft-standard-WSL2 x86_64
++ whoami
+root
++ id
+uid=0(root) gid=0(root) groups=0(root)
++ rm notes/empty.txt notes/renamed.txt notes/topics.txt
++ rmdir notes
++ cd /
++ rmdir /tmp/linux-homework.4I3Klv
+Linux exercises completed successfully.
++ echo 'Linux exercises completed successfully.'

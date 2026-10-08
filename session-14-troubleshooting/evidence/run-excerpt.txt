@@ -1,0 +1,44 @@
+Exact excerpts from the real run.txt transcript. Full context is retained in run.txt.
+
+$ kubectl --context devops-homework -n hw14 get pods -o wide
+NAME                   READY   STATUS                       RESTARTS      AGE     IP             NODE              NOMINATED NODE   READINESS GATES
+bad-config             0/1     CreateContainerConfigError   0             38s     10.244.0.111   devops-homework   <none>           <none>
+bad-dns                1/1     Running                      0             38s     10.244.0.112   devops-homework   <none>           <none>
+bad-image              0/1     ErrImagePull                 0             38s     10.244.0.110   devops-homework   <none>           <none>
+crash                  0/1     CrashLoopBackOff             2 (22s ago)   38s     10.244.0.109   devops-homework   <none>           <none>
+missing-volume         0/1     ContainerCreating            0             38s     <none>         devops-homework   <none>           <none>
+pending                0/1     Pending                      0             38s     <none>         <none>            <none>           <none>
+web-77f566f745-n9tnw   1/1     Running                      0             3m56s   10.244.0.37    devops-homework   <none>           <none>
+
+$ kubectl --context devops-homework -n hw14 logs crash --previous
+required configuration missing
+
+$ kubectl --context devops-homework -n hw14 get pods,svc,endpointslices -o wide
+NAME                       READY   STATUS    RESTARTS   AGE     IP             NODE              NOMINATED NODE   READINESS GATES
+pod/bad-config             1/1     Running   0          2m17s   10.244.0.111   devops-homework   <none>           <none>
+pod/bad-dns                1/1     Running   0          64s     10.244.0.116   devops-homework   <none>           <none>
+pod/bad-image              1/1     Running   0          64s     10.244.0.114   devops-homework   <none>           <none>
+pod/crash                  1/1     Running   0          65s     10.244.0.113   devops-homework   <none>           <none>
+pod/missing-volume         1/1     Running   0          2m17s   10.244.0.118   devops-homework   <none>           <none>
+pod/pending                1/1     Running   0          64s     10.244.0.115   devops-homework   <none>           <none>
+pod/web-77f566f745-n9tnw   1/1     Running   0          5m35s   10.244.0.37    devops-homework   <none>           <none>
+
+NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE     SELECTOR
+service/web   ClusterIP   10.102.239.215   <none>        80/TCP    5m35s   app=web
+
+NAME                                       ADDRESSTYPE   PORTS   ENDPOINTS     AGE
+endpointslice.discovery.k8s.io/web-rwqwg   IPv4          80      10.244.0.37   5m35s
+
+$ kubectl --context devops-homework -n hw14 exec bad-config -- printenv APP_ENV
+homework
+
+$ kubectl --context devops-homework -n hw14 exec bad-dns -- nslookup web.hw14.svc.cluster.local
+Server:		10.96.0.10
+Address:	10.96.0.10:53
+
+
+Name:	web.hw14.svc.cluster.local
+Address: 10.102.239.215
+
+$ kubectl --context devops-homework -n hw14 exec bad-dns -- wget -qO- http://web
+v1

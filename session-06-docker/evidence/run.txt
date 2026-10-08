@@ -1,0 +1,45 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20261008205635
+Username: AMANLAPTOP\Aman
+RunAs User: AMANLAPTOP\Aman
+Configuration Name: 
+Machine: AMANLAPTOP (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File session-06-docker/verify.ps1
+Process ID: 15540
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is evidence/run.txt
+
+
+
+GET http://localhost:8101
+HTTP 200
+<h1>Hello World from Node.js</h1><p>Aman Kumar | 10275</p>
+GET http://localhost:8102
+HTTP 200
+<h1>Hello World from Python</h1><p>Aman Kumar | 10275</p>
+GET http://localhost:8103
+HTTP 200
+<h1>Hello World from Java</h1><p>Aman Kumar | 10275</p>
+GET http://localhost:8104
+HTTP 200
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Apache demo</title><h1>Hello World from Apache</h1><p>Aman Kumar | 10275</p></html>
+GET http://localhost:8105
+HTTP 200
+<!doctype html><html lang="en"><meta charset="utf-8"><title>React demo</title><div id="root"></div><script src="app.js"></script></html>
+GET http://localhost:8106
+HTTP 200
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Nginx demo</title><h1>Hello World from Nginx</h1><p>Aman Kumar | 10275</p></html>
+
+**********************
+Windows PowerShell transcript end
+End time: 20261008205647
+**********************

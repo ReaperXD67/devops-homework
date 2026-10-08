@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "devops.name" . }}-http-test
+  labels:
+    {{- include "devops.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  restartPolicy: Never
+  automountServiceAccountToken: false
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: http-test
+      image: {{ printf "%s:%s" .Values.image.repository .Values.image.tag | quote }}
+      imagePullPolicy: {{ .Values.image.pullPolicy }}
+      command: [node, -e]
+      args:
+        - >-
+          const http = require('node:http');
+          http.get('http://{{ include "devops.name" . }}:{{ .Values.service.port }}/readyz', res => {
+            let body = ''; res.on('data', d => body += d);
+            res.on('end', () => {
+              console.log('Service readiness response:', res.statusCode, body);
+              process.exit(res.statusCode === 200 && JSON.parse(body).status === 'ok' ? 0 : 1);
+            });
+          }).on('error', error => { console.error(error.message); process.exit(1); });
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop: [ALL]
+      resources:
+        requests: {cpu: 10m, memory: 16Mi}
+        limits: {cpu: 100m, memory: 64Mi}

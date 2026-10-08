@@ -1,0 +1,20 @@
+name: devops-hello
+services:
+  nodejs:
+    build: ./nodejs-app
+    ports: ["127.0.0.1:8101:8080"]
+  python:
+    build: ./python-app
+    ports: ["127.0.0.1:8102:8080"]
+  java:
+    build: ./java-app
+    ports: ["127.0.0.1:8103:8080"]
+  apache:
+    build: ./Apache-app
+    ports: ["127.0.0.1:8104:80"]
+  react:
+    build: ./React-app
+    ports: ["127.0.0.1:8105:80"]
+  nginx:
+    build: ./nginx-app
+    ports: ["127.0.0.1:8106:80"]

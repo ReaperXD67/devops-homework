@@ -1,0 +1,178 @@
+Actual final Helm deployment evidence
+UTC: 2026-10-08T15:33:48Z
+Context: devops-homework; Namespace: devops-final-helm
+Image: devops-final:local; locally built and loaded into Minikube
+The runtime Secret value is never written to this log.
+
+> helm version --short
+v3.19.0+g3d8990f
+
+Exit code: 0
+
+> helm lint --strict
+==> Linting C:\Users\Aman\OneDrive\Desktop\Scaler\devops-homework\final-devops-project\helm
+[INFO] Chart.yaml: icon is recommended
+
+1 chart(s) linted, 0 chart(s) failed
+
+Exit code: 0
+
+> kubectl create namespace devops-final-helm (idempotent apply)
+namespace/devops-final-helm unchanged
+
+Exit code: 0
+
+> Create app-secret from a generated runtime token (value omitted)
+secret/app-secret configured
+
+Exit code: 0
+
+> helm upgrade --install final-app (APP_VERSION 1.0.0)
+Release "final-app" does not exist. Installing it now.
+NAME: final-app
+LAST DEPLOYED: Thu Oct  8 21:03:49 2026
+NAMESPACE: devops-final-helm
+STATUS: deployed
+REVISION: 1
+NOTES:
+Release final-app is deployed in devops-final-helm.
+The existing Secret app-secret must contain key token.
+
+Check application readiness:
+  helm test final-app --namespace devops-final-helm --logs
+
+Open a local tunnel:
+  kubectl -n devops-final-helm port-forward svc/final-app 18081:80
+  curl http://127.0.0.1:18081/api/info
+
+Exit code: 0
+
+> helm test final-app --logs
+NAME: final-app
+LAST DEPLOYED: Thu Oct  8 21:03:49 2026
+NAMESPACE: devops-final-helm
+STATUS: deployed
+REVISION: 1
+TEST SUITE:     final-app-http-test
+Last Started:   Thu Oct  8 21:03:54 2026
+Last Completed: Thu Oct  8 21:03:57 2026
+Phase:          Succeeded
+NOTES:
+Release final-app is deployed in devops-final-helm.
+The existing Secret app-secret must contain key token.
+
+Check application readiness:
+  helm test final-app --namespace devops-final-helm --logs
+
+Open a local tunnel:
+  kubectl -n devops-final-helm port-forward svc/final-app 18081:80
+  curl http://127.0.0.1:18081/api/info
+
+POD LOGS: final-app-http-test
+Service readiness response: 200 {"status":"ok"}
+
+
+Exit code: 0
+
+> kubectl get deployment,pods,service
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES               SELECTOR
+deployment.apps/final-app   2/2     2            2           7s    app          devops-final:local   app.kubernetes.io/instance=final-app,app.kubernetes.io/name=devops-app
+
+NAME                             READY   STATUS      RESTARTS   AGE   IP            NODE              NOMINATED NODE   READINESS GATES
+pod/final-app-64d777d655-58mdc   1/1     Running     0          7s    10.244.0.91   devops-homework   <none>           <none>
+pod/final-app-64d777d655-dfbs4   1/1     Running     0          7s    10.244.0.92   devops-homework   <none>           <none>
+pod/final-app-http-test          0/1     Completed   0          3s    10.244.0.94   devops-homework   <none>           <none>
+
+NAME                TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+service/final-app   ClusterIP   10.103.119.74   <none>        80/TCP    7s    app.kubernetes.io/instance=final-app,app.kubernetes.io/name=devops-app
+
+Exit code: 0
+
+> HTTP /api/info through ClusterIP Service at version 1.0.0
+{"application":"DevOps homework","author":"Aman Kumar","enrollment":"10275","version":"1.0.0"}
+
+Exit code: 0
+
+> helm upgrade final-app (APP_VERSION 1.1.0)
+Release "final-app" has been upgraded. Happy Helming!
+NAME: final-app
+LAST DEPLOYED: Thu Oct  8 21:03:57 2026
+NAMESPACE: devops-final-helm
+STATUS: deployed
+REVISION: 2
+NOTES:
+Release final-app is deployed in devops-final-helm.
+The existing Secret app-secret must contain key token.
+
+Check application readiness:
+  helm test final-app --namespace devops-final-helm --logs
+
+Open a local tunnel:
+  kubectl -n devops-final-helm port-forward svc/final-app 18081:80
+  curl http://127.0.0.1:18081/api/info
+
+Exit code: 0
+
+> HTTP /api/info after version 1.1.0 upgrade
+{"application":"DevOps homework","author":"Aman Kumar","enrollment":"10275","version":"1.1.0"}
+
+Exit code: 0
+
+> helm rollback final-app 1
+Rollback was a success! Happy Helming!
+
+Exit code: 0
+
+> HTTP /api/info after rollback to revision 1
+{"application":"DevOps homework","author":"Aman Kumar","enrollment":"10275","version":"1.0.0"}
+
+Exit code: 0
+
+> helm history final-app
+REVISION	UPDATED                 	STATUS    	CHART           	APP VERSION	DESCRIPTION     
+1       	Thu Oct  8 21:03:49 2026	superseded	devops-app-1.0.0	1.0.0      	Install complete
+2       	Thu Oct  8 21:03:57 2026	superseded	devops-app-1.0.0	1.0.0      	Upgrade complete
+3       	Thu Oct  8 21:04:06 2026	deployed  	devops-app-1.0.0	1.0.0      	Rollback to 1   
+
+Exit code: 0
+
+> helm test final-app --logs after rollback
+NAME: final-app
+LAST DEPLOYED: Thu Oct  8 21:04:06 2026
+NAMESPACE: devops-final-helm
+STATUS: deployed
+REVISION: 3
+TEST SUITE:     final-app-http-test
+Last Started:   Thu Oct  8 21:04:15 2026
+Last Completed: Thu Oct  8 21:04:19 2026
+Phase:          Succeeded
+NOTES:
+Release final-app is deployed in devops-final-helm.
+The existing Secret app-secret must contain key token.
+
+Check application readiness:
+  helm test final-app --namespace devops-final-helm --logs
+
+Open a local tunnel:
+  kubectl -n devops-final-helm port-forward svc/final-app 18081:80
+  curl http://127.0.0.1:18081/api/info
+
+POD LOGS: final-app-http-test
+Service readiness response: 200 {"status":"ok"}
+
+
+Exit code: 0
+
+> kubectl get deployment,pods,service after rollback
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/final-app   2/2     2            2           29s
+
+NAME                             READY   STATUS      RESTARTS   AGE
+pod/final-app-64d777d655-55844   1/1     Running     0          9s
+pod/final-app-64d777d655-5m4hs   1/1     Running     0          13s
+pod/final-app-http-test          0/1     Completed   0          4s
+
+NAME                TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/final-app   ClusterIP   10.103.119.74   <none>        80/TCP    29s
+
+Exit code: 0

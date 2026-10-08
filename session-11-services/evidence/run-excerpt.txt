@@ -1,0 +1,36 @@
+Exact excerpts from the real run.txt transcript. Full context is retained in run.txt.
+
+$ kubectl --context devops-homework -n hw11 get services -o wide
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE     SELECTOR
+clusterip      ClusterIP      10.98.122.194    <none>        80/TCP         3m38s   app=web
+externalname   ExternalName   <none>           example.com   <none>         3m38s   <none>
+headless       ClusterIP      None             <none>        80/TCP         3m38s   app=web
+loadbalancer   LoadBalancer   10.110.185.240   <pending>     80:31505/TCP   3m38s   app=web
+nodeport       NodePort       10.109.221.243   <none>        80:32389/TCP   3m38s   app=web
+
+$ kubectl --context devops-homework -n hw11 exec dns-client -- nslookup headless.hw11.svc.cluster.local
+Server:		10.96.0.10
+Address:	10.96.0.10:53
+
+Name:	headless.hw11.svc.cluster.local
+Address: 10.244.0.21
+Name:	headless.hw11.svc.cluster.local
+Address: 10.244.0.20
+
+$ kubectl --context devops-homework -n hw11 exec dns-client -- nslookup externalname.hw11.svc.cluster.local
+Server:		10.96.0.10
+Address:	10.96.0.10:53
+
+externalname.hw11.svc.cluster.local	canonical name = example.com
+
+externalname.hw11.svc.cluster.local	canonical name = example.com
+Name:	example.com
+Address: 104.20.23.154
+Name:	example.com
+Address: 172.66.147.243
+
+$ kubectl --context devops-homework -n hw11 exec dns-client -- wget -qO- http://clusterip
+Hello from Kubernetes Services
+
+$ kubectl --context devops-homework -n hw11 exec dns-client -- wget -qO- http://192.168.49.2:32389
+Hello from Kubernetes Services

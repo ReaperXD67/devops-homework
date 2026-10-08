@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Six running Docker applications</title>
+<style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
+<h1>Six running Docker applications</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
+<p>Source: <a href="../../session-06-docker/evidence/state.txt">session-06-docker/evidence/state.txt</a> · Last 19 nonempty lines of 19</p>
+<pre>Captured UTC: 2026-10-08T15:36:54.854119+00:00
+$ docker compose -f session-06-docker/compose.yaml ps
+NAME                    IMAGE                 COMMAND                  SERVICE   CREATED          STATUS          PORTS
+devops-hello-apache-1   devops-hello-apache   &quot;httpd-foreground&quot;       apache    10 minutes ago   Up 10 minutes   127.0.0.1:8104-&gt;80/tcp
+devops-hello-java-1     devops-hello-java     &quot;/__cacert_entrypoin…&quot;   java      10 minutes ago   Up 10 minutes   127.0.0.1:8103-&gt;8080/tcp
+devops-hello-nginx-1    devops-hello-nginx    &quot;/docker-entrypoint.…&quot;   nginx     10 minutes ago   Up 10 minutes   127.0.0.1:8106-&gt;80/tcp
+devops-hello-nodejs-1   devops-hello-nodejs   &quot;docker-entrypoint.s…&quot;   nodejs    10 minutes ago   Up 10 minutes   127.0.0.1:8101-&gt;8080/tcp
+devops-hello-python-1   devops-hello-python   &quot;python app.py&quot;          python    10 minutes ago   Up 10 minutes   127.0.0.1:8102-&gt;8080/tcp
+devops-hello-react-1    devops-hello-react    &quot;/docker-entrypoint.…&quot;   react     10 minutes ago   Up 10 minutes   127.0.0.1:8105-&gt;80/tcp
+Exit code: 0
+$ docker images --filter reference=devops-hello-*
+IMAGE                        ID             DISK USAGE   CONTENT SIZE   EXTRA
+devops-hello-apache:latest   7e86ff7f7536        105MB         23.3MB   U
+devops-hello-java:latest     3a36eddd3a96        286MB         74.1MB   U
+devops-hello-nginx:latest    a6bd96922dc9       92.8MB         26.1MB   U
+devops-hello-nodejs:latest   8be1dee0bfd9        241MB         61.6MB   U
+devops-hello-python:latest   6741fcfe423f       78.7MB         19.5MB   U
+devops-hello-react:latest    f797173636de       93.1MB         26.2MB   U
+Exit code: 0</pre></html>

@@ -1,0 +1,739 @@
+**********************
+PowerShell transcript start
+Start time: 20261008210338
+Username: AMANLAPTOP\Aman
+RunAs User: AMANLAPTOP\Aman
+Configuration Name: 
+Machine: AMANLAPTOP (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Users\Aman\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\pwsh.dll -Command try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}
+& .\Run-Lab.ps1
+Process ID: 19424
+PSVersion: 7.6.5
+PSEdition: Core
+GitCommitId: 7.6.5
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is evidence/run.txt
+$ kubectl --context devops-homework apply -f 01-rolling.yaml
+namespace/hw10 unchanged
+deployment.apps/rolling configured
+service/rolling unchanged
+$ kubectl --context devops-homework -n hw10 rollout status deployment/rolling --timeout=180s
+Waiting for deployment "rolling" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "rolling" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "rolling" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "rolling" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "rolling" rollout to finish: 1 old replicas are pending termination...
+deployment "rolling" successfully rolled out
+$ kubectl --context devops-homework -n hw10 set env deployment/rolling VERSION=rolling-v2
+deployment.apps/rolling env updated
+$ kubectl --context devops-homework -n hw10 get pods -o wide
+NAME                        READY   STATUS              RESTARTS   AGE    IP            NODE              NOMINATED NODE   READINESS GATES
+blue-649c7cdf79-xkrhg       1/1     Running             0          2m     10.244.0.49   devops-homework   <none>           <none>
+canary-98459b7cb-5jkzq      1/1     Running             0          116s   10.244.0.56   devops-homework   <none>           <none>
+green-7bcc9d4cbd-nrdlb      1/1     Running             0          2m     10.244.0.50   devops-homework   <none>           <none>
+life-failed                 0/1     Error               0          106s   10.244.0.63   devops-homework   <none>           <none>
+life-succeeded              0/1     Completed           0          106s   10.244.0.62   devops-homework   <none>           <none>
+recreate-7759ff9f59-h485k   1/1     Running             0          108s   10.244.0.60   devops-homework   <none>           <none>
+recreate-7759ff9f59-q8rrn   1/1     Running             0          108s   10.244.0.59   devops-homework   <none>           <none>
+rolling-5566d4786-5dv7x     1/1     Running             0          6s     10.244.0.85   devops-homework   <none>           <none>
+rolling-5566d4786-jqdzj     1/1     Running             0          9s     10.244.0.82   devops-homework   <none>           <none>
+rolling-58c9685cdf-ns2x6    0/1     ContainerCreating   0          0s     <none>        devops-homework   <none>           <none>
+stable-6bdf5bfb77-2vm46     1/1     Running             0          116s   10.244.0.55   devops-homework   <none>           <none>
+stable-6bdf5bfb77-8tp2t     1/1     Running             0          116s   10.244.0.52   devops-homework   <none>           <none>
+stable-6bdf5bfb77-c7qb7     1/1     Running             0          116s   10.244.0.54   devops-homework   <none>           <none>
+stable-6bdf5bfb77-dmlgk     1/1     Running             0          116s   10.244.0.53   devops-homework   <none>           <none>
+$ kubectl --context devops-homework -n hw10 rollout status deployment/rolling --timeout=120s
+Waiting for deployment "rolling" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "rolling" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "rolling" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "rolling" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "rolling" rollout to finish: 1 old replicas are pending termination...
+deployment "rolling" successfully rolled out
+$ kubectl --context devops-homework -n hw10 get rs
+NAME                  DESIRED   CURRENT   READY   AGE
+blue-649c7cdf79       1         1         1       2m7s
+canary-98459b7cb      1         1         1       2m3s
+green-7bcc9d4cbd      1         1         1       2m7s
+recreate-7555c7c4b8   0         0         0       2m
+recreate-7759ff9f59   2         2         2       115s
+rolling-5566d4786     0         0         0       3m47s
+rolling-58c9685cdf    2         2         2       3m45s
+stable-6bdf5bfb77     4         4         4       2m3s
+$ kubectl --context devops-homework -n hw10 exec deployment/rolling -- wget -qO- http://rolling
+rolling-v2
+$ kubectl --context devops-homework apply -f 02-blue-green.yaml
+deployment.apps/blue unchanged
+deployment.apps/green unchanged
+service/color configured
+$ kubectl --context devops-homework -n hw10 rollout status deployment/blue --timeout=120s
+deployment "blue" successfully rolled out
+$ kubectl --context devops-homework -n hw10 rollout status deployment/green --timeout=120s
+deployment "green" successfully rolled out
+$ kubectl --context devops-homework -n hw10 exec deployment/blue -- wget -qO- http://color
+blue-v1
+$ kubectl --context devops-homework -n hw10 patch service color --type=merge --patch-file green-patch.json
+service/color patched
+$ kubectl --context devops-homework -n hw10 exec deployment/green -- wget -qO- http://color
+green-v2
+$ kubectl --context devops-homework apply -f 03-canary.yaml
+deployment.apps/stable unchanged
+deployment.apps/canary unchanged
+service/canary-demo unchanged
+$ kubectl --context devops-homework -n hw10 rollout status deployment/stable --timeout=120s
+deployment "stable" successfully rolled out
+$ kubectl --context devops-homework -n hw10 rollout status deployment/canary --timeout=120s
+deployment "canary" successfully rolled out
+$ kubectl --context devops-homework -n hw10 get endpointslices -l kubernetes.io/service-name=canary-demo -o wide
+NAME                ADDRESSTYPE   PORTS   ENDPOINTS                                         AGE
+canary-demo-j5w26   IPv4          80      10.244.0.55,10.244.0.56,10.244.0.53 + 2 more...   2m20s
+$ kubectl --context devops-homework -n hw10 exec deployment/stable -- sh -c for i in $(seq 1 100); do wget -qO- http://canary-demo; done
+stable-v1
+canary-v2
+stable-v1
+stable-v1
+canary-v2
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+canary-v2
+stable-v1
+stable-v1
+canary-v2
+stable-v1
+canary-v2
+canary-v2
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+canary-v2
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+canary-v2
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+canary-v2
+stable-v1
+stable-v1
+stable-v1
+canary-v2
+canary-v2
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+canary-v2
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+canary-v2
+stable-v1
+stable-v1
+canary-v2
+stable-v1
+stable-v1
+stable-v1
+canary-v2
+stable-v1
+stable-v1
+canary-v2
+stable-v1
+stable-v1
+stable-v1
+canary-v2
+canary-v2
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+stable-v1
+canary-v2
+stable-v1
+canary-v2
+stable-v1
+stable-v1
+canary-v2
+canary-v2
+canary-v2
+canary-v2
+stable-v1
+$ kubectl --context devops-homework apply -f 04-recreate.yaml
+deployment.apps/recreate configured
+service/recreate unchanged
+$ kubectl --context devops-homework -n hw10 rollout status deployment/recreate --timeout=120s
+Waiting for deployment "recreate" rollout to finish: 0 out of 2 new replicas have been updated...
+Waiting for deployment "recreate" rollout to finish: 0 out of 2 new replicas have been updated...
+Waiting for deployment "recreate" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "recreate" rollout to finish: 1 of 2 updated replicas are available...
+deployment "recreate" successfully rolled out
+$ kubectl --context devops-homework -n hw10 set env deployment/recreate VERSION=recreate-v2
+deployment.apps/recreate env updated
+$ kubectl --context devops-homework -n hw10 get pods -l app=recreate -o wide
+NAME                        READY   STATUS        RESTARTS   AGE   IP             NODE              NOMINATED NODE   READINESS GATES
+recreate-7555c7c4b8-2lhr7   1/1     Terminating   0          6s    10.244.0.102   devops-homework   <none>           <none>
+recreate-7555c7c4b8-cj98l   1/1     Terminating   0          6s    10.244.0.103   devops-homework   <none>           <none>
+$ kubectl --context devops-homework -n hw10 rollout status deployment/recreate --timeout=120s
+Waiting for deployment "recreate" rollout to finish: 0 out of 2 new replicas have been updated...
+Waiting for deployment "recreate" rollout to finish: 0 out of 2 new replicas have been updated...
+Waiting for deployment "recreate" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "recreate" rollout to finish: 1 of 2 updated replicas are available...
+deployment "recreate" successfully rolled out
+$ kubectl --context devops-homework -n hw10 describe deployment recreate
+Name:               recreate
+Namespace:          hw10
+CreationTimestamp:  Thu, 08 Oct 2026 21:01:54 +0530
+Labels:             <none>
+Annotations:        deployment.kubernetes.io/revision: 4
+Selector:           app=recreate
+Replicas:           2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:       Recreate
+MinReadySeconds:    0
+Pod Template:
+  Labels:  app=recreate
+  Containers:
+   web:
+    Image:      nginx:1.28-alpine
+    Port:       80/TCP
+    Host Port:  0/TCP
+    Command:
+      sh
+      -c
+    Args:
+      printf "%s\n" "$VERSION" > /usr/share/nginx/html/index.html; exec nginx -g "daemon off;"
+    Limits:
+      cpu:     200m
+      memory:  64Mi
+    Requests:
+      cpu:      10m
+      memory:   16Mi
+    Liveness:   http-get http://:80/ delay=10s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:80/ delay=1s timeout=1s period=2s #success=1 #failure=3
+    Environment:
+      VERSION:     recreate-v2
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Progressing    True    NewReplicaSetAvailable
+  Available      True    MinimumReplicasAvailable
+OldReplicaSets:  recreate-7555c7c4b8 (0/0 replicas created)
+NewReplicaSet:   recreate-7759ff9f59 (2/2 replicas created)
+Events:
+  Type    Reason             Age                  From                   Message
+  ----    ------             ----                 ----                   -------
+  Normal  ScalingReplicaSet  13s                  deployment-controller  Scaled down replica set recreate-7759ff9f59 from 2 to 0
+  Normal  ScalingReplicaSet  12s (x2 over 2m31s)  deployment-controller  Scaled up replica set recreate-7555c7c4b8 from 0 to 2
+  Normal  ScalingReplicaSet  6s (x2 over 2m29s)   deployment-controller  Scaled down replica set recreate-7555c7c4b8 from 2 to 0
+  Normal  ScalingReplicaSet  5s (x2 over 2m26s)   deployment-controller  Scaled up replica set recreate-7759ff9f59 from 0 to 2
+$ kubectl --context devops-homework -n hw10 get events --sort-by=.metadata.creationTimestamp
+LAST SEEN   TYPE      REASON              OBJECT                           MESSAGE
+4m18s       Normal    Started             pod/rolling-5566d4786-2k65s      Started container web
+4m18s       Normal    SuccessfulCreate    replicaset/rolling-5566d4786     Created pod: rolling-5566d4786-jmxlp
+4m18s       Normal    SuccessfulCreate    replicaset/rolling-5566d4786     Created pod: rolling-5566d4786-2k65s
+4m18s       Normal    Created             pod/rolling-5566d4786-2k65s      Created container: web
+4m18s       Normal    Scheduled           pod/rolling-5566d4786-2k65s      Successfully assigned hw10/rolling-5566d4786-2k65s to devops-homework
+4m18s       Normal    Started             pod/rolling-5566d4786-jmxlp      Started container web
+4m18s       Normal    Created             pod/rolling-5566d4786-jmxlp      Created container: web
+4m18s       Normal    Pulled              pod/rolling-5566d4786-jmxlp      Container image "nginx:1.28-alpine" already present on machine
+4m18s       Normal    Scheduled           pod/rolling-5566d4786-jmxlp      Successfully assigned hw10/rolling-5566d4786-jmxlp to devops-homework
+4m18s       Normal    ScalingReplicaSet   deployment/rolling               Scaled up replica set rolling-5566d4786 from 0 to 2
+4m18s       Normal    Pulled              pod/rolling-5566d4786-2k65s      Container image "nginx:1.28-alpine" already present on machine
+4m16s       Normal    SuccessfulCreate    replicaset/rolling-58c9685cdf    Created pod: rolling-58c9685cdf-fdt22
+4m16s       Normal    Scheduled           pod/rolling-58c9685cdf-fdt22     Successfully assigned hw10/rolling-58c9685cdf-fdt22 to devops-homework
+4m16s       Normal    Started             pod/rolling-58c9685cdf-fdt22     Started container web
+38s         Normal    ScalingReplicaSet   deployment/rolling               Scaled up replica set rolling-58c9685cdf from 0 to 1
+4m16s       Normal    Created             pod/rolling-58c9685cdf-fdt22     Created container: web
+4m16s       Normal    Pulled              pod/rolling-58c9685cdf-fdt22     Container image "nginx:1.28-alpine" already present on machine
+4m15s       Normal    Scheduled           pod/rolling-58c9685cdf-7pbj5     Successfully assigned hw10/rolling-58c9685cdf-7pbj5 to devops-homework
+4m15s       Normal    Killing             pod/rolling-5566d4786-2k65s      Stopping container web
+4m15s       Normal    SuccessfulDelete    replicaset/rolling-5566d4786     Deleted pod: rolling-5566d4786-2k65s
+4m15s       Normal    SuccessfulCreate    replicaset/rolling-58c9685cdf    Created pod: rolling-58c9685cdf-7pbj5
+36s         Normal    ScalingReplicaSet   deployment/rolling               Scaled down replica set rolling-5566d4786 from 2 to 1
+36s         Normal    ScalingReplicaSet   deployment/rolling               Scaled up replica set rolling-58c9685cdf from 1 to 2
+4m14s       Normal    Pulled              pod/rolling-58c9685cdf-7pbj5     Container image "nginx:1.28-alpine" already present on machine
+4m14s       Normal    Created             pod/rolling-58c9685cdf-7pbj5     Created container: web
+4m14s       Normal    Started             pod/rolling-58c9685cdf-7pbj5     Started container web
+34s         Normal    ScalingReplicaSet   deployment/rolling               Scaled down replica set rolling-5566d4786 from 1 to 0
+4m13s       Normal    SuccessfulDelete    replicaset/rolling-5566d4786     Deleted pod: rolling-5566d4786-jmxlp
+4m13s       Normal    Killing             pod/rolling-5566d4786-jmxlp      Stopping container web
+2m45s       Normal    SuccessfulCreate    replicaset/rolling-5566d4786     Created pod: rolling-5566d4786-l68sh
+47s         Normal    ScalingReplicaSet   deployment/rolling               Scaled up replica set rolling-5566d4786 from 0 to 1
+2m45s       Normal    Scheduled           pod/rolling-5566d4786-l68sh      Successfully assigned hw10/rolling-5566d4786-l68sh to devops-homework
+2m44s       Normal    Pulled              pod/rolling-5566d4786-l68sh      Container image "nginx:1.28-alpine" already present on machine
+2m44s       Normal    Created             pod/rolling-5566d4786-l68sh      Created container: web
+2m44s       Normal    Started             pod/rolling-5566d4786-l68sh      Started container web
+2m43s       Warning   Unhealthy           pod/rolling-58c9685cdf-7pbj5     Readiness probe failed: Get "http://10.244.0.19:80/": dial tcp 10.244.0.19:80: connect: connection refused
+44s         Normal    ScalingReplicaSet   deployment/rolling               Scaled up replica set rolling-5566d4786 from 1 to 2
+2m43s       Normal    Scheduled           pod/rolling-5566d4786-vnjp8      Successfully assigned hw10/rolling-5566d4786-vnjp8 to devops-homework
+2m43s       Normal    SuccessfulCreate    replicaset/rolling-5566d4786     Created pod: rolling-5566d4786-vnjp8
+2m43s       Normal    Killing             pod/rolling-58c9685cdf-7pbj5     Stopping container web
+44s         Normal    ScalingReplicaSet   deployment/rolling               Scaled down replica set rolling-58c9685cdf from 2 to 1
+2m43s       Normal    SuccessfulDelete    replicaset/rolling-58c9685cdf    Deleted pod: rolling-58c9685cdf-7pbj5
+2m42s       Normal    Started             pod/rolling-5566d4786-vnjp8      Started container web
+2m42s       Normal    Created             pod/rolling-5566d4786-vnjp8      Created container: web
+2m42s       Normal    Pulled              pod/rolling-5566d4786-vnjp8      Container image "nginx:1.28-alpine" already present on machine
+2m41s       Normal    Scheduled           pod/rolling-58c9685cdf-wcjcd     Successfully assigned hw10/rolling-58c9685cdf-wcjcd to devops-homework
+2m41s       Normal    Killing             pod/rolling-58c9685cdf-fdt22     Stopping container web
+2m41s       Normal    SuccessfulCreate    replicaset/rolling-58c9685cdf    Created pod: rolling-58c9685cdf-wcjcd
+2m41s       Normal    SuccessfulDelete    replicaset/rolling-58c9685cdf    Deleted pod: rolling-58c9685cdf-fdt22
+42s         Normal    ScalingReplicaSet   deployment/rolling               Scaled down replica set rolling-58c9685cdf from 1 to 0
+2m40s       Normal    Pulled              pod/rolling-58c9685cdf-wcjcd     Container image "nginx:1.28-alpine" already present on machine
+2m40s       Normal    Created             pod/rolling-58c9685cdf-wcjcd     Created container: web
+2m40s       Normal    Started             pod/rolling-58c9685cdf-wcjcd     Started container web
+2m39s       Normal    Created             pod/rolling-58c9685cdf-wdzr4     Created container: web
+2m39s       Normal    Scheduled           pod/rolling-58c9685cdf-wdzr4     Successfully assigned hw10/rolling-58c9685cdf-wdzr4 to devops-homework
+2m39s       Normal    SuccessfulCreate    replicaset/rolling-58c9685cdf    Created pod: rolling-58c9685cdf-wdzr4
+2m39s       Normal    SuccessfulDelete    replicaset/rolling-5566d4786     Deleted pod: rolling-5566d4786-vnjp8
+2m39s       Normal    Started             pod/rolling-58c9685cdf-wdzr4     Started container web
+2m39s       Normal    Pulled              pod/rolling-58c9685cdf-wdzr4     Container image "nginx:1.28-alpine" already present on machine
+2m38s       Normal    SuccessfulCreate    replicaset/green-7bcc9d4cbd      Created pod: green-7bcc9d4cbd-nrdlb
+2m38s       Normal    Killing             pod/rolling-5566d4786-vnjp8      Stopping container web
+2m38s       Normal    Scheduled           pod/green-7bcc9d4cbd-nrdlb       Successfully assigned hw10/green-7bcc9d4cbd-nrdlb to devops-homework
+2m38s       Normal    Killing             pod/rolling-5566d4786-l68sh      Stopping container web
+2m38s       Normal    Scheduled           pod/blue-649c7cdf79-xkrhg        Successfully assigned hw10/blue-649c7cdf79-xkrhg to devops-homework
+2m38s       Normal    ScalingReplicaSet   deployment/blue                  Scaled up replica set blue-649c7cdf79 from 0 to 1
+2m38s       Normal    SuccessfulCreate    replicaset/blue-649c7cdf79       Created pod: blue-649c7cdf79-xkrhg
+2m38s       Normal    SuccessfulDelete    replicaset/rolling-5566d4786     Deleted pod: rolling-5566d4786-l68sh
+2m38s       Normal    ScalingReplicaSet   deployment/green                 Scaled up replica set green-7bcc9d4cbd from 0 to 1
+2m37s       Normal    Created             pod/green-7bcc9d4cbd-nrdlb       Created container: web
+2m37s       Normal    Created             pod/blue-649c7cdf79-xkrhg        Created container: web
+2m37s       Normal    Pulled              pod/green-7bcc9d4cbd-nrdlb       Container image "nginx:1.28-alpine" already present on machine
+2m37s       Normal    Pulled              pod/blue-649c7cdf79-xkrhg        Container image "nginx:1.28-alpine" already present on machine
+2m37s       Normal    Started             pod/green-7bcc9d4cbd-nrdlb       Started container web
+2m37s       Normal    Started             pod/blue-649c7cdf79-xkrhg        Started container web
+2m34s       Normal    ScalingReplicaSet   deployment/stable                Scaled up replica set stable-6bdf5bfb77 from 0 to 4
+2m34s       Normal    Scheduled           pod/stable-6bdf5bfb77-c7qb7      Successfully assigned hw10/stable-6bdf5bfb77-c7qb7 to devops-homework
+2m34s       Normal    SuccessfulCreate    replicaset/stable-6bdf5bfb77     Created pod: stable-6bdf5bfb77-8tp2t
+2m34s       Normal    SuccessfulCreate    replicaset/stable-6bdf5bfb77     Created pod: stable-6bdf5bfb77-2vm46
+2m34s       Normal    Pulled              pod/stable-6bdf5bfb77-2vm46      Container image "nginx:1.28-alpine" already present on machine
+2m34s       Normal    Scheduled           pod/stable-6bdf5bfb77-8tp2t      Successfully assigned hw10/stable-6bdf5bfb77-8tp2t to devops-homework
+2m34s       Normal    Pulled              pod/stable-6bdf5bfb77-8tp2t      Container image "nginx:1.28-alpine" already present on machine
+2m34s       Normal    SuccessfulCreate    replicaset/stable-6bdf5bfb77     Created pod: stable-6bdf5bfb77-c7qb7
+2m34s       Normal    Started             pod/stable-6bdf5bfb77-dmlgk      Started container web
+2m34s       Normal    Scheduled           pod/stable-6bdf5bfb77-dmlgk      Successfully assigned hw10/stable-6bdf5bfb77-dmlgk to devops-homework
+2m34s       Normal    Created             pod/stable-6bdf5bfb77-dmlgk      Created container: web
+2m34s       Normal    Pulled              pod/stable-6bdf5bfb77-c7qb7      Container image "nginx:1.28-alpine" already present on machine
+2m34s       Normal    Scheduled           pod/canary-98459b7cb-5jkzq       Successfully assigned hw10/canary-98459b7cb-5jkzq to devops-homework
+2m34s       Normal    Pulled              pod/canary-98459b7cb-5jkzq       Container image "nginx:1.28-alpine" already present on machine
+2m34s       Normal    Pulled              pod/stable-6bdf5bfb77-dmlgk      Container image "nginx:1.28-alpine" already present on machine
+2m34s       Normal    SuccessfulCreate    replicaset/canary-98459b7cb      Created pod: canary-98459b7cb-5jkzq
+2m34s       Normal    SuccessfulCreate    replicaset/stable-6bdf5bfb77     Created pod: stable-6bdf5bfb77-dmlgk
+2m34s       Normal    ScalingReplicaSet   deployment/canary                Scaled up replica set canary-98459b7cb from 0 to 1
+2m34s       Normal    Scheduled           pod/stable-6bdf5bfb77-2vm46      Successfully assigned hw10/stable-6bdf5bfb77-2vm46 to devops-homework
+2m33s       Normal    Started             pod/stable-6bdf5bfb77-2vm46      Started container web
+2m33s       Normal    Started             pod/stable-6bdf5bfb77-c7qb7      Started container web
+2m33s       Normal    Started             pod/canary-98459b7cb-5jkzq       Started container web
+2m33s       Normal    Created             pod/canary-98459b7cb-5jkzq       Created container: web
+2m33s       Normal    Created             pod/stable-6bdf5bfb77-c7qb7      Created container: web
+2m33s       Normal    Started             pod/stable-6bdf5bfb77-8tp2t      Started container web
+2m33s       Normal    Created             pod/stable-6bdf5bfb77-8tp2t      Created container: web
+2m33s       Normal    Created             pod/stable-6bdf5bfb77-2vm46      Created container: web
+2m31s       Normal    Scheduled           pod/recreate-7555c7c4b8-8fxb4    Successfully assigned hw10/recreate-7555c7c4b8-8fxb4 to devops-homework
+2m31s       Normal    SuccessfulCreate    replicaset/recreate-7555c7c4b8   Created pod: recreate-7555c7c4b8-8fxb4
+2m31s       Normal    SuccessfulCreate    replicaset/recreate-7555c7c4b8   Created pod: recreate-7555c7c4b8-4cnnk
+12s         Normal    ScalingReplicaSet   deployment/recreate              Scaled up replica set recreate-7555c7c4b8 from 0 to 2
+2m31s       Normal    Scheduled           pod/recreate-7555c7c4b8-4cnnk    Successfully assigned hw10/recreate-7555c7c4b8-4cnnk to devops-homework
+2m30s       Normal    Created             pod/recreate-7555c7c4b8-4cnnk    Created container: web
+2m30s       Normal    Pulled              pod/recreate-7555c7c4b8-4cnnk    Container image "nginx:1.28-alpine" already present on machine
+2m30s       Normal    Started             pod/recreate-7555c7c4b8-4cnnk    Started container web
+2m30s       Normal    Pulled              pod/recreate-7555c7c4b8-8fxb4    Container image "nginx:1.28-alpine" already present on machine
+2m30s       Normal    Created             pod/recreate-7555c7c4b8-8fxb4    Created container: web
+2m30s       Normal    Started             pod/recreate-7555c7c4b8-8fxb4    Started container web
+6s          Normal    ScalingReplicaSet   deployment/recreate              Scaled down replica set recreate-7555c7c4b8 from 2 to 0
+2m29s       Normal    SuccessfulDelete    replicaset/recreate-7555c7c4b8   Deleted pod: recreate-7555c7c4b8-4cnnk
+2m29s       Normal    SuccessfulDelete    replicaset/recreate-7555c7c4b8   Deleted pod: recreate-7555c7c4b8-8fxb4
+2m27s       Normal    Killing             pod/recreate-7555c7c4b8-4cnnk    Stopping container web
+2m27s       Normal    Killing             pod/recreate-7555c7c4b8-8fxb4    Stopping container web
+2m26s       Normal    Scheduled           pod/recreate-7759ff9f59-h485k    Successfully assigned hw10/recreate-7759ff9f59-h485k to devops-homework
+2m26s       Normal    Scheduled           pod/recreate-7759ff9f59-q8rrn    Successfully assigned hw10/recreate-7759ff9f59-q8rrn to devops-homework
+2m26s       Normal    SuccessfulCreate    replicaset/recreate-7759ff9f59   Created pod: recreate-7759ff9f59-q8rrn
+2m26s       Normal    SuccessfulCreate    replicaset/recreate-7759ff9f59   Created pod: recreate-7759ff9f59-h485k
+5s          Normal    ScalingReplicaSet   deployment/recreate              Scaled up replica set recreate-7759ff9f59 from 0 to 2
+2m25s       Normal    Pulled              pod/recreate-7759ff9f59-h485k    Container image "nginx:1.28-alpine" already present on machine
+2m25s       Normal    Created             pod/recreate-7759ff9f59-q8rrn    Created container: web
+2m25s       Normal    Started             pod/recreate-7759ff9f59-h485k    Started container web
+2m25s       Normal    Created             pod/recreate-7759ff9f59-h485k    Created container: web
+2m25s       Normal    Started             pod/recreate-7759ff9f59-q8rrn    Started container web
+2m25s       Normal    Pulled              pod/recreate-7759ff9f59-q8rrn    Container image "nginx:1.28-alpine" already present on machine
+2m24s       Warning   FailedScheduling    pod/life-pending                 0/1 nodes are available: 1 node(s) didn't match Pod's node affinity/selector. no new claims to deallocate, preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+2m24s       Normal    Scheduled           pod/life-failed                  Successfully assigned hw10/life-failed to devops-homework
+2m24s       Normal    Scheduled           pod/life-succeeded               Successfully assigned hw10/life-succeeded to devops-homework
+2m24s       Normal    Scheduled           pod/life-running                 Successfully assigned hw10/life-running to devops-homework
+2m23s       Normal    Pulled              pod/life-running                 Container image "busybox:1.37" already present on machine
+2m23s       Normal    Pulled              pod/life-failed                  Container image "busybox:1.37" already present on machine
+2m23s       Normal    Created             pod/life-running                 Created container: demo
+2m23s       Normal    Pulled              pod/life-succeeded               Container image "busybox:1.37" already present on machine
+2m23s       Normal    Created             pod/life-succeeded               Created container: demo
+2m22s       Normal    Started             pod/life-failed                  Started container demo
+2m22s       Normal    Created             pod/life-failed                  Created container: demo
+2m22s       Normal    Started             pod/life-running                 Started container demo
+2m22s       Normal    Started             pod/life-succeeded               Started container demo
+2m15s       Normal    Killing             pod/life-running                 Stopping container demo
+47s         Normal    Scheduled           pod/rolling-5566d4786-jqdzj      Successfully assigned hw10/rolling-5566d4786-jqdzj to devops-homework
+47s         Normal    SuccessfulCreate    replicaset/rolling-5566d4786     Created pod: rolling-5566d4786-jqdzj
+46s         Normal    Pulled              pod/rolling-5566d4786-jqdzj      Container image "nginx:1.28-alpine" already present on machine
+46s         Normal    Started             pod/rolling-5566d4786-jqdzj      Started container web
+46s         Normal    Created             pod/rolling-5566d4786-jqdzj      Created container: web
+44s         Normal    Scheduled           pod/rolling-5566d4786-5dv7x      Successfully assigned hw10/rolling-5566d4786-5dv7x to devops-homework
+44s         Normal    SuccessfulCreate    replicaset/rolling-5566d4786     Created pod: rolling-5566d4786-5dv7x
+44s         Normal    SuccessfulDelete    replicaset/rolling-58c9685cdf    Deleted pod: rolling-58c9685cdf-wcjcd
+44s         Normal    Killing             pod/rolling-58c9685cdf-wcjcd     Stopping container web
+43s         Normal    Pulled              pod/rolling-5566d4786-5dv7x      Container image "nginx:1.28-alpine" already present on machine
+43s         Normal    Created             pod/rolling-5566d4786-5dv7x      Created container: web
+43s         Normal    Started             pod/rolling-5566d4786-5dv7x      Started container web
+41s         Normal    SuccessfulDelete    replicaset/rolling-58c9685cdf    Deleted pod: rolling-58c9685cdf-wdzr4
+41s         Normal    Killing             pod/rolling-58c9685cdf-wdzr4     Stopping container web
+38s         Normal    Scheduled           pod/rolling-58c9685cdf-ns2x6     Successfully assigned hw10/rolling-58c9685cdf-ns2x6 to devops-homework
+38s         Normal    SuccessfulCreate    replicaset/rolling-58c9685cdf    Created pod: rolling-58c9685cdf-ns2x6
+37s         Normal    Created             pod/rolling-58c9685cdf-ns2x6     Created container: web
+37s         Normal    Started             pod/rolling-58c9685cdf-ns2x6     Started container web
+37s         Normal    Pulled              pod/rolling-58c9685cdf-ns2x6     Container image "nginx:1.28-alpine" already present on machine
+36s         Normal    Pulled              pod/rolling-58c9685cdf-jqk6m     Container image "nginx:1.28-alpine" already present on machine
+36s         Normal    SuccessfulDelete    replicaset/rolling-5566d4786     Deleted pod: rolling-5566d4786-5dv7x
+36s         Normal    Killing             pod/rolling-5566d4786-5dv7x      Stopping container web
+36s         Normal    Scheduled           pod/rolling-58c9685cdf-jqk6m     Successfully assigned hw10/rolling-58c9685cdf-jqk6m to devops-homework
+36s         Normal    SuccessfulCreate    replicaset/rolling-58c9685cdf    Created pod: rolling-58c9685cdf-jqk6m
+35s         Normal    Started             pod/rolling-58c9685cdf-jqk6m     Started container web
+35s         Normal    Created             pod/rolling-58c9685cdf-jqk6m     Created container: web
+34s         Normal    Killing             pod/rolling-5566d4786-jqdzj      Stopping container web
+34s         Normal    SuccessfulDelete    replicaset/rolling-5566d4786     Deleted pod: rolling-5566d4786-jqdzj
+13s         Normal    Killing             pod/recreate-7759ff9f59-q8rrn    Stopping container web
+13s         Normal    ScalingReplicaSet   deployment/recreate              Scaled down replica set recreate-7759ff9f59 from 2 to 0
+13s         Normal    Killing             pod/recreate-7759ff9f59-h485k    Stopping container web
+13s         Normal    SuccessfulDelete    replicaset/recreate-7759ff9f59   Deleted pod: recreate-7759ff9f59-h485k
+13s         Normal    SuccessfulDelete    replicaset/recreate-7759ff9f59   Deleted pod: recreate-7759ff9f59-q8rrn
+12s         Normal    Scheduled           pod/recreate-7555c7c4b8-2lhr7    Successfully assigned hw10/recreate-7555c7c4b8-2lhr7 to devops-homework
+12s         Normal    Scheduled           pod/recreate-7555c7c4b8-cj98l    Successfully assigned hw10/recreate-7555c7c4b8-cj98l to devops-homework
+12s         Normal    Pulled              pod/recreate-7555c7c4b8-cj98l    Container image "nginx:1.28-alpine" already present on machine
+12s         Normal    Pulled              pod/recreate-7555c7c4b8-2lhr7    Container image "nginx:1.28-alpine" already present on machine
+12s         Normal    SuccessfulCreate    replicaset/recreate-7555c7c4b8   Created pod: recreate-7555c7c4b8-cj98l
+12s         Normal    SuccessfulCreate    replicaset/recreate-7555c7c4b8   Created pod: recreate-7555c7c4b8-2lhr7
+11s         Normal    Created             pod/recreate-7555c7c4b8-2lhr7    Created container: web
+11s         Normal    Started             pod/recreate-7555c7c4b8-2lhr7    Started container web
+11s         Normal    Created             pod/recreate-7555c7c4b8-cj98l    Created container: web
+11s         Normal    Started             pod/recreate-7555c7c4b8-cj98l    Started container web
+6s          Normal    Killing             pod/recreate-7555c7c4b8-cj98l    Stopping container web
+6s          Normal    SuccessfulDelete    replicaset/recreate-7555c7c4b8   Deleted pod: recreate-7555c7c4b8-2lhr7
+6s          Normal    SuccessfulDelete    replicaset/recreate-7555c7c4b8   Deleted pod: recreate-7555c7c4b8-cj98l
+6s          Normal    Killing             pod/recreate-7555c7c4b8-2lhr7    Stopping container web
+5s          Normal    Scheduled           pod/recreate-7759ff9f59-lfj45    Successfully assigned hw10/recreate-7759ff9f59-lfj45 to devops-homework
+5s          Normal    Pulled              pod/recreate-7759ff9f59-grf2s    Container image "nginx:1.28-alpine" already present on machine
+5s          Normal    Scheduled           pod/recreate-7759ff9f59-grf2s    Successfully assigned hw10/recreate-7759ff9f59-grf2s to devops-homework
+5s          Normal    SuccessfulCreate    replicaset/recreate-7759ff9f59   Created pod: recreate-7759ff9f59-lfj45
+5s          Normal    SuccessfulCreate    replicaset/recreate-7759ff9f59   Created pod: recreate-7759ff9f59-grf2s
+4s          Normal    Created             pod/recreate-7759ff9f59-grf2s    Created container: web
+4s          Normal    Started             pod/recreate-7759ff9f59-grf2s    Started container web
+4s          Normal    Pulled              pod/recreate-7759ff9f59-lfj45    Container image "nginx:1.28-alpine" already present on machine
+4s          Normal    Created             pod/recreate-7759ff9f59-lfj45    Created container: web
+4s          Normal    Started             pod/recreate-7759ff9f59-lfj45    Started container web
+$ kubectl --context devops-homework apply -f 05-lifecycle.yaml
+pod/life-running created
+pod/life-succeeded unchanged
+pod/life-failed unchanged
+pod/life-pending created
+$ kubectl --context devops-homework -n hw10 get pods -o wide
+NAME                        READY   STATUS      RESTARTS   AGE     IP             NODE              NOMINATED NODE   READINESS GATES
+blue-649c7cdf79-xkrhg       1/1     Running     0          2m47s   10.244.0.49    devops-homework   <none>           <none>
+canary-98459b7cb-5jkzq      1/1     Running     0          2m43s   10.244.0.56    devops-homework   <none>           <none>
+green-7bcc9d4cbd-nrdlb      1/1     Running     0          2m47s   10.244.0.50    devops-homework   <none>           <none>
+life-failed                 0/1     Error       0          2m33s   10.244.0.63    devops-homework   <none>           <none>
+life-pending                0/1     Pending     0          8s      <none>         <none>            <none>           <none>
+life-running                1/1     Running     0          9s      10.244.0.107   devops-homework   <none>           <none>
+life-succeeded              0/1     Completed   0          2m33s   10.244.0.62    devops-homework   <none>           <none>
+recreate-7759ff9f59-grf2s   1/1     Running     0          14s     10.244.0.106   devops-homework   <none>           <none>
+recreate-7759ff9f59-lfj45   1/1     Running     0          14s     10.244.0.105   devops-homework   <none>           <none>
+rolling-58c9685cdf-jqk6m    1/1     Running     0          45s     10.244.0.90    devops-homework   <none>           <none>
+rolling-58c9685cdf-ns2x6    1/1     Running     0          47s     10.244.0.89    devops-homework   <none>           <none>
+stable-6bdf5bfb77-2vm46     1/1     Running     0          2m43s   10.244.0.55    devops-homework   <none>           <none>
+stable-6bdf5bfb77-8tp2t     1/1     Running     0          2m43s   10.244.0.52    devops-homework   <none>           <none>
+stable-6bdf5bfb77-c7qb7     1/1     Running     0          2m43s   10.244.0.54    devops-homework   <none>           <none>
+stable-6bdf5bfb77-dmlgk     1/1     Running     0          2m43s   10.244.0.53    devops-homework   <none>           <none>
+$ kubectl --context devops-homework -n hw10 describe pod life-running
+Name:             life-running
+Namespace:        hw10
+Priority:         0
+Service Account:  default
+Node:             devops-homework/192.168.49.2
+Start Time:       Thu, 08 Oct 2026 21:04:25 +0530
+Labels:           <none>
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.107
+IPs:
+  IP:  10.244.0.107
+Containers:
+  demo:
+    Container ID:  containerd://06138b0aa835bbd0ccb818c95aa7b80232bd26cc881dd50f4537a8d589293d7d
+    Image:         busybox:1.37
+    Image ID:      docker.io/library/busybox@sha256:bdf57e528e45e4433820e045b29b4597825a1c9e38353532d90a01445013f82e
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      sleep 3600
+    State:          Running
+      Started:      Thu, 08 Oct 2026 21:04:26 +0530
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     100m
+      memory:  32Mi
+    Requests:
+      cpu:        5m
+      memory:     8Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-74fwd (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-74fwd:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  9s    default-scheduler  Successfully assigned hw10/life-running to devops-homework
+  Normal  Pulled     8s    kubelet            Container image "busybox:1.37" already present on machine
+  Normal  Created    8s    kubelet            Created container: demo
+  Normal  Started    8s    kubelet            Started container demo
+$ kubectl --context devops-homework -n hw10 describe pod life-succeeded
+Name:             life-succeeded
+Namespace:        hw10
+Priority:         0
+Service Account:  default
+Node:             devops-homework/192.168.49.2
+Start Time:       Thu, 08 Oct 2026 21:02:01 +0530
+Labels:           <none>
+Annotations:      <none>
+Status:           Succeeded
+IP:               10.244.0.62
+IPs:
+  IP:  10.244.0.62
+Containers:
+  demo:
+    Container ID:  containerd://4b924aef0c95412ce853dd76cbcd097a1a80553c01a15659afd3b63d73b8f821
+    Image:         busybox:1.37
+    Image ID:      docker.io/library/busybox@sha256:bdf57e528e45e4433820e045b29b4597825a1c9e38353532d90a01445013f82e
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo success; exit 0
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Thu, 08 Oct 2026 21:02:03 +0530
+      Finished:     Thu, 08 Oct 2026 21:02:03 +0530
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     100m
+      memory:  32Mi
+    Requests:
+      cpu:        5m
+      memory:     8Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-jh5wb (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   False
+  Initialized                 True
+  Ready                       False
+  ContainersReady             False
+  PodScheduled                True
+Volumes:
+  kube-api-access-jh5wb:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  2m33s  default-scheduler  Successfully assigned hw10/life-succeeded to devops-homework
+  Normal  Pulled     2m32s  kubelet            Container image "busybox:1.37" already present on machine
+  Normal  Created    2m32s  kubelet            Created container: demo
+  Normal  Started    2m31s  kubelet            Started container demo
+$ kubectl --context devops-homework -n hw10 describe pod life-failed
+Name:             life-failed
+Namespace:        hw10
+Priority:         0
+Service Account:  default
+Node:             devops-homework/192.168.49.2
+Start Time:       Thu, 08 Oct 2026 21:02:01 +0530
+Labels:           <none>
+Annotations:      <none>
+Status:           Failed
+IP:               10.244.0.63
+IPs:
+  IP:  10.244.0.63
+Containers:
+  demo:
+    Container ID:  containerd://4507f6246b2034887b6467202a330a2356b4e003766e1f365210211c61c36c56
+    Image:         busybox:1.37
+    Image ID:      docker.io/library/busybox@sha256:bdf57e528e45e4433820e045b29b4597825a1c9e38353532d90a01445013f82e
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo intentional-failure; exit 1
+    State:          Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Thu, 08 Oct 2026 21:02:03 +0530
+      Finished:     Thu, 08 Oct 2026 21:02:03 +0530
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     100m
+      memory:  32Mi
+    Requests:
+      cpu:        5m
+      memory:     8Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-jlwnh (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   False
+  Initialized                 True
+  Ready                       False
+  ContainersReady             False
+  PodScheduled                True
+Volumes:
+  kube-api-access-jlwnh:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  2m33s  default-scheduler  Successfully assigned hw10/life-failed to devops-homework
+  Normal  Pulled     2m32s  kubelet            Container image "busybox:1.37" already present on machine
+  Normal  Created    2m31s  kubelet            Created container: demo
+  Normal  Started    2m31s  kubelet            Started container demo
+$ kubectl --context devops-homework -n hw10 describe pod life-pending
+Name:             life-pending
+Namespace:        hw10
+Priority:         0
+Service Account:  default
+Node:             <none>
+Labels:           <none>
+Annotations:      <none>
+Status:           Pending
+IP:
+IPs:              <none>
+Containers:
+  demo:
+    Image:      busybox:1.37
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      sleep 3600
+    Limits:
+      cpu:     100m
+      memory:  32Mi
+    Requests:
+      cpu:        5m
+      memory:     8Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-4df7t (ro)
+Conditions:
+  Type           Status
+  PodScheduled   False
+Volumes:
+  kube-api-access-4df7t:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              homework/nonexistent=true
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  8s    default-scheduler  0/1 nodes are available: 1 node(s) didn't match Pod's node affinity/selector. no new claims to deallocate, preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+$ kubectl --context devops-homework -n hw10 logs life-succeeded
+success
+$ kubectl --context devops-homework -n hw10 logs life-failed
+intentional-failure
+$ kubectl --context devops-homework -n hw10 delete pod life-pending life-running
+pod "life-pending" deleted from hw10 namespace
+pod "life-running" deleted from hw10 namespace
+**********************
+PowerShell transcript end
+End time: 20261008210505
+**********************

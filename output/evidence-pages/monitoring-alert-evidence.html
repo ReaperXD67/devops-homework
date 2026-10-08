@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Prometheus alert firing and recovery</title>
+<style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
+<h1>Prometheus alert firing and recovery</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
+<p>Source: <a href="../../final-devops-project/monitoring/evidence/run.txt">final-devops-project/monitoring/evidence/run.txt</a> · Last 52 nonempty lines of 141</p>
+<pre>    &quot;status&quot;:  &quot;success&quot;,
+    &quot;data&quot;:  {
+                 &quot;resultType&quot;:  &quot;vector&quot;,
+                 &quot;result&quot;:  [
+                                {
+                                    &quot;metric&quot;:  {
+                                                   &quot;__name__&quot;:  &quot;up&quot;,
+                                                   &quot;instance&quot;:  &quot;app:8080&quot;,
+                                                   &quot;job&quot;:  &quot;devops-app&quot;
+                                               },
+                                    &quot;value&quot;:  [
+                                                  1791473387.770,
+                                                  &quot;1&quot;
+                                              ]
+                                }
+                            ]
+             }
+}
+Outage alert after stopping the application
+{
+    &quot;status&quot;:  &quot;success&quot;,
+    &quot;data&quot;:  {
+                 &quot;alerts&quot;:  [
+                                {
+                                    &quot;labels&quot;:  {
+                                                   &quot;alertname&quot;:  &quot;ApplicationDown&quot;,
+                                                   &quot;instance&quot;:  &quot;app:8080&quot;,
+                                                   &quot;job&quot;:  &quot;devops-app&quot;,
+                                                   &quot;severity&quot;:  &quot;critical&quot;
+                                               },
+                                    &quot;annotations&quot;:  {
+                                                        &quot;summary&quot;:  &quot;DevOps application is unavailable&quot;
+                                                    },
+                                    &quot;state&quot;:  &quot;firing&quot;,
+                                    &quot;activeAt&quot;:  &quot;2026-10-08T15:29:58.532309439Z&quot;,
+                                    &quot;value&quot;:  &quot;0e+00&quot;
+                                }
+                            ]
+             }
+}
+Recovery alert state
+{
+    &quot;status&quot;:  &quot;success&quot;,
+    &quot;data&quot;:  {
+                 &quot;alerts&quot;:  [
+                            ]
+             }
+}
+**********************
+Windows PowerShell transcript end
+End time: 20261008210031
+**********************</pre></html>

@@ -1,0 +1,20 @@
+Exact excerpts from the real run.txt transcript. Full context is retained in run.txt.
+
+$ kubectl --context devops-homework get nodes -o wide
+NAME              STATUS   ROLES           AGE    VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE                         KERNEL-VERSION                      CONTAINER-RUNTIME
+devops-homework   Ready    control-plane   8m2s   v1.34.0   192.168.49.2   <none>        Debian GNU/Linux 12 (bookworm)   6.18.33.1-microsoft-standard-WSL2   containerd://2.3.4
+
+$ kubectl --context devops-homework -n hw9 exec deployment/web -- wget -qO- http://127.0.0.1
+Hello Kubernetes v1
+
+$ kubectl --context devops-homework -n hw9 scale deployment web --replicas=3
+deployment.apps/web scaled
+
+$ kubectl --context devops-homework -n hw9 exec deployment/web -- wget -qO- http://web.hw9.svc.cluster.local
+Hello Kubernetes v2
+
+$ kubectl --context devops-homework -n hw9 exec deployment/web -- wget -qO- http://web
+Hello Kubernetes v1
+
+$ kubectl --context devops-homework -n hw9 scale deployment web --replicas=1
+deployment.apps/web scaled

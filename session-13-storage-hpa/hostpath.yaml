@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostpath-demo
+  namespace: hw13
+spec:
+  restartPolicy: Never
+  containers:
+  - name: demo
+    image: busybox:1.37
+    command:
+    - sh
+    - -c
+    - echo node-local > /node-lab/proof.txt; cat /node-lab/proof.txt
+    resources:
+      requests:
+        cpu: 5m
+        memory: 8Mi
+      limits:
+        cpu: 100m
+        memory: 32Mi
+    volumeMounts:
+    - name: node
+      mountPath: /node-lab
+  volumes:
+  - name: node
+    hostPath:
+      path: /tmp/devops-homework-storage
+      type: DirectoryOrCreate

@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Linux links and users</title>
+<style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
+<h1>Linux links and users</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
+<p>Source: <a href="../../session-01-02-linux/evidence/linux-output.txt">session-01-02-linux/evidence/linux-output.txt</a> · Last 52 nonempty lines of 149</p>
+<pre>linux
+kubernetes
++ head -n 2 notes/topics.txt
+linux
+docker
++ tail -n 2 notes/topics.txt
+linux
+kubernetes
++ grep -n linux notes/topics.txt
+1:linux
+3:linux
++ sort notes/topics.txt
++ uniq -c
+      1 docker
+      1 kubernetes
+      2 linux
++ wc -l notes/topics.txt
+4 notes/topics.txt
++ find notes -type f -name &#x27;*.txt&#x27;
+notes/empty.txt
+notes/renamed.txt
+notes/topics.txt
++ chmod 640 notes/renamed.txt
++ ls -l notes/renamed.txt
+-rw-r----- 1 root root 30 Oct  8 15:25 notes/renamed.txt
++ du -sh notes
+12K	notes
++ df -h /
+Filesystem      Size  Used Avail Use% Mounted on
+overlay        1007G  102G  854G  11% /
++ free -m
+               total        used        free      shared  buff/cache   available
+Mem:            9944        2582          87          43        7516        7362
+Swap:           8192           0        8191
++ ps -eo pid,comm,args
++ head -n 10
+    PID COMMAND         COMMAND
+      1 bash            bash /work/session-01-02-linux/linux-lab.sh
+     98 ps              ps -eo pid,comm,args
+     99 head            head -n 10
++ uname -srm
+Linux 6.18.33.1-microsoft-standard-WSL2 x86_64
++ whoami
+root
++ id
+uid=0(root) gid=0(root) groups=0(root)
++ rm notes/empty.txt notes/renamed.txt notes/topics.txt
++ rmdir notes
++ cd /
++ rmdir /tmp/linux-homework.4I3Klv
+Linux exercises completed successfully.
++ echo &#x27;Linux exercises completed successfully.&#x27;</pre></html>

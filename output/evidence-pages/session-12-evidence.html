@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>ConfigMaps, Secrets and Ingress</title>
+<style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
+<h1>ConfigMaps, Secrets and Ingress</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
+<p>Source: <a href="../../session-12-config-ingress/evidence/run.txt">session-12-config-ingress/evidence/run.txt</a> · Last 52 nonempty lines of 87</p>
+<pre>$ kubectl --context devops-homework -n hw12 exec deployment/web -- printenv APP_ENV WELCOME
+homework
+Hello ConfigMap and Ingress
+Secret injection verified: runtime value matches; value redacted.
+$ kubectl --context devops-homework -n hw12 get ingress,svc,pods
+NAME                            CLASS   HOSTS            ADDRESS        PORTS   AGE
+ingress.networking.k8s.io/web   nginx   homework.local   192.168.49.2   80      2m56s
+NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+service/web   ClusterIP   10.102.111.118   &lt;none&gt;        80/TCP    2m56s
+NAME                      READY   STATUS    RESTARTS   AGE
+pod/web-fb8f454c5-b647b   1/1     Running   0          9s
+$ kubectl --context devops-homework -n hw12 exec deployment/web -- wget -qO- --header=Host:homework.local http://ingress-nginx-controller.ingress-nginx.svc.cluster.local
+Hello ConfigMap and Ingress
+Injecting broken Service targetPort 81
+$ kubectl --context devops-homework -n hw12 patch service web --type=merge --patch-file broken-port.json
+service/web patched
+$ kubectl --context devops-homework -n hw12 exec deployment/web -- wget -T 3 -qO- http://web
+wget: can&#x27;t connect to remote host (10.102.111.118): Connection refused
+command terminated with exit code 1
+$ kubectl --context devops-homework -n hw12 describe service web
+Name:                     web
+Namespace:                hw12
+Labels:                   &lt;none&gt;
+Annotations:              &lt;none&gt;
+Selector:                 app=web
+Type:                     ClusterIP
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.102.111.118
+IPs:                      10.102.111.118
+Port:                     http  80/TCP
+TargetPort:               81/TCP
+Endpoints:                10.244.0.108:81
+Session Affinity:         None
+Internal Traffic Policy:  Cluster
+Events:                   &lt;none&gt;
+$ kubectl --context devops-homework -n hw12 get endpointslices -o wide
+NAME        ADDRESSTYPE   PORTS   ENDPOINTS      AGE
+web-mq7s6   IPv4          81      10.244.0.108   2m57s
+$ kubectl --context devops-homework -n hw12 exec deployment/web -- wget -qO- http://127.0.0.1:80
+Hello ConfigMap and Ingress
+$ kubectl --context devops-homework apply -f app.yaml
+deployment.apps/web unchanged
+service/web configured
+$ kubectl --context devops-homework -n hw12 exec deployment/web -- wget -qO- http://web
+Hello ConfigMap and Ingress
+$ kubectl --context devops-homework -n hw12 exec deployment/web -- wget -qO- --header=Host:homework.local http://ingress-nginx-controller.ingress-nginx.svc.cluster.local
+Hello ConfigMap and Ingress
+**********************
+PowerShell transcript end
+End time: 20261008210441
+**********************</pre></html>

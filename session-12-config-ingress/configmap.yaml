@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hw12
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+  namespace: hw12
+data:
+  APP_ENV: homework
+  WELCOME: Hello ConfigMap and Ingress

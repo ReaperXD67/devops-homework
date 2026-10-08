@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Git commits and cherry-pick</title>
+<style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
+<h1>Git commits and cherry-pick</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
+<p>Source: <a href="../../session-05-git/evidence/output.txt">session-05-git/evidence/output.txt</a> · Last 52 nonempty lines of 117</p>
+<pre>[topic e51a821] topic 2: selected feature
+ 1 file changed, 1 insertion(+)
+ create mode 100644 selected.txt
+++ git rev-parse HEAD
++ selected_commit=e51a821ec72bab0fa19f8573e1769fadba2e0c0a
++ printf &#x27;Also not selected\n&#x27;
++ git add topic-three.txt
++ git commit -m &#x27;topic 3: independent third feature&#x27;
+[topic 8abb1d6] topic 3: independent third feature
+ 1 file changed, 1 insertion(+)
+ create mode 100644 topic-three.txt
++ git log --oneline topic
+8abb1d6 topic 3: independent third feature
+e51a821 topic 2: selected feature
+e32b374 topic 1: independent first feature
+b33b4cd main 4: explicitly add new file
+644d78d main 3: auto-stage tracked modification
++ git switch main
+6debfd1 main 2: explicitly stage tracked change
+1636230 main 1: add tracked file
+Switched to branch &#x27;main&#x27;
++ git cherry-pick e51a821ec72bab0fa19f8573e1769fadba2e0c0a
+[main 8fb8135] topic 2: selected feature
+ Date: Thu Oct 8 15:25:47 2026 +0000
+ 1 file changed, 1 insertion(+)
+ create mode 100644 selected.txt
++ git log --oneline --graph --all --decorate
+* 8fb8135 (HEAD -&gt; main) topic 2: selected feature
+| * 8abb1d6 (topic) topic 3: independent third feature
+| * e51a821 topic 2: selected feature
+| * e32b374 topic 1: independent first feature
+|/
+* b33b4cd main 4: explicitly add new file
+* 644d78d main 3: auto-stage tracked modification
+* 6debfd1 main 2: explicitly stage tracked change
+* 1636230 main 1: add tracked file
++ git show --stat HEAD
+commit 8fb8135a4d0e32f93b10367c74ef3c3610aa27c1
+Author: Aman &lt;reaperxd67@users.noreply.github.com&gt;
+Date:   Thu Oct 8 15:25:47 2026 +0000
+    topic 2: selected feature
+ selected.txt | 1 +
+ 1 file changed, 1 insertion(+)
++ cat selected.txt
+The selected cherry-picked feature
++ test &#x27;!&#x27; -e topic-one.txt
++ test &#x27;!&#x27; -e topic-three.txt
++ git status --short
++ echo &#x27;Verified: only the selected topic change was applied to main.&#x27;
++ echo &#x27;Temporary demonstration repository:&#x27; /tmp/git-homework.CAMssD
+Verified: only the selected topic change was applied to main.
+Temporary demonstration repository: /tmp/git-homework.CAMssD</pre></html>

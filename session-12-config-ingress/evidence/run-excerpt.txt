@@ -1,0 +1,27 @@
+Exact excerpts from the real run.txt transcript. Full context is retained in run.txt.
+
+$ kubectl --context devops-homework -n hw12 exec deployment/web -- printenv APP_ENV WELCOME
+homework
+Hello ConfigMap and Ingress
+Secret injection verified: runtime value matches; value redacted.
+
+$ kubectl --context devops-homework -n hw12 exec deployment/web -- wget -qO- --header=Host:homework.local http://ingress-nginx-controller.ingress-nginx.svc.cluster.local
+Hello ConfigMap and Ingress
+Injecting broken Service targetPort 81
+
+$ kubectl --context devops-homework -n hw12 exec deployment/web -- wget -T 3 -qO- http://web
+wget: can't connect to remote host (10.102.111.118): Connection refused
+command terminated with exit code 1
+
+$ kubectl --context devops-homework -n hw12 get endpointslices -o wide
+NAME        ADDRESSTYPE   PORTS   ENDPOINTS      AGE
+web-mq7s6   IPv4          81      10.244.0.108   2m57s
+
+$ kubectl --context devops-homework -n hw12 exec deployment/web -- wget -qO- http://127.0.0.1:80
+Hello ConfigMap and Ingress
+
+$ kubectl --context devops-homework -n hw12 exec deployment/web -- wget -qO- http://web
+Hello ConfigMap and Ingress
+
+$ kubectl --context devops-homework -n hw12 exec deployment/web -- wget -qO- --header=Host:homework.local http://ingress-nginx-controller.ingress-nginx.svc.cluster.local
+Hello ConfigMap and Ingress

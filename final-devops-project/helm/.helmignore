@@ -1,0 +1,4 @@
+.git/
+evidence/
+*.tgz
+deploy-local.ps1

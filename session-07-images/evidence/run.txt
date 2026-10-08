@@ -1,0 +1,30 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20261008210016
+Username: AMANLAPTOP\Aman
+RunAs User: AMANLAPTOP\Aman
+Configuration Name: 
+Machine: AMANLAPTOP (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File session-07-images/verify.ps1
+Process ID: 30344
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is evidence/run.txt
+
+
+
+<h1>Hello World from Docker multi-stage build</h1><p>Aman Kumar | 10275</p>
+
+
+
+**********************
+Windows PowerShell transcript end
+End time: 20261008210023
+**********************

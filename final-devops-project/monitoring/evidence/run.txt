@@ -1,0 +1,150 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20261008205907
+Username: AMANLAPTOP\Aman
+RunAs User: AMANLAPTOP\Aman
+Configuration Name: 
+Machine: AMANLAPTOP (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File final-devops-project/monitoring/verify.ps1
+Process ID: 10784
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is evidence/run.txt
+
+{"status":"ok"}
+{"status":"ok"}
+{"status":"ok"}
+{"status":"ok"}
+{"status":"ok"}
+{"status":"ok"}
+{"status":"ok"}
+{"status":"ok"}
+{"status":"ok"}
+{"status":"ok"}
+Application metrics
+# HELP app_requests_total HTTP requests received
+# TYPE app_requests_total counter
+app_requests_total 14
+# HELP process_resident_memory_bytes Resident memory
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 57769984
+# HELP process_cpu_seconds_total Process CPU time
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 0.156811
+# HELP app_uptime_seconds Uptime
+# TYPE app_uptime_seconds gauge
+app_uptime_seconds 15.534
+Prometheus targets
+
+labels                                     health scrapeUrl
+------                                     ------ ---------
+@{instance=app:8080; job=devops-app}       up     http://app:8080/metrics
+@{instance=localhost:9090; job=prometheus} up     http://localhost:9090/metrics
+
+
+CPU rate and resident memory queries
+rate(process_cpu_seconds_total{job="devops-app"}[1m])
+{
+    "status":  "success",
+    "data":  {
+                 "resultType":  "vector",
+                 "result":  [
+                                {
+                                    "metric":  {
+                                                   "instance":  "app:8080",
+                                                   "job":  "devops-app"
+                                               },
+                                    "value":  [
+                                                  1791473387.764,
+                                                  "0.00004658238666666611"
+                                              ]
+                                }
+                            ]
+             }
+}
+process_resident_memory_bytes{job="devops-app"}
+{
+    "status":  "success",
+    "data":  {
+                 "resultType":  "vector",
+                 "result":  [
+                                {
+                                    "metric":  {
+                                                   "__name__":  "process_resident_memory_bytes",
+                                                   "instance":  "app:8080",
+                                                   "job":  "devops-app"
+                                               },
+                                    "value":  [
+                                                  1791473387.767,
+                                                  "57638912"
+                                              ]
+                                }
+                            ]
+             }
+}
+up{job="devops-app"}
+{
+    "status":  "success",
+    "data":  {
+                 "resultType":  "vector",
+                 "result":  [
+                                {
+                                    "metric":  {
+                                                   "__name__":  "up",
+                                                   "instance":  "app:8080",
+                                                   "job":  "devops-app"
+                                               },
+                                    "value":  [
+                                                  1791473387.770,
+                                                  "1"
+                                              ]
+                                }
+                            ]
+             }
+}
+
+
+Outage alert after stopping the application
+{
+    "status":  "success",
+    "data":  {
+                 "alerts":  [
+                                {
+                                    "labels":  {
+                                                   "alertname":  "ApplicationDown",
+                                                   "instance":  "app:8080",
+                                                   "job":  "devops-app",
+                                                   "severity":  "critical"
+                                               },
+                                    "annotations":  {
+                                                        "summary":  "DevOps application is unavailable"
+                                                    },
+                                    "state":  "firing",
+                                    "activeAt":  "2026-10-08T15:29:58.532309439Z",
+                                    "value":  "0e+00"
+                                }
+                            ]
+             }
+}
+
+Recovery alert state
+{
+    "status":  "success",
+    "data":  {
+                 "alerts":  [
+
+                            ]
+             }
+}
+
+**********************
+Windows PowerShell transcript end
+End time: 20261008210031
+**********************

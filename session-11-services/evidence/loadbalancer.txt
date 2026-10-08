@@ -1,0 +1,23 @@
+$ minikube tunnel -p devops-homework --bind-address=127.0.0.1 (running in background)
+* Tunnel successfully started
+
+* NOTE: Please do not close this terminal as this process must stay alive for the tunnel to be accessible ...
+
+* Starting tunnel for service loadbalancer.
+* Starting tunnel for service devops-app.
+* Starting tunnel for service web.
+$ kubectl --context devops-homework -n hw11 get service loadbalancer -o wide
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE    SELECTOR
+loadbalancer   LoadBalancer   10.110.185.240   127.0.0.1     80:31505/TCP   5m8s   app=web
+$ curl.exe -sS -i http://127.0.0.1
+HTTP/1.1 200 OK
+Server: nginx/1.28.3
+Date: Thu, 08 Oct 2026 15:35:22 GMT
+Content-Type: text/html
+Content-Length: 31
+Last-Modified: Thu, 08 Oct 2026 15:30:15 GMT
+Connection: keep-alive
+ETag: "6ac7b707-1f"
+Accept-Ranges: bytes
+
+Hello from Kubernetes Services

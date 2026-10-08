@@ -1,0 +1,4 @@
+Error: execution error at (devops-app/templates/hpa.yaml:3:4): autoscaling.minReplicas must not exceed maxReplicas
+
+Use --debug flag to render out invalid YAML
+Expected nonzero exit code: 1

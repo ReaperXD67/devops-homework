@@ -1,0 +1,15 @@
+$ wsl -d Ubuntu -- journalctl --version
+systemd 259 (259.5-0ubuntu3.4)
++PAM +AUDIT +SELINUX +APPARMOR +IMA +IPE +SMACK +SECCOMP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 -IDN +KMOD +LIBCRYPTSETUP +LIBCRYPTSETUP_PLUGINS +LIBFDISK +PCRE2 +PWQUALITY +P11KIT +QRENCODE +TPM2 +BZIP2 +LZ4 +XZ +ZLIB +ZSTD +BPF_FRAMEWORK +BTF -XKBCOMMON -UTMP +SYSVINIT +LIBARCHIVE
+$ wsl -d Ubuntu -- journalctl -u cron.service --no-pager -n 5
+Oct 08 15:20:07 amanlaptop systemd[1]: Stopped cron.service - Regular background program processing daemon.
+Oct 08 15:20:14 amanlaptop systemd[1]: Started cron.service - Regular background program processing daemon.
+Oct 08 15:20:14 amanlaptop (cron)[116]: cron.service: Referenced but unset environment variable evaluates to an empty string: EXTRA_OPTS
+Oct 08 15:20:14 amanlaptop cron[116]: (CRON) INFO (pidfile fd = 3)
+Oct 08 15:20:14 amanlaptop cron[116]: (CRON) INFO (Running @reboot jobs)
+$ wsl -d Ubuntu -- journalctl --no-pager -n 5
+Oct 08 15:23:00 amanlaptop kernel: docker0: port 2(veth98a0561) entered disabled state
+Oct 08 15:23:00 amanlaptop kernel: veth98a0561 (unregistering): left allmulticast mode
+Oct 08 15:23:00 amanlaptop kernel: veth98a0561 (unregistering): left promiscuous mode
+Oct 08 15:23:00 amanlaptop kernel: docker0: port 2(veth98a0561) entered disabled state
+Oct 08 15:23:13 amanlaptop systemd-resolved[63]: Clock change detected. Flushing caches.

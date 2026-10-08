@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Networking commands</title>
+<style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
+<h1>Networking commands</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
+<p>Source: <a href="../../session-04-networking/evidence/output.txt">session-04-networking/evidence/output.txt</a> · Last 52 nonempty lines of 113</p>
+<pre>nameserver 192.168.65.7
+# Based on host file: &#x27;/etc/resolv.conf&#x27; (legacy)
+# Overrides: []
+[exit status: 0]
+$ curl --head --max-time 20 https://example.com
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+HTTP/2 200
+date: Thu, 08 Oct 2026 15:25:55 GMT
+content-type: text/html; charset=utf-8
+server: cloudflare
+last-modified: Sun, 04 Oct 2026 20:44:03 GMT
+allow: GET, HEAD
+accept-ranges: bytes
+age: 11618
+cf-cache-status: HIT
+cf-ray: a47629359dad442d-BOM
+alt-svc: h3=&quot;:443&quot;; ma=86400
+[exit status: 0]
+$ wget --spider --timeout=20 https://example.com
+Spider mode enabled. Check if remote file exists.
+--2026-10-08 15:25:51--  https://example.com/
+Resolving example.com (example.com)... 172.66.147.243, 104.20.23.154
+Connecting to example.com (example.com)|172.66.147.243|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Remote file exists and could contain further links,
+but recursion is disabled -- not retrieving.
+[exit status: 0]
+$ nc -vz -w 10 example.com 443
+Connection to example.com (172.66.147.243) 443 port [tcp/*] succeeded!
+[exit status: 0]
+$ ss -tunlp
+Netid State Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+[exit status: 0]
+$ netstat -rn
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+0.0.0.0         172.17.0.1      0.0.0.0         UG        0 0          0 eth0
+172.17.0.0      0.0.0.0         255.255.0.0     U         0 0          0 eth0
+[exit status: 0]
+$ traceroute -m 5 -w 1 -q 1 example.com
+traceroute to example.com (172.66.147.243), 5 hops max, 60 byte packets
+ 1  172.17.0.1 (172.17.0.1)  0.652 ms
+ 2  *
+ 3  *
+ 4  *
+ 5  *
+[exit status: 0]
+The external route/ICMP results reflect this Docker Desktop network.</pre></html>

@@ -4,7 +4,7 @@ metadata:
   name: devops-app
   namespace: devops-final
 spec:
-  replicas: 2
+  # HPA owns replica count; GitOps must not continually reset it.
   selector:
     matchLabels: {app: devops-app}
   strategy:

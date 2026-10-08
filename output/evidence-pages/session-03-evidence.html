@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Shell scripting</title>
+<style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
+<h1>Shell scripting</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
+<p>Source: <a href="../../session-03-shell/evidence/output.txt">session-03-shell/evidence/output.txt</a> · Last 40 nonempty lines of 40</p>
+<pre>+ set -euo pipefail
+++ date -u +%Y-%m-%dT%H:%M:%SZ
++ current_date=2026-10-08T15:26:07Z
+++ hostname
++ machine_hostname=shell-lab
+++ id -un
++ current_user=root
++ echo &#x27;Current date (UTC): 2026-10-08T15:26:07Z&#x27;
++ echo &#x27;Hostname: shell-lab&#x27;
++ echo &#x27;Username: root&#x27;
++ echo &#x27;Disk usage:&#x27;
++ df -h
+Current date (UTC): 2026-10-08T15:26:07Z
+Hostname: shell-lab
+Username: root
+Disk usage:
+Filesystem      Size  Used Avail Use% Mounted on
+overlay        1007G  103G  854G  11% /
+tmpfs            64M     0   64M   0% /dev
+shm              64M     0   64M   0% /dev/shm
+C:\             953G  563G  391G  60% /work
+/dev/sde       1007G  103G  854G  11% /etc/hosts
+tmpfs           4.9G     0  4.9G   0% /proc/acpi
+tmpfs           4.9G     0  4.9G   0% /proc/scsi
+tmpfs           4.9G     0  4.9G   0% /sys/firmware
++ read -r -p &#x27;Enter the directory in which to save process information: &#x27; output_dir
++ output_dir=/tmp/system-report
++ [[ -z /tmp/system-report ]]
++ mkdir -p -- /tmp/system-report
++ process_file=/tmp/system-report/running-processes.txt
++ touch -- /tmp/system-report/running-processes.txt
++ ps aux
+Running processes:
++ echo &#x27;Running processes:&#x27;
++ cat -- /tmp/system-report/running-processes.txt
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1 25.0  0.0   4336  3388 ?        Ss   15:26   0:00 bash -x /work/session-03-shell/system-info.sh
+root          13  0.0  0.0   7904  4184 ?        R    15:26   0:00 ps aux
+Process information saved to: /tmp/system-report/running-processes.txt
++ echo &#x27;Process information saved to: /tmp/system-report/running-processes.txt&#x27;</pre></html>

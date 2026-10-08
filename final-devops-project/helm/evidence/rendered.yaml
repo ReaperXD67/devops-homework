@@ -1,0 +1,171 @@
+---
+# Source: devops-app/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: final-app-config
+  labels:
+    app.kubernetes.io/name: devops-app
+    app.kubernetes.io/instance: final-app
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "devops-app-1.0.0"
+data:
+  APP_VERSION: "1.0.0"
+  PORT: "8080"
+---
+# Source: devops-app/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: final-app
+  labels:
+    app.kubernetes.io/name: devops-app
+    app.kubernetes.io/instance: final-app
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "devops-app-1.0.0"
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: devops-app
+    app.kubernetes.io/instance: final-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+# Source: devops-app/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: final-app
+  labels:
+    app.kubernetes.io/name: devops-app
+    app.kubernetes.io/instance: final-app
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "devops-app-1.0.0"
+spec:
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: devops-app
+      app.kubernetes.io/instance: final-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: devops-app
+        app.kubernetes.io/instance: final-app
+      annotations:
+        checksum/config: 8c4e12b3fefe195636ac8964df60f4f84199903e48e881a2aede2e2808d98098
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          image: "ghcr.io/reaperxd67/devops-homework:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: final-app-config
+          env:
+            - name: DEMO_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: "app-secret"
+                  key: "token"
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 2
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 250m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 32Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          volumeMounts:
+            - name: temporary
+              mountPath: /tmp
+      volumes:
+        - name: temporary
+          emptyDir: {}
+---
+# Source: devops-app/templates/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: final-app
+  labels:
+    app.kubernetes.io/name: devops-app
+    app.kubernetes.io/instance: final-app
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "devops-app-1.0.0"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: final-app
+  minReplicas: 2
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+---
+# Source: devops-app/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: final-app
+  labels:
+    app.kubernetes.io/name: devops-app
+    app.kubernetes.io/instance: final-app
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "devops-app-1.0.0"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "devops-helm.local"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: final-app
+                port:
+                  number: 80

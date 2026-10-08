@@ -1,0 +1,718 @@
+**********************
+PowerShell transcript start
+Start time: 20261008210426
+Username: AMANLAPTOP\Aman
+RunAs User: AMANLAPTOP\Aman
+Configuration Name: 
+Machine: AMANLAPTOP (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Users\Aman\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\pwsh.dll -Command try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}
+& .\Run-Lab.ps1
+Process ID: 30092
+PSVersion: 7.6.5
+PSEdition: Core
+GitCommitId: 7.6.5
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is evidence/run.txt
+$ kubectl --context devops-homework -n hw14 delete pod crash bad-image pending bad-dns missing-volume bad-config --ignore-not-found
+pod "crash" deleted from hw14 namespace
+pod "bad-image" deleted from hw14 namespace
+pod "pending" deleted from hw14 namespace
+pod "bad-dns" deleted from hw14 namespace
+pod "missing-volume" deleted from hw14 namespace
+pod "bad-config" deleted from hw14 namespace
+$ kubectl --context devops-homework -n hw14 delete configmap missing-config --ignore-not-found
+configmap "missing-config" deleted from hw14 namespace
+$ kubectl --context devops-homework apply -f broken.yaml
+namespace/hw14 unchanged
+deployment.apps/web unchanged
+service/web configured
+pod/crash created
+pod/bad-image created
+pod/pending created
+pod/missing-volume created
+pod/bad-config created
+pod/bad-dns created
+$ kubectl --context devops-homework -n hw14 rollout status deployment/web --timeout=120s
+deployment "web" successfully rolled out
+$ kubectl --context devops-homework -n hw14 get pods -o wide
+NAME                   READY   STATUS                       RESTARTS      AGE     IP             NODE              NOMINATED NODE   READINESS GATES
+bad-config             0/1     CreateContainerConfigError   0             38s     10.244.0.111   devops-homework   <none>           <none>
+bad-dns                1/1     Running                      0             38s     10.244.0.112   devops-homework   <none>           <none>
+bad-image              0/1     ErrImagePull                 0             38s     10.244.0.110   devops-homework   <none>           <none>
+crash                  0/1     CrashLoopBackOff             2 (22s ago)   38s     10.244.0.109   devops-homework   <none>           <none>
+missing-volume         0/1     ContainerCreating            0             38s     <none>         devops-homework   <none>           <none>
+pending                0/1     Pending                      0             38s     <none>         <none>            <none>           <none>
+web-77f566f745-n9tnw   1/1     Running                      0             3m56s   10.244.0.37    devops-homework   <none>           <none>
+$ kubectl --context devops-homework -n hw14 describe pod crash
+Name:             crash
+Namespace:        hw14
+Priority:         0
+Service Account:  default
+Node:             devops-homework/192.168.49.2
+Start Time:       Thu, 08 Oct 2026 21:04:58 +0530
+Labels:           <none>
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.109
+IPs:
+  IP:  10.244.0.109
+Containers:
+  demo:
+    Container ID:  containerd://61da72ad0c159f5439fc762d769d2ef12562d0dd34ed25e995ceb73ddc427301
+    Image:         busybox:1.37
+    Image ID:      docker.io/library/busybox@sha256:bdf57e528e45e4433820e045b29b4597825a1c9e38353532d90a01445013f82e
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo "required configuration missing"; exit 1
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Thu, 08 Oct 2026 21:05:14 +0530
+      Finished:     Thu, 08 Oct 2026 21:05:14 +0530
+    Ready:          False
+    Restart Count:  2
+    Limits:
+      cpu:     100m
+      memory:  32Mi
+    Requests:
+      cpu:        5m
+      memory:     8Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-8rl7n (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       False
+  ContainersReady             False
+  PodScheduled                True
+Volumes:
+  kube-api-access-8rl7n:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  38s                default-scheduler  Successfully assigned hw14/crash to devops-homework
+  Normal   Pulled     22s (x3 over 38s)  kubelet            Container image "busybox:1.37" already present on machine
+  Normal   Created    22s (x3 over 38s)  kubelet            Created container: demo
+  Normal   Started    22s (x3 over 37s)  kubelet            Started container demo
+  Warning  BackOff    8s (x3 over 36s)   kubelet            Back-off restarting failed container demo in pod crash_hw14(b5a4a5ac-c139-4cee-84af-fc005fd8d328)
+$ kubectl --context devops-homework -n hw14 describe pod bad-image
+Name:             bad-image
+Namespace:        hw14
+Priority:         0
+Service Account:  default
+Node:             devops-homework/192.168.49.2
+Start Time:       Thu, 08 Oct 2026 21:04:58 +0530
+Labels:           <none>
+Annotations:      <none>
+Status:           Pending
+IP:               10.244.0.110
+IPs:
+  IP:  10.244.0.110
+Containers:
+  demo:
+    Container ID:
+    Image:         nginx:homework-tag-does-not-exist
+    Image ID:
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      sleep 86400
+    State:          Waiting
+      Reason:       ErrImagePull
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     100m
+      memory:  32Mi
+    Requests:
+      cpu:        5m
+      memory:     8Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-227dj (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       False
+  ContainersReady             False
+  PodScheduled                True
+Volumes:
+  kube-api-access-227dj:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  38s                default-scheduler  Successfully assigned hw14/bad-image to devops-homework
+  Normal   Pulling    21s (x2 over 38s)  kubelet            Pulling image "nginx:homework-tag-does-not-exist"
+  Warning  Failed     20s (x2 over 36s)  kubelet            Failed to pull image "nginx:homework-tag-does-not-exist": rpc error: code = NotFound desc = failed to pull and unpack image "docker.io/library/nginx:homework-tag-does-not-exist": failed to resolve reference "docker.io/library/nginx:homework-tag-does-not-exist": docker.io/library/nginx:homework-tag-does-not-exist: not found
+  Warning  Failed     20s (x2 over 36s)  kubelet            Error: ErrImagePull
+  Normal   BackOff    9s (x2 over 35s)   kubelet            Back-off pulling image "nginx:homework-tag-does-not-exist"
+  Warning  Failed     9s (x2 over 35s)   kubelet            Error: ImagePullBackOff
+$ kubectl --context devops-homework -n hw14 describe pod pending
+Name:             pending
+Namespace:        hw14
+Priority:         0
+Service Account:  default
+Node:             <none>
+Labels:           <none>
+Annotations:      <none>
+Status:           Pending
+IP:
+IPs:              <none>
+Containers:
+  demo:
+    Image:      busybox:1.37
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      sleep 86400
+    Limits:
+      cpu:     100m
+      memory:  32Mi
+    Requests:
+      cpu:        5m
+      memory:     8Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-q7zbt (ro)
+Conditions:
+  Type           Status
+  PodScheduled   False
+Volumes:
+  kube-api-access-q7zbt:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              homework/missing-node=true
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  38s   default-scheduler  0/1 nodes are available: 1 node(s) didn't match Pod's node affinity/selector. no new claims to deallocate, preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+$ kubectl --context devops-homework -n hw14 describe pod missing-volume
+Name:             missing-volume
+Namespace:        hw14
+Priority:         0
+Service Account:  default
+Node:             devops-homework/192.168.49.2
+Start Time:       Thu, 08 Oct 2026 21:04:58 +0530
+Labels:           <none>
+Annotations:      <none>
+Status:           Pending
+IP:
+IPs:              <none>
+Containers:
+  demo:
+    Container ID:
+    Image:         busybox:1.37
+    Image ID:
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      sleep 86400
+    State:          Waiting
+      Reason:       ContainerCreating
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     100m
+      memory:  32Mi
+    Requests:
+      cpu:        5m
+      memory:     8Mi
+    Environment:  <none>
+    Mounts:
+      /config from config (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-wpwgt (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   False
+  Initialized                 True
+  Ready                       False
+  ContainersReady             False
+  PodScheduled                True
+Volumes:
+  config:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      missing-config
+    Optional:  false
+  kube-api-access-wpwgt:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason       Age               From               Message
+  ----     ------       ----              ----               -------
+  Normal   Scheduled    38s               default-scheduler  Successfully assigned hw14/missing-volume to devops-homework
+  Warning  FailedMount  7s (x7 over 38s)  kubelet            MountVolume.SetUp failed for volume "config" : configmap "missing-config" not found
+$ kubectl --context devops-homework -n hw14 describe pod bad-config
+Name:             bad-config
+Namespace:        hw14
+Priority:         0
+Service Account:  default
+Node:             devops-homework/192.168.49.2
+Start Time:       Thu, 08 Oct 2026 21:04:58 +0530
+Labels:           <none>
+Annotations:      <none>
+Status:           Pending
+IP:               10.244.0.111
+IPs:
+  IP:  10.244.0.111
+Containers:
+  demo:
+    Container ID:
+    Image:         busybox:1.37
+    Image ID:
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      sleep 86400
+    State:          Waiting
+      Reason:       CreateContainerConfigError
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     100m
+      memory:  32Mi
+    Requests:
+      cpu:     5m
+      memory:  8Mi
+    Environment:
+      APP_ENV:  <set to the key 'APP_ENV' of config map 'missing-config'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-vvgwc (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       False
+  ContainersReady             False
+  PodScheduled                True
+Volumes:
+  kube-api-access-vvgwc:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age               From               Message
+  ----     ------     ----              ----               -------
+  Normal   Scheduled  38s               default-scheduler  Successfully assigned hw14/bad-config to devops-homework
+  Normal   Pulled     7s (x4 over 38s)  kubelet            Container image "busybox:1.37" already present on machine
+  Warning  Failed     7s (x4 over 38s)  kubelet            Error: configmap "missing-config" not found
+$ kubectl --context devops-homework -n hw14 describe pod bad-dns
+Name:             bad-dns
+Namespace:        hw14
+Priority:         0
+Service Account:  default
+Node:             devops-homework/192.168.49.2
+Start Time:       Thu, 08 Oct 2026 21:04:58 +0530
+Labels:           <none>
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.112
+IPs:
+  IP:  10.244.0.112
+Containers:
+  demo:
+    Container ID:  containerd://81a1c645898c72259e27512221f9afed1c2da194711cc0f517478e16b4645293
+    Image:         busybox:1.37
+    Image ID:      docker.io/library/busybox@sha256:bdf57e528e45e4433820e045b29b4597825a1c9e38353532d90a01445013f82e
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      sleep 86400
+    State:          Running
+      Started:      Thu, 08 Oct 2026 21:04:59 +0530
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     100m
+      memory:  32Mi
+    Requests:
+      cpu:        5m
+      memory:     8Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-c2f7x (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-c2f7x:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  39s   default-scheduler  Successfully assigned hw14/bad-dns to devops-homework
+  Normal  Pulled     39s   kubelet            Container image "busybox:1.37" already present on machine
+  Normal  Created    39s   kubelet            Created container: demo
+  Normal  Started    38s   kubelet            Started container demo
+$ kubectl --context devops-homework -n hw14 logs crash --previous
+required configuration missing
+$ kubectl --context devops-homework -n hw14 events
+LAST SEEN               TYPE      REASON              OBJECT                      MESSAGE
+3m57s                   Normal    Scheduled           Pod/bad-dns                 Successfully assigned hw14/bad-dns to devops-homework
+3m57s                   Normal    Scheduled           Pod/bad-config              Successfully assigned hw14/bad-config to devops-homework
+3m57s                   Normal    Scheduled           Pod/bad-image               Successfully assigned hw14/bad-image to devops-homework
+3m57s                   Warning   FailedScheduling    Pod/pending                 0/1 nodes are available: 1 node(s) didn't match Pod's node affinity/selector. no new claims to deallocate, preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+3m57s                   Normal    Scheduled           Pod/missing-volume          Successfully assigned hw14/missing-volume to devops-homework
+3m57s                   Normal    Scheduled           Pod/crash                   Successfully assigned hw14/crash to devops-homework
+3m57s                   Normal    ScalingReplicaSet   Deployment/web              Scaled up replica set web-77f566f745 from 0 to 1
+3m57s                   Normal    SuccessfulCreate    ReplicaSet/web-77f566f745   Created pod: web-77f566f745-n9tnw
+3m57s                   Normal    Scheduled           Pod/web-77f566f745-n9tnw    Successfully assigned hw14/web-77f566f745-n9tnw to devops-homework
+3m56s                   Normal    Pulled              Pod/bad-dns                 Container image "busybox:1.37" already present on machine
+3m56s                   Normal    Started             Pod/web-77f566f745-n9tnw    Started container web
+3m56s                   Normal    Created             Pod/bad-dns                 Created container: demo
+3m56s                   Normal    Created             Pod/web-77f566f745-n9tnw    Created container: web
+3m56s                   Normal    Pulled              Pod/web-77f566f745-n9tnw    Container image "nginx:1.28-alpine" already present on machine
+3m55s                   Normal    Started             Pod/bad-dns                 Started container demo
+3m54s                   Warning   Failed              Pod/bad-image               Error: ImagePullBackOff
+3m54s                   Normal    BackOff             Pod/bad-image               Back-off pulling image "nginx:homework-tag-does-not-exist"
+3m40s (x3 over 3m56s)   Normal    Pulled              Pod/crash                   Container image "busybox:1.37" already present on machine
+3m40s (x3 over 3m56s)   Normal    Created             Pod/crash                   Created container: demo
+3m40s (x2 over 3m56s)   Normal    Pulling             Pod/bad-image               Pulling image "nginx:homework-tag-does-not-exist"
+3m40s (x3 over 3m56s)   Normal    Started             Pod/crash                   Started container demo
+3m27s (x3 over 3m54s)   Warning   BackOff             Pod/crash                   Back-off restarting failed container demo in pod crash_hw14(e4199bc4-1c74-42aa-93c1-a18f525d996d)
+3m26s                   Normal    Killing             Pod/bad-dns                 Stopping container demo
+3m25s (x7 over 3m57s)   Warning   FailedMount         Pod/missing-volume          MountVolume.SetUp failed for volume "config" : configmap "missing-config" not found
+3m9s (x2 over 3m54s)    Warning   Failed              Pod/bad-image               Failed to pull image "nginx:homework-tag-does-not-exist": rpc error: code = NotFound desc = failed to pull and unpack image "docker.io/library/nginx:homework-tag-does-not-exist": failed to resolve reference "docker.io/library/nginx:homework-tag-does-not-exist": docker.io/library/nginx:homework-tag-does-not-exist: not found
+3m9s (x2 over 3m54s)    Warning   Failed              Pod/bad-image               Error: ErrImagePull
+3m4s (x6 over 3m56s)    Warning   Failed              Pod/bad-config              Error: configmap "missing-config" not found
+2m55s                   Normal    Scheduled           Pod/pending                 Successfully assigned hw14/pending to devops-homework
+2m55s                   Normal    Scheduled           Pod/crash                   Successfully assigned hw14/crash to devops-homework
+2m55s                   Normal    Scheduled           Pod/bad-image               Successfully assigned hw14/bad-image to devops-homework
+2m55s                   Normal    Scheduled           Pod/bad-dns                 Successfully assigned hw14/bad-dns to devops-homework
+2m54s                   Normal    Created             Pod/bad-image               Created container: demo
+2m54s                   Normal    Created             Pod/crash                   Created container: demo
+2m54s                   Normal    Started             Pod/bad-dns                 Started container demo
+2m54s                   Normal    Started             Pod/crash                   Started container demo
+2m54s                   Normal    Started             Pod/pending                 Started container demo
+2m54s                   Normal    Created             Pod/pending                 Created container: demo
+2m54s                   Normal    Pulled              Pod/pending                 Container image "busybox:1.37" already present on machine
+2m54s                   Normal    Started             Pod/bad-image               Started container demo
+2m54s                   Normal    Pulled              Pod/bad-image               Container image "busybox:1.37" already present on machine
+2m54s                   Normal    Pulled              Pod/crash                   Container image "busybox:1.37" already present on machine
+2m54s                   Normal    Created             Pod/bad-dns                 Created container: demo
+2m54s                   Normal    Pulled              Pod/bad-dns                 Container image "busybox:1.37" already present on machine
+2m52s                   Normal    Started             Pod/missing-volume          Started container demo
+2m52s                   Normal    Created             Pod/missing-volume          Created container: demo
+2m52s                   Normal    Pulled              Pod/missing-volume          Container image "busybox:1.37" already present on machine
+2m51s                   Normal    Created             Pod/bad-config              Created container: demo
+2m51s (x7 over 3m56s)   Normal    Pulled              Pod/bad-config              Container image "busybox:1.37" already present on machine
+2m51s                   Normal    Started             Pod/bad-config              Started container demo
+71s                     Normal    Killing             Pod/bad-config              Stopping container demo
+71s                     Normal    Killing             Pod/bad-dns                 Stopping container demo
+71s                     Normal    Killing             Pod/pending                 Stopping container demo
+71s                     Normal    Killing             Pod/crash                   Stopping container demo
+71s                     Normal    Killing             Pod/missing-volume          Stopping container demo
+71s                     Normal    Killing             Pod/bad-image               Stopping container demo
+39s                     Normal    Scheduled           Pod/bad-dns                 Successfully assigned hw14/bad-dns to devops-homework
+39s                     Normal    Created             Pod/bad-dns                 Created container: demo
+39s                     Normal    Scheduled           Pod/bad-config              Successfully assigned hw14/bad-config to devops-homework
+39s                     Normal    Pulled              Pod/bad-dns                 Container image "busybox:1.37" already present on machine
+39s                     Warning   FailedScheduling    Pod/pending                 0/1 nodes are available: 1 node(s) didn't match Pod's node affinity/selector. no new claims to deallocate, preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+39s                     Normal    Scheduled           Pod/crash                   Successfully assigned hw14/crash to devops-homework
+39s                     Normal    Scheduled           Pod/missing-volume          Successfully assigned hw14/missing-volume to devops-homework
+39s                     Normal    Scheduled           Pod/bad-image               Successfully assigned hw14/bad-image to devops-homework
+38s                     Normal    Started             Pod/bad-dns                 Started container demo
+23s (x3 over 39s)       Normal    Created             Pod/crash                   Created container: demo
+23s (x3 over 39s)       Normal    Pulled              Pod/crash                   Container image "busybox:1.37" already present on machine
+23s (x3 over 38s)       Normal    Started             Pod/crash                   Started container demo
+22s (x2 over 39s)       Normal    Pulling             Pod/bad-image               Pulling image "nginx:homework-tag-does-not-exist"
+21s (x2 over 37s)       Warning   Failed              Pod/bad-image               Error: ErrImagePull
+21s (x2 over 37s)       Warning   Failed              Pod/bad-image               Failed to pull image "nginx:homework-tag-does-not-exist": rpc error: code = NotFound desc = failed to pull and unpack image "docker.io/library/nginx:homework-tag-does-not-exist": failed to resolve reference "docker.io/library/nginx:homework-tag-does-not-exist": docker.io/library/nginx:homework-tag-does-not-exist: not found
+10s (x2 over 36s)       Normal    BackOff             Pod/bad-image               Back-off pulling image "nginx:homework-tag-does-not-exist"
+10s (x2 over 36s)       Warning   Failed              Pod/bad-image               Error: ImagePullBackOff
+9s (x3 over 37s)        Warning   BackOff             Pod/crash                   Back-off restarting failed container demo in pod crash_hw14(b5a4a5ac-c139-4cee-84af-fc005fd8d328)
+8s (x7 over 39s)        Warning   FailedMount         Pod/missing-volume          MountVolume.SetUp failed for volume "config" : configmap "missing-config" not found
+8s (x4 over 39s)        Warning   Failed              Pod/bad-config              Error: configmap "missing-config" not found
+8s (x4 over 39s)        Normal    Pulled              Pod/bad-config              Container image "busybox:1.37" already present on machine
+$ kubectl --context devops-homework explain pod.spec.containers.resources
+KIND:       Pod
+VERSION:    v1
+
+FIELD: resources <ResourceRequirements>
+
+
+DESCRIPTION:
+    Compute Resources required by this container. Cannot be updated. More info:
+    https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+    ResourceRequirements describes the compute resource requirements.
+
+FIELDS:
+  claims	<[]ResourceClaim>
+    Claims lists the names of resources, defined in spec.resourceClaims, that
+    are used by this container.
+
+    This field depends on the DynamicResourceAllocation feature gate.
+
+    This field is immutable. It can only be set for containers.
+
+  limits	<map[string]Quantity>
+    Limits describes the maximum amount of compute resources allowed. More info:
+    https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+
+  requests	<map[string]Quantity>
+    Requests describes the minimum amount of compute resources required. If
+    Requests is omitted for a container, it defaults to Limits if that is
+    explicitly specified, otherwise to an implementation-defined value. Requests
+    cannot exceed Limits. More info:
+    https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+
+
+$ kubectl --context devops-homework -n hw14 top pods
+NAME                   CPU(cores)   MEMORY(bytes)
+bad-dns                0m           0Mi
+crash                  0m           0Mi
+web-77f566f745-n9tnw   1m           11Mi
+$ kubectl --context devops-homework -n hw14 get svc,endpointslices -o wide
+NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE     SELECTOR
+service/web   ClusterIP   10.102.239.215   <none>        80/TCP    3m57s   app=typo
+
+NAME                                       ADDRESSTYPE   PORTS     ENDPOINTS   AGE
+endpointslice.discovery.k8s.io/web-rwqwg   IPv4          <unset>   <unset>     3m57s
+$ kubectl --context devops-homework -n hw14 exec deployment/web -- wget -T 3 -qO- http://web
+wget: can't connect to remote host (10.102.239.215): Connection refused
+command terminated with exit code 1
+$ kubectl --context devops-homework -n hw14 exec bad-dns -- nslookup kubernetes.default.svc.cluster.local
+Server:		203.0.113.53
+Address:	203.0.113.53:53
+
+** server can't find kubernetes.default.svc.cluster.local: NXDOMAIN
+
+** server can't find kubernetes.default.svc.cluster.local: NXDOMAIN
+
+command terminated with exit code 1
+$ kubectl --context devops-homework -n hw14 exec bad-dns -- cat /etc/resolv.conf
+nameserver 203.0.113.53
+$ kubectl --context devops-homework -n hw14 exec deployment/web -- wget -qO- http://127.0.0.1
+v1
+$ kubectl --context devops-homework -n hw14 exec bad-dns -- wget -T 3 -qO- http://10.244.0.37
+v1
+$ kubectl --context devops-homework -n hw14 exec bad-dns -- wget -T 3 -qO- http://10.244.0.37:81
+wget: can't connect to remote host (10.244.0.37): Connection refused
+command terminated with exit code 1
+$ kubectl --context devops-homework -n hw14 delete pod crash bad-image pending bad-dns
+pod "crash" deleted from hw14 namespace
+pod "bad-image" deleted from hw14 namespace
+pod "pending" deleted from hw14 namespace
+pod "bad-dns" deleted from hw14 namespace
+$ kubectl --context devops-homework apply -f fixed.yaml
+pod/crash created
+pod/bad-image created
+pod/pending created
+pod/bad-dns created
+service/web configured
+configmap/missing-config created
+$ kubectl --context devops-homework -n hw14 wait --for=condition=Ready pod --all --timeout=180s
+pod/bad-config condition met
+pod/bad-dns condition met
+pod/bad-image condition met
+pod/crash condition met
+pod/missing-volume condition met
+pod/pending condition met
+pod/web-77f566f745-n9tnw condition met
+$ kubectl --context devops-homework -n hw14 get pods,svc,endpointslices -o wide
+NAME                       READY   STATUS    RESTARTS   AGE     IP             NODE              NOMINATED NODE   READINESS GATES
+pod/bad-config             1/1     Running   0          2m17s   10.244.0.111   devops-homework   <none>           <none>
+pod/bad-dns                1/1     Running   0          64s     10.244.0.116   devops-homework   <none>           <none>
+pod/bad-image              1/1     Running   0          64s     10.244.0.114   devops-homework   <none>           <none>
+pod/crash                  1/1     Running   0          65s     10.244.0.113   devops-homework   <none>           <none>
+pod/missing-volume         1/1     Running   0          2m17s   10.244.0.118   devops-homework   <none>           <none>
+pod/pending                1/1     Running   0          64s     10.244.0.115   devops-homework   <none>           <none>
+pod/web-77f566f745-n9tnw   1/1     Running   0          5m35s   10.244.0.37    devops-homework   <none>           <none>
+
+NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE     SELECTOR
+service/web   ClusterIP   10.102.239.215   <none>        80/TCP    5m35s   app=web
+
+NAME                                       ADDRESSTYPE   PORTS   ENDPOINTS     AGE
+endpointslice.discovery.k8s.io/web-rwqwg   IPv4          80      10.244.0.37   5m35s
+$ kubectl --context devops-homework -n hw14 logs crash
+recovered
+$ kubectl --context devops-homework -n hw14 exec bad-config -- printenv APP_ENV
+homework
+$ kubectl --context devops-homework -n hw14 exec bad-dns -- nslookup web.hw14.svc.cluster.local
+Server:		10.96.0.10
+Address:	10.96.0.10:53
+
+
+Name:	web.hw14.svc.cluster.local
+Address: 10.102.239.215
+
+$ kubectl --context devops-homework -n hw14 exec bad-dns -- wget -qO- http://web
+v1
+$ kubectl --context devops-homework -n hw14 exec bad-dns -- wget -qO- http://10.244.0.37:80
+v1
+$ kubectl --context devops-homework -n hw14 events
+LAST SEEN               TYPE      REASON              OBJECT                      MESSAGE
+5m36s                   Normal    Scheduled           Pod/missing-volume          Successfully assigned hw14/missing-volume to devops-homework
+5m36s                   Normal    Scheduled           Pod/bad-dns                 Successfully assigned hw14/bad-dns to devops-homework
+5m36s                   Normal    Scheduled           Pod/web-77f566f745-n9tnw    Successfully assigned hw14/web-77f566f745-n9tnw to devops-homework
+5m36s                   Normal    Scheduled           Pod/bad-image               Successfully assigned hw14/bad-image to devops-homework
+5m36s                   Normal    Scheduled           Pod/bad-config              Successfully assigned hw14/bad-config to devops-homework
+5m36s                   Normal    Scheduled           Pod/crash                   Successfully assigned hw14/crash to devops-homework
+5m36s                   Warning   FailedScheduling    Pod/pending                 0/1 nodes are available: 1 node(s) didn't match Pod's node affinity/selector. no new claims to deallocate, preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+5m36s                   Normal    ScalingReplicaSet   Deployment/web              Scaled up replica set web-77f566f745 from 0 to 1
+5m36s                   Normal    SuccessfulCreate    ReplicaSet/web-77f566f745   Created pod: web-77f566f745-n9tnw
+5m35s                   Normal    Pulled              Pod/web-77f566f745-n9tnw    Container image "nginx:1.28-alpine" already present on machine
+5m35s                   Normal    Created             Pod/web-77f566f745-n9tnw    Created container: web
+5m35s                   Normal    Started             Pod/web-77f566f745-n9tnw    Started container web
+5m35s                   Normal    Created             Pod/bad-dns                 Created container: demo
+5m35s                   Normal    Pulled              Pod/bad-dns                 Container image "busybox:1.37" already present on machine
+5m34s                   Normal    Started             Pod/bad-dns                 Started container demo
+5m33s                   Normal    BackOff             Pod/bad-image               Back-off pulling image "nginx:homework-tag-does-not-exist"
+5m33s                   Warning   Failed              Pod/bad-image               Error: ImagePullBackOff
+5m19s (x3 over 5m35s)   Normal    Started             Pod/crash                   Started container demo
+5m19s (x2 over 5m35s)   Normal    Pulling             Pod/bad-image               Pulling image "nginx:homework-tag-does-not-exist"
+5m19s (x3 over 5m35s)   Normal    Created             Pod/crash                   Created container: demo
+5m19s (x3 over 5m35s)   Normal    Pulled              Pod/crash                   Container image "busybox:1.37" already present on machine
+5m6s (x3 over 5m33s)    Warning   BackOff             Pod/crash                   Back-off restarting failed container demo in pod crash_hw14(e4199bc4-1c74-42aa-93c1-a18f525d996d)
+5m5s                    Normal    Killing             Pod/bad-dns                 Stopping container demo
+5m4s (x7 over 5m36s)    Warning   FailedMount         Pod/missing-volume          MountVolume.SetUp failed for volume "config" : configmap "missing-config" not found
+4m48s (x2 over 5m33s)   Warning   Failed              Pod/bad-image               Failed to pull image "nginx:homework-tag-does-not-exist": rpc error: code = NotFound desc = failed to pull and unpack image "docker.io/library/nginx:homework-tag-does-not-exist": failed to resolve reference "docker.io/library/nginx:homework-tag-does-not-exist": docker.io/library/nginx:homework-tag-does-not-exist: not found
+4m48s (x2 over 5m33s)   Warning   Failed              Pod/bad-image               Error: ErrImagePull
+4m43s (x6 over 5m35s)   Warning   Failed              Pod/bad-config              Error: configmap "missing-config" not found
+4m34s                   Normal    Scheduled           Pod/crash                   Successfully assigned hw14/crash to devops-homework
+4m34s                   Normal    Scheduled           Pod/pending                 Successfully assigned hw14/pending to devops-homework
+4m34s                   Normal    Scheduled           Pod/bad-image               Successfully assigned hw14/bad-image to devops-homework
+4m34s                   Normal    Scheduled           Pod/bad-dns                 Successfully assigned hw14/bad-dns to devops-homework
+4m33s                   Normal    Pulled              Pod/pending                 Container image "busybox:1.37" already present on machine
+4m33s                   Normal    Created             Pod/bad-image               Created container: demo
+4m33s                   Normal    Started             Pod/bad-dns                 Started container demo
+4m33s                   Normal    Pulled              Pod/bad-dns                 Container image "busybox:1.37" already present on machine
+4m33s                   Normal    Started             Pod/pending                 Started container demo
+4m33s                   Normal    Started             Pod/crash                   Started container demo
+4m33s                   Normal    Pulled              Pod/bad-image               Container image "busybox:1.37" already present on machine
+4m33s                   Normal    Created             Pod/bad-dns                 Created container: demo
+4m33s                   Normal    Started             Pod/bad-image               Started container demo
+4m33s                   Normal    Created             Pod/crash                   Created container: demo
+4m33s                   Normal    Pulled              Pod/crash                   Container image "busybox:1.37" already present on machine
+4m33s                   Normal    Created             Pod/pending                 Created container: demo
+4m31s                   Normal    Started             Pod/missing-volume          Started container demo
+4m31s                   Normal    Pulled              Pod/missing-volume          Container image "busybox:1.37" already present on machine
+4m31s                   Normal    Created             Pod/missing-volume          Created container: demo
+4m30s                   Normal    Created             Pod/bad-config              Created container: demo
+4m30s                   Normal    Started             Pod/bad-config              Started container demo
+4m30s (x7 over 5m35s)   Normal    Pulled              Pod/bad-config              Container image "busybox:1.37" already present on machine
+2m50s                   Normal    Killing             Pod/bad-config              Stopping container demo
+2m50s                   Normal    Killing             Pod/bad-image               Stopping container demo
+2m50s                   Normal    Killing             Pod/missing-volume          Stopping container demo
+2m50s                   Normal    Killing             Pod/crash                   Stopping container demo
+2m50s                   Normal    Killing             Pod/pending                 Stopping container demo
+2m50s                   Normal    Killing             Pod/bad-dns                 Stopping container demo
+2m18s                   Normal    Created             Pod/bad-dns                 Created container: demo
+2m18s                   Normal    Scheduled           Pod/bad-dns                 Successfully assigned hw14/bad-dns to devops-homework
+2m18s                   Normal    Scheduled           Pod/bad-image               Successfully assigned hw14/bad-image to devops-homework
+2m18s                   Normal    Scheduled           Pod/missing-volume          Successfully assigned hw14/missing-volume to devops-homework
+2m18s                   Warning   FailedScheduling    Pod/pending                 0/1 nodes are available: 1 node(s) didn't match Pod's node affinity/selector. no new claims to deallocate, preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+2m18s                   Normal    Scheduled           Pod/bad-config              Successfully assigned hw14/bad-config to devops-homework
+2m18s                   Normal    Scheduled           Pod/crash                   Successfully assigned hw14/crash to devops-homework
+2m18s                   Normal    Pulled              Pod/bad-dns                 Container image "busybox:1.37" already present on machine
+2m17s                   Normal    Started             Pod/bad-dns                 Started container demo
+2m1s (x2 over 2m18s)    Normal    Pulling             Pod/bad-image               Pulling image "nginx:homework-tag-does-not-exist"
+2m (x2 over 2m16s)      Warning   Failed              Pod/bad-image               Error: ErrImagePull
+2m (x2 over 2m16s)      Warning   Failed              Pod/bad-image               Failed to pull image "nginx:homework-tag-does-not-exist": rpc error: code = NotFound desc = failed to pull and unpack image "docker.io/library/nginx:homework-tag-does-not-exist": failed to resolve reference "docker.io/library/nginx:homework-tag-does-not-exist": docker.io/library/nginx:homework-tag-does-not-exist: not found
+109s (x2 over 2m15s)    Warning   Failed              Pod/bad-image               Error: ImagePullBackOff
+109s (x2 over 2m15s)    Normal    BackOff             Pod/bad-image               Back-off pulling image "nginx:homework-tag-does-not-exist"
+108s (x3 over 2m16s)    Warning   BackOff             Pod/crash                   Back-off restarting failed container demo in pod crash_hw14(b5a4a5ac-c139-4cee-84af-fc005fd8d328)
+97s (x4 over 2m18s)     Normal    Created             Pod/crash                   Created container: demo
+97s (x4 over 2m18s)     Normal    Pulled              Pod/crash                   Container image "busybox:1.37" already present on machine
+97s (x4 over 2m17s)     Normal    Started             Pod/crash                   Started container demo
+97s                     Normal    Killing             Pod/bad-dns                 Stopping container demo
+74s (x8 over 2m18s)     Warning   FailedMount         Pod/missing-volume          MountVolume.SetUp failed for volume "config" : configmap "missing-config" not found
+71s (x7 over 2m18s)     Warning   Failed              Pod/bad-config              Error: configmap "missing-config" not found
+65s                     Normal    Created             Pod/bad-image               Created container: demo
+65s                     Normal    Pulled              Pod/pending                 Container image "busybox:1.37" already present on machine
+65s                     Normal    Scheduled           Pod/bad-image               Successfully assigned hw14/bad-image to devops-homework
+65s                     Normal    Pulled              Pod/bad-image               Container image "busybox:1.37" already present on machine
+65s                     Normal    Scheduled           Pod/bad-dns                 Successfully assigned hw14/bad-dns to devops-homework
+65s                     Normal    Created             Pod/crash                   Created container: demo
+65s                     Normal    Pulled              Pod/crash                   Container image "busybox:1.37" already present on machine
+65s                     Normal    Scheduled           Pod/crash                   Successfully assigned hw14/crash to devops-homework
+65s                     Normal    Started             Pod/crash                   Started container demo
+65s                     Normal    Created             Pod/pending                 Created container: demo
+65s                     Normal    Created             Pod/bad-dns                 Created container: demo
+65s                     Normal    Pulled              Pod/bad-dns                 Container image "busybox:1.37" already present on machine
+65s                     Normal    Scheduled           Pod/pending                 Successfully assigned hw14/pending to devops-homework
+64s                     Normal    Started             Pod/bad-image               Started container demo
+64s                     Normal    Started             Pod/bad-dns                 Started container demo
+64s                     Normal    Started             Pod/pending                 Started container demo
+60s                     Normal    Started             Pod/bad-config              Started container demo
+60s                     Normal    Created             Pod/bad-config              Created container: demo
+60s (x8 over 2m18s)     Normal    Pulled              Pod/bad-config              Container image "busybox:1.37" already present on machine
+2s                      Normal    Started             Pod/missing-volume          Started container demo
+2s                      Normal    Created             Pod/missing-volume          Created container: demo
+2s                      Normal    Pulled              Pod/missing-volume          Container image "busybox:1.37" already present on machine
+**********************
+PowerShell transcript end
+End time: 20261008210716
+**********************

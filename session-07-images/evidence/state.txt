@@ -1,0 +1,25 @@
+Captured UTC: 2026-10-08T15:36:55.544087+00:00
+
+$ docker ps --filter name=devops-multistage
+CONTAINER ID   IMAGE                 COMMAND    CREATED         STATUS         PORTS                      NAMES
+db1998c962bc   devops-multistage:1   "/hello"   6 minutes ago   Up 6 minutes   127.0.0.2:8080->8080/tcp   devops-multistage
+
+Exit code: 0
+
+$ curl.exe --fail --silent http://127.0.0.2:8080
+<h1>Hello World from Docker multi-stage build</h1><p>Aman Kumar | 10275</p>
+Exit code: 0
+
+$ docker image inspect devops-multistage:1 --format "Size={{.Size}} User={{.Config.User}}"
+Size=2465204 User=10001:10001
+
+Exit code: 0
+
+$ docker history devops-multistage:1
+IMAGE          CREATED          CREATED BY                      SIZE      COMMENT
+f5d38623111e   11 minutes ago   ENTRYPOINT ["/hello"]           0B        buildkit.dockerfile.v0
+<missing>      11 minutes ago   EXPOSE [8080/tcp]               0B        buildkit.dockerfile.v0
+<missing>      11 minutes ago   USER 10001:10001                0B        buildkit.dockerfile.v0
+<missing>      11 minutes ago   COPY /hello /hello # buildkit   5.77MB    buildkit.dockerfile.v0
+
+Exit code: 0

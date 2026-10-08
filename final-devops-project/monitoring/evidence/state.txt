@@ -1,0 +1,36 @@
+Captured UTC: 2026-10-08T15:37:04.813986+00:00
+
+$ docker compose -f final-devops-project/monitoring/compose.yaml ps
+NAME                             IMAGE                    COMMAND                  SERVICE      CREATED         STATUS                   PORTS
+devops-monitoring-app-1          devops-final:local       "docker-entrypoint.s…"   app          7 minutes ago   Up 6 minutes (healthy)   127.0.0.1:8200->8080/tcp
+devops-monitoring-prometheus-1   prom/prometheus:v3.7.3   "/bin/prometheus --c…"   prometheus   7 minutes ago   Up 7 minutes             127.0.0.1:9090->9090/tcp
+
+Exit code: 0
+
+$ curl.exe --fail --silent http://127.0.0.1:8200/metrics
+# HELP app_requests_total HTTP requests received
+# TYPE app_requests_total counter
+app_requests_total 111
+# HELP process_resident_memory_bytes Resident memory
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 61632512
+# HELP process_cpu_seconds_total Process CPU time
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 0.352587
+# HELP app_uptime_seconds Uptime
+# TYPE app_uptime_seconds gauge
+app_uptime_seconds 410.76
+
+Exit code: 0
+
+$ docker compose -f final-devops-project/monitoring/compose.yaml logs --tail 8 app
+app-1  | {"timestamp":"2026-10-08T15:36:38.493Z","traceId":"eaff522a-e59b-448c-8c8c-ae91b32b12b1","method":"GET","path":"/healthz","status":200}
+app-1  | {"timestamp":"2026-10-08T15:36:40.815Z","traceId":"4778fd03-d821-4616-a0b9-56a723b3f49a","method":"GET","path":"/metrics","status":200}
+app-1  | {"timestamp":"2026-10-08T15:36:45.815Z","traceId":"0afadc94-dc0f-4861-ab7b-35757e957f0b","method":"GET","path":"/metrics","status":200}
+app-1  | {"timestamp":"2026-10-08T15:36:50.816Z","traceId":"69fb0513-01d0-4e4b-bc38-191f0b2e62a1","method":"GET","path":"/metrics","status":200}
+app-1  | {"timestamp":"2026-10-08T15:36:53.660Z","traceId":"efe4c24b-14d7-47dc-8540-48356e90a5c0","method":"GET","path":"/healthz","status":200}
+app-1  | {"timestamp":"2026-10-08T15:36:55.815Z","traceId":"62d3be4d-820c-4185-b8bc-a0243e709226","method":"GET","path":"/metrics","status":200}
+app-1  | {"timestamp":"2026-10-08T15:37:00.816Z","traceId":"ff5b09c3-978b-4be8-afeb-b116815b7541","method":"GET","path":"/metrics","status":200}
+app-1  | {"timestamp":"2026-10-08T15:37:05.220Z","traceId":"ac80db47-822a-479b-8de5-f996d1cf9ec8","method":"GET","path":"/metrics","status":200}
+
+Exit code: 0

@@ -1,0 +1,21 @@
+Exact excerpts from the real run.txt transcript. Full context is retained in run.txt.
+
+$ kubectl --context devops-homework -n hw10 exec deployment/rolling -- wget -qO- http://rolling
+rolling-v2
+
+$ kubectl --context devops-homework -n hw10 exec deployment/blue -- wget -qO- http://color
+blue-v1
+
+$ kubectl --context devops-homework -n hw10 exec deployment/green -- wget -qO- http://color
+green-v2
+
+$ kubectl --context devops-homework -n hw10 get endpointslices -l kubernetes.io/service-name=canary-demo -o wide
+NAME                ADDRESSTYPE   PORTS   ENDPOINTS                                         AGE
+canary-demo-j5w26   IPv4          80      10.244.0.55,10.244.0.56,10.244.0.53 + 2 more...   2m20s
+
+$ kubectl --context devops-homework -n hw10 get pods -l app=recreate -o wide
+NAME                        READY   STATUS        RESTARTS   AGE   IP             NODE              NOMINATED NODE   READINESS GATES
+recreate-7555c7c4b8-2lhr7   1/1     Terminating   0          6s    10.244.0.102   devops-homework   <none>           <none>
+recreate-7555c7c4b8-cj98l   1/1     Terminating   0          6s    10.244.0.103   devops-homework   <none>           <none>
+
+Count of exact HTTP response lines in the 100-request sample: stable-v1=76, canary-v2=24.

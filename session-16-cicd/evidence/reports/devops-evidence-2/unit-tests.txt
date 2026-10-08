@@ -1,0 +1,26 @@
+
+> devops-course-application@1.0.0 test
+> node --test test/*.test.js
+
+{"timestamp":"2026-10-08T15:31:02.061Z","traceId":"2cf4573a-6930-401d-8602-dbd5a5212f6a","method":"GET","path":"/","status":200}
+✔ home page identifies the assignment (49.867147ms)
+{"timestamp":"2026-10-08T15:31:02.083Z","traceId":"149ff2a1-2419-454f-a40e-9966c5109785","method":"GET","path":"/healthz","status":200}
+{"timestamp":"2026-10-08T15:31:02.086Z","traceId":"e2cc53b0-56df-4b45-8b44-ed28dbb68f9c","method":"GET","path":"/readyz","status":200}
+✔ liveness and readiness are healthy (6.247923ms)
+{"timestamp":"2026-10-08T15:31:02.089Z","traceId":"d22948f4-0444-47d4-803f-1d4dddc2562a","method":"GET","path":"/api/info","status":200}
+✔ API returns version without configuration secrets (3.197543ms)
+{"timestamp":"2026-10-08T15:31:02.092Z","traceId":"0ec587ed-97a1-46c4-9951-0befdbe9ab73","method":"GET","path":"/metrics","status":200}
+{"timestamp":"2026-10-08T15:31:02.093Z","traceId":"2238ea7f-1fa5-406b-80ec-ae1d9aa3dd36","method":"GET","path":"/healthz","status":200}
+{"timestamp":"2026-10-08T15:31:02.094Z","traceId":"05ea2a98-f2a7-4ebf-a7f0-f83665d98ee3","method":"GET","path":"/metrics","status":200}
+✔ metrics count requests and expose CPU and memory (5.308477ms)
+{"timestamp":"2026-10-08T15:31:02.101Z","traceId":"6452792b-11e9-4d74-a24c-b383266e337e","method":"GET","path":"/missing","status":404}
+{"timestamp":"2026-10-08T15:31:02.103Z","traceId":"c2f0dfe2-7343-4014-bc6a-3673ffb35209","method":"GET","path":"/missing","status":404}
+✔ unknown paths return 404 with unique correlation IDs (8.766686ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 153.921705

@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Kubernetes troubleshooting recovery</title>
+<style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
+<h1>Kubernetes troubleshooting recovery</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
+<p>Source: <a href="../../session-14-troubleshooting/evidence/run.txt">session-14-troubleshooting/evidence/run.txt</a> · Last 52 nonempty lines of 699</p>
+<pre>2m50s                   Normal    Killing             Pod/bad-image               Stopping container demo
+2m50s                   Normal    Killing             Pod/missing-volume          Stopping container demo
+2m50s                   Normal    Killing             Pod/crash                   Stopping container demo
+2m50s                   Normal    Killing             Pod/pending                 Stopping container demo
+2m50s                   Normal    Killing             Pod/bad-dns                 Stopping container demo
+2m18s                   Normal    Created             Pod/bad-dns                 Created container: demo
+2m18s                   Normal    Scheduled           Pod/bad-dns                 Successfully assigned hw14/bad-dns to devops-homework
+2m18s                   Normal    Scheduled           Pod/bad-image               Successfully assigned hw14/bad-image to devops-homework
+2m18s                   Normal    Scheduled           Pod/missing-volume          Successfully assigned hw14/missing-volume to devops-homework
+2m18s                   Warning   FailedScheduling    Pod/pending                 0/1 nodes are available: 1 node(s) didn&#x27;t match Pod&#x27;s node affinity/selector. no new claims to deallocate, preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+2m18s                   Normal    Scheduled           Pod/bad-config              Successfully assigned hw14/bad-config to devops-homework
+2m18s                   Normal    Scheduled           Pod/crash                   Successfully assigned hw14/crash to devops-homework
+2m18s                   Normal    Pulled              Pod/bad-dns                 Container image &quot;busybox:1.37&quot; already present on machine
+2m17s                   Normal    Started             Pod/bad-dns                 Started container demo
+2m1s (x2 over 2m18s)    Normal    Pulling             Pod/bad-image               Pulling image &quot;nginx:homework-tag-does-not-exist&quot;
+2m (x2 over 2m16s)      Warning   Failed              Pod/bad-image               Error: ErrImagePull
+2m (x2 over 2m16s)      Warning   Failed              Pod/bad-image               Failed to pull image &quot;nginx:homework-tag-does-not-exist&quot;: rpc error: code = NotFound desc = failed to pull and unpack image &quot;docker.io/library/nginx:homework-tag-does-not-exist&quot;: failed to resolve reference &quot;docker.io/library/nginx:homework-tag-does-not-exist&quot;: docker.io/library/nginx:homework-tag-does-not-exist: not found
+109s (x2 over 2m15s)    Warning   Failed              Pod/bad-image               Error: ImagePullBackOff
+109s (x2 over 2m15s)    Normal    BackOff             Pod/bad-image               Back-off pulling image &quot;nginx:homework-tag-does-not-exist&quot;
+108s (x3 over 2m16s)    Warning   BackOff             Pod/crash                   Back-off restarting failed container demo in pod crash_hw14(b5a4a5ac-c139-4cee-84af-fc005fd8d328)
+97s (x4 over 2m18s)     Normal    Created             Pod/crash                   Created container: demo
+97s (x4 over 2m18s)     Normal    Pulled              Pod/crash                   Container image &quot;busybox:1.37&quot; already present on machine
+97s (x4 over 2m17s)     Normal    Started             Pod/crash                   Started container demo
+97s                     Normal    Killing             Pod/bad-dns                 Stopping container demo
+74s (x8 over 2m18s)     Warning   FailedMount         Pod/missing-volume          MountVolume.SetUp failed for volume &quot;config&quot; : configmap &quot;missing-config&quot; not found
+71s (x7 over 2m18s)     Warning   Failed              Pod/bad-config              Error: configmap &quot;missing-config&quot; not found
+65s                     Normal    Created             Pod/bad-image               Created container: demo
+65s                     Normal    Pulled              Pod/pending                 Container image &quot;busybox:1.37&quot; already present on machine
+65s                     Normal    Scheduled           Pod/bad-image               Successfully assigned hw14/bad-image to devops-homework
+65s                     Normal    Pulled              Pod/bad-image               Container image &quot;busybox:1.37&quot; already present on machine
+65s                     Normal    Scheduled           Pod/bad-dns                 Successfully assigned hw14/bad-dns to devops-homework
+65s                     Normal    Created             Pod/crash                   Created container: demo
+65s                     Normal    Pulled              Pod/crash                   Container image &quot;busybox:1.37&quot; already present on machine
+65s                     Normal    Scheduled           Pod/crash                   Successfully assigned hw14/crash to devops-homework
+65s                     Normal    Started             Pod/crash                   Started container demo
+65s                     Normal    Created             Pod/pending                 Created container: demo
+65s                     Normal    Created             Pod/bad-dns                 Created container: demo
+65s                     Normal    Pulled              Pod/bad-dns                 Container image &quot;busybox:1.37&quot; already present on machine
+65s                     Normal    Scheduled           Pod/pending                 Successfully assigned hw14/pending to devops-homework
+64s                     Normal    Started             Pod/bad-image               Started container demo
+64s                     Normal    Started             Pod/bad-dns                 Started container demo
+64s                     Normal    Started             Pod/pending                 Started container demo
+60s                     Normal    Started             Pod/bad-config              Started container demo
+60s                     Normal    Created             Pod/bad-config              Created container: demo
+60s (x8 over 2m18s)     Normal    Pulled              Pod/bad-config              Container image &quot;busybox:1.37&quot; already present on machine
+2s                      Normal    Started             Pod/missing-volume          Started container demo
+2s                      Normal    Created             Pod/missing-volume          Created container: demo
+2s                      Normal    Pulled              Pod/missing-volume          Container image &quot;busybox:1.37&quot; already present on machine
+**********************
+PowerShell transcript end
+End time: 20261008210716
+**********************</pre></html>

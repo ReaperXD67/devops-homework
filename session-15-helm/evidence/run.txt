@@ -1,0 +1,362 @@
+**********************
+PowerShell transcript start
+Start time: 20261008210328
+Username: AMANLAPTOP\Aman
+RunAs User: AMANLAPTOP\Aman
+Configuration Name: 
+Machine: AMANLAPTOP (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Users\Aman\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\pwsh.dll -Command try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}
+& .\Run-Lab.ps1 -Helm "$env:TEMP\devops-tools\windows-amd64\helm.exe"
+Process ID: 30740
+PSVersion: 7.6.5
+PSEdition: Core
+GitCommitId: 7.6.5
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is evidence/run.txt
+$ helm --kube-context devops-homework version --short
+v3.19.0+g3d8990f
+$ helm --kube-context devops-homework create C:\Users\Aman\AppData\Local\Temp\helm-homework-scaffold-3b7ee7d10d2741399010a3fdaa49b768
+Creating C:\Users\Aman\AppData\Local\Temp\helm-homework-scaffold-3b7ee7d10d2741399010a3fdaa49b768
+$ helm --kube-context devops-homework repo add prometheus-community https://prometheus-community.github.io/helm-charts --force-update
+"prometheus-community" has been added to your repositories
+$ helm --kube-context devops-homework repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "prometheus-community" chart repository
+Update Complete. ⎈Happy Helming!⎈
+$ helm --kube-context devops-homework repo list
+NAME                	URL
+prometheus-community	https://prometheus-community.github.io/helm-charts
+$ helm --kube-context devops-homework search repo prometheus-community/prometheus
+NAME                                              	CHART VERSION	APP VERSION	DESCRIPTION
+prometheus-community/prometheus                   	29.36.1      	v3.15.0    	Prometheus is a monitoring system and time seri...
+prometheus-community/prometheus-adapter           	5.3.0        	v0.12.0    	A Helm chart for k8s prometheus adapter
+prometheus-community/prometheus-blackbox-exporter 	11.20.0      	v0.29.0    	Prometheus Blackbox Exporter
+prometheus-community/prometheus-cloudwatch-expo...	0.28.2       	0.16.0     	A Helm chart for prometheus cloudwatch-exporter
+prometheus-community/prometheus-conntrack-stats...	0.5.40       	v0.4.48    	A Helm chart for conntrack-stats-exporter
+prometheus-community/prometheus-consul-exporter   	1.1.1        	v0.13.0    	A Helm chart for the Prometheus Consul Exporter
+prometheus-community/prometheus-couchdb-exporter  	1.1.0        	1.0        	A Helm chart to export the metrics from couchdb...
+prometheus-community/prometheus-druid-exporter    	1.2.0        	v0.11.0    	Druid exporter to monitor druid metrics with Pr...
+prometheus-community/prometheus-elasticsearch-e...	7.4.0        	v1.11.0    	Elasticsearch stats exporter for Prometheus
+prometheus-community/prometheus-fastly-exporter   	0.14.1       	v10.3.0    	A Helm chart for the Prometheus Fastly Exporter
+prometheus-community/prometheus-ipmi-exporter     	0.8.2        	v1.10.1    	This is an IPMI exporter for Prometheus.
+prometheus-community/prometheus-json-exporter     	0.20.1       	v0.7.0     	Install prometheus-json-exporter
+prometheus-community/prometheus-kafka-exporter    	4.0.0        	v1.9.0     	A Helm chart to export metrics from Kafka in Pr...
+prometheus-community/prometheus-memcached-exporter	0.6.0        	v0.17.0    	Prometheus exporter for Memcached metrics
+prometheus-community/prometheus-modbus-exporter   	0.1.4        	0.4.1      	A Helm chart for prometheus-modbus-exporter
+prometheus-community/prometheus-mongodb-exporter  	3.22.0       	0.53.0     	A Prometheus exporter for MongoDB metrics
+prometheus-community/prometheus-mysql-exporter    	2.15.0       	v0.20.0    	A Helm chart for prometheus mysql exporter with...
+prometheus-community/prometheus-nats-exporter     	2.23.2       	0.20.2     	A Helm chart for prometheus-nats-exporter
+prometheus-community/prometheus-nginx-exporter    	1.23.1       	1.5.3      	A Helm chart for NGINX Prometheus Exporter
+prometheus-community/prometheus-node-exporter     	4.59.0       	1.12.1     	A Helm chart for prometheus node-exporter
+prometheus-community/prometheus-opencost-exporter 	0.1.2        	1.108.0    	Prometheus OpenCost Exporter
+prometheus-community/prometheus-operator          	9.3.2        	0.38.1     	DEPRECATED - This chart will be renamed. See ht...
+prometheus-community/prometheus-operator-admiss...	0.44.2       	0.94.1     	Prometheus Operator Admission Webhook
+prometheus-community/prometheus-operator-crds     	32.0.1       	v0.94.1    	A Helm chart that collects custom resource defi...
+prometheus-community/prometheus-pgbouncer-exporter	0.10.1       	v0.12.1    	A Helm chart for prometheus pgbouncer-exporter
+prometheus-community/prometheus-pingdom-exporter  	3.4.4        	v0.5.7     	A Helm chart for Prometheus Pingdom Exporter
+prometheus-community/prometheus-pingmesh-exporter 	0.5.0        	v1.2.2     	Prometheus Pingmesh Exporter
+prometheus-community/prometheus-postgres-exporter 	8.2.0        	v0.20.1    	A Helm chart for prometheus postgres-exporter
+prometheus-community/prometheus-pushgateway       	3.9.1        	v1.11.4    	A Helm chart for prometheus pushgateway
+prometheus-community/prometheus-rabbitmq-exporter 	2.1.2        	1.0.0      	Rabbitmq metrics exporter for prometheus
+prometheus-community/prometheus-redis-exporter    	6.33.0       	v1.93.0    	Prometheus exporter for Redis metrics
+prometheus-community/prometheus-smartctl-exporter 	0.17.1       	v0.14.0    	A Helm chart for Kubernetes
+prometheus-community/prometheus-snmp-exporter     	9.18.1       	v0.30.1    	Prometheus SNMP Exporter
+prometheus-community/prometheus-sql-exporter      	0.5.0        	v0.8       	Prometheus SQL Exporter
+prometheus-community/prometheus-stackdriver-exp...	5.2.0        	v0.19.0    	Stackdriver exporter for Prometheus
+prometheus-community/prometheus-statsd-exporter   	1.0.0        	v0.28.0    	A Helm chart for prometheus stats-exporter
+prometheus-community/prometheus-systemd-exporter  	0.5.2        	0.7.0      	A Helm chart for prometheus systemd-exporter
+prometheus-community/prometheus-to-sd             	0.5.1        	v0.9.2     	Scrape metrics stored in prometheus format and ...
+prometheus-community/prometheus-windows-exporter  	0.12.8       	0.31.8     	A Helm chart for prometheus windows-exporter
+prometheus-community/prometheus-yet-another-clo...	0.48.0       	v0.68.0    	Yace - Yet Another CloudWatch Exporter
+$ helm --kube-context devops-homework lint ./chart
+==> Linting ./chart
+[INFO] Chart.yaml: icon is recommended
+
+1 chart(s) linted, 0 chart(s) failed
+$ helm --kube-context devops-homework template homework ./chart --namespace hw15
+---
+# Source: homework-web/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: homework
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/instance: homework
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+# Source: homework-web/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homework
+  labels:
+    app.kubernetes.io/instance: homework
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: homework
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: homework
+    spec:
+      containers:
+        - name: web
+          image: "nginx:1.28-alpine"
+          imagePullPolicy: IfNotPresent
+          command: [sh, -c]
+          args:
+            - 'printf "%s\n" "$APP_VERSION" > /usr/share/nginx/html/index.html; exec nginx -g "daemon off;"'
+          env:
+            - name: APP_VERSION
+              value: "v1"
+          ports:
+            - name: http
+              containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 1
+            periodSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 200m
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi
+$ helm --kube-context devops-homework install homework ./chart --namespace hw15 --create-namespace --wait --timeout 180s
+NAME: homework
+LAST DEPLOYED: Thu Oct  8 21:03:32 2026
+NAMESPACE: hw15
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+Release homework is installed in namespace hw15.
+Check its response:
+  kubectl --context devops-homework -n hw15 exec deployment/homework -- wget -qO- http://homework
+$ helm --kube-context devops-homework list --namespace hw15
+NAME    	NAMESPACE	REVISION	UPDATED                              	STATUS  	CHART             	APP VERSION
+homework	hw15     	1       	2026-10-08 21:03:32.5609118 +0530 IST	deployed	homework-web-0.1.0	1.0.0
+$ helm --kube-context devops-homework status homework --namespace hw15
+NAME: homework
+LAST DEPLOYED: Thu Oct  8 21:03:32 2026
+NAMESPACE: hw15
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+Release homework is installed in namespace hw15.
+Check its response:
+  kubectl --context devops-homework -n hw15 exec deployment/homework -- wget -qO- http://homework
+$ helm --kube-context devops-homework get all homework --namespace hw15
+NAME: homework
+LAST DEPLOYED: Thu Oct  8 21:03:32 2026
+NAMESPACE: hw15
+STATUS: deployed
+REVISION: 1
+CHART: homework-web
+VERSION: 0.1.0
+APP_VERSION: 1.0.0
+TEST SUITE: None
+USER-SUPPLIED VALUES:
+null
+
+COMPUTED VALUES:
+appVersion: v1
+image:
+  pullPolicy: IfNotPresent
+  repository: nginx
+  tag: 1.28-alpine
+replicaCount: 1
+resources:
+  limits:
+    cpu: 200m
+    memory: 64Mi
+  requests:
+    cpu: 10m
+    memory: 16Mi
+service:
+  port: 80
+
+HOOKS:
+MANIFEST:
+---
+# Source: homework-web/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: homework
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/instance: homework
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+# Source: homework-web/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homework
+  labels:
+    app.kubernetes.io/instance: homework
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: homework
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: homework
+    spec:
+      containers:
+        - name: web
+          image: "nginx:1.28-alpine"
+          imagePullPolicy: IfNotPresent
+          command: [sh, -c]
+          args:
+            - 'printf "%s\n" "$APP_VERSION" > /usr/share/nginx/html/index.html; exec nginx -g "daemon off;"'
+          env:
+            - name: APP_VERSION
+              value: "v1"
+          ports:
+            - name: http
+              containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 1
+            periodSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 200m
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi
+
+NOTES:
+Release homework is installed in namespace hw15.
+Check its response:
+  kubectl --context devops-homework -n hw15 exec deployment/homework -- wget -qO- http://homework
+$ kubectl --context devops-homework -n hw15 exec deployment/homework -- wget -qO- http://homework
+v1
+$ helm --kube-context devops-homework upgrade homework ./chart --namespace hw15 -f values-v2.yaml --wait --timeout 180s
+Release "homework" has been upgraded. Happy Helming!
+NAME: homework
+LAST DEPLOYED: Thu Oct  8 21:03:37 2026
+NAMESPACE: hw15
+STATUS: deployed
+REVISION: 2
+TEST SUITE: None
+NOTES:
+Release homework is installed in namespace hw15.
+Check its response:
+  kubectl --context devops-homework -n hw15 exec deployment/homework -- wget -qO- http://homework
+$ kubectl --context devops-homework -n hw15 get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+homework-5d5ffd97b9-62gnr   0/1     Completed   0          11s
+homework-87f444fcd-79hz8    1/1     Running     0          6s
+homework-87f444fcd-rw8xd    1/1     Running     0          4s
+$ kubectl --context devops-homework -n hw15 exec deployment/homework -- wget -qO- http://homework
+v2
+$ helm --kube-context devops-homework upgrade homework ./chart --namespace hw15 -f values-v3.yaml --wait --timeout 180s
+Release "homework" has been upgraded. Happy Helming!
+NAME: homework
+LAST DEPLOYED: Thu Oct  8 21:03:44 2026
+NAMESPACE: hw15
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+NOTES:
+Release homework is installed in namespace hw15.
+Check its response:
+  kubectl --context devops-homework -n hw15 exec deployment/homework -- wget -qO- http://homework
+$ kubectl --context devops-homework -n hw15 exec deployment/homework -- wget -qO- http://homework
+v3
+$ helm --kube-context devops-homework history homework --namespace hw15
+REVISION	UPDATED                 	STATUS    	CHART             	APP VERSION	DESCRIPTION
+1       	Thu Oct  8 21:03:32 2026	superseded	homework-web-0.1.0	1.0.0      	Install complete
+2       	Thu Oct  8 21:03:37 2026	superseded	homework-web-0.1.0	1.0.0      	Upgrade complete
+3       	Thu Oct  8 21:03:44 2026	deployed  	homework-web-0.1.0	1.0.0      	Upgrade complete
+$ helm --kube-context devops-homework rollback homework 1 --namespace hw15 --wait --timeout 180s
+Rollback was a success! Happy Helming!
+$ helm --kube-context devops-homework history homework --namespace hw15
+REVISION	UPDATED                 	STATUS    	CHART             	APP VERSION	DESCRIPTION
+1       	Thu Oct  8 21:03:32 2026	superseded	homework-web-0.1.0	1.0.0      	Install complete
+2       	Thu Oct  8 21:03:37 2026	superseded	homework-web-0.1.0	1.0.0      	Upgrade complete
+3       	Thu Oct  8 21:03:44 2026	superseded	homework-web-0.1.0	1.0.0      	Upgrade complete
+4       	Thu Oct  8 21:03:50 2026	deployed  	homework-web-0.1.0	1.0.0      	Rollback to 1
+$ helm --kube-context devops-homework get values homework --namespace hw15 --all
+COMPUTED VALUES:
+appVersion: v1
+image:
+  pullPolicy: IfNotPresent
+  repository: nginx
+  tag: 1.28-alpine
+replicaCount: 1
+resources:
+  limits:
+    cpu: 200m
+    memory: 64Mi
+  requests:
+    cpu: 10m
+    memory: 16Mi
+service:
+  port: 80
+$ kubectl --context devops-homework -n hw15 get deployment,pods,svc
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/homework   1/1     1            1           21s
+
+NAME                            READY   STATUS    RESTARTS   AGE
+pod/homework-5d5ffd97b9-plw6h   1/1     Running   0          2s
+
+NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/homework   ClusterIP   10.101.98.101   <none>        80/TCP    21s
+$ kubectl --context devops-homework -n hw15 exec deployment/homework -- wget -qO- http://homework
+v1
+$ helm --kube-context devops-homework uninstall homework --namespace hw15 --wait
+release "homework" uninstalled
+$ helm --kube-context devops-homework list --namespace hw15
+NAME	NAMESPACE	REVISION	UPDATED	STATUS	CHART	APP VERSION
+$ kubectl --context devops-homework -n hw15 wait --for=delete pod -l app.kubernetes.io/instance=homework --timeout=60s
+pod/homework-5d5ffd97b9-plw6h condition met
+$ kubectl --context devops-homework -n hw15 get deployments,services,pods
+No resources found in hw15 namespace.
+**********************
+PowerShell transcript end
+End time: 20261008210356
+**********************

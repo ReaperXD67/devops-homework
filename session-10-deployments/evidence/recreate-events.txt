@@ -1,0 +1,9 @@
+$ kubectl --context devops-homework -n hw10 describe deployment recreate
+
+Events:
+  Type    Reason             Age                  From                   Message
+  ----    ------             ----                 ----                   -------
+  Normal  ScalingReplicaSet  13s                  deployment-controller  Scaled down replica set recreate-7759ff9f59 from 2 to 0
+  Normal  ScalingReplicaSet  12s (x2 over 2m31s)  deployment-controller  Scaled up replica set recreate-7555c7c4b8 from 0 to 2
+  Normal  ScalingReplicaSet  6s (x2 over 2m29s)   deployment-controller  Scaled down replica set recreate-7555c7c4b8 from 2 to 0
+  Normal  ScalingReplicaSet  5s (x2 over 2m26s)   deployment-controller  Scaled up replica set recreate-7759ff9f59 from 0 to 2

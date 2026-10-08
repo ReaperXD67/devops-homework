@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue
+  namespace: hw10
+spec:
+  replicas: 1
+  selector:
+    matchLabels: &id001
+      app: color
+      version: blue
+  template:
+    metadata:
+      labels: *id001
+    spec:
+      containers:
+      - name: web
+        image: nginx:1.28-alpine
+        command:
+        - sh
+        - -c
+        args:
+        - printf "%s\n" "$VERSION" > /usr/share/nginx/html/index.html; exec nginx
+          -g "daemon off;"
+        env:
+        - name: VERSION
+          value: blue-v1
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 200m
+            memory: 64Mi
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 1
+          periodSeconds: 2
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: green
+  namespace: hw10
+spec:
+  replicas: 1
+  selector:
+    matchLabels: &id001
+      app: color
+      version: green
+  template:
+    metadata:
+      labels: *id001
+    spec:
+      containers:
+      - name: web
+        image: nginx:1.28-alpine
+        command:
+        - sh
+        - -c
+        args:
+        - printf "%s\n" "$VERSION" > /usr/share/nginx/html/index.html; exec nginx
+          -g "daemon off;"
+        env:
+        - name: VERSION
+          value: green-v2
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 200m
+            memory: 64Mi
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 1
+          periodSeconds: 2
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: color
+  namespace: hw10
+spec:
+  type: ClusterIP
+  selector:
+    app: color
+    version: blue
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80

@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Final application Helm lifecycle</title>
+<style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
+<h1>Final application Helm lifecycle</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
+<p>Source: <a href="../../final-devops-project/helm/evidence/deployment.txt">final-devops-project/helm/evidence/deployment.txt</a> · Last 52 nonempty lines of 131</p>
+<pre>Check application readiness:
+  helm test final-app --namespace devops-final-helm --logs
+Open a local tunnel:
+  kubectl -n devops-final-helm port-forward svc/final-app 18081:80
+  curl http://127.0.0.1:18081/api/info
+Exit code: 0
+&gt; HTTP /api/info after version 1.1.0 upgrade
+{&quot;application&quot;:&quot;DevOps homework&quot;,&quot;author&quot;:&quot;Aman Kumar&quot;,&quot;enrollment&quot;:&quot;10275&quot;,&quot;version&quot;:&quot;1.1.0&quot;}
+Exit code: 0
+&gt; helm rollback final-app 1
+Rollback was a success! Happy Helming!
+Exit code: 0
+&gt; HTTP /api/info after rollback to revision 1
+{&quot;application&quot;:&quot;DevOps homework&quot;,&quot;author&quot;:&quot;Aman Kumar&quot;,&quot;enrollment&quot;:&quot;10275&quot;,&quot;version&quot;:&quot;1.0.0&quot;}
+Exit code: 0
+&gt; helm history final-app
+REVISION	UPDATED                 	STATUS    	CHART           	APP VERSION	DESCRIPTION
+1       	Thu Oct  8 21:03:49 2026	superseded	devops-app-1.0.0	1.0.0      	Install complete
+2       	Thu Oct  8 21:03:57 2026	superseded	devops-app-1.0.0	1.0.0      	Upgrade complete
+3       	Thu Oct  8 21:04:06 2026	deployed  	devops-app-1.0.0	1.0.0      	Rollback to 1
+Exit code: 0
+&gt; helm test final-app --logs after rollback
+NAME: final-app
+LAST DEPLOYED: Thu Oct  8 21:04:06 2026
+NAMESPACE: devops-final-helm
+STATUS: deployed
+REVISION: 3
+TEST SUITE:     final-app-http-test
+Last Started:   Thu Oct  8 21:04:15 2026
+Last Completed: Thu Oct  8 21:04:19 2026
+Phase:          Succeeded
+NOTES:
+Release final-app is deployed in devops-final-helm.
+The existing Secret app-secret must contain key token.
+Check application readiness:
+  helm test final-app --namespace devops-final-helm --logs
+Open a local tunnel:
+  kubectl -n devops-final-helm port-forward svc/final-app 18081:80
+  curl http://127.0.0.1:18081/api/info
+POD LOGS: final-app-http-test
+Service readiness response: 200 {&quot;status&quot;:&quot;ok&quot;}
+Exit code: 0
+&gt; kubectl get deployment,pods,service after rollback
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/final-app   2/2     2            2           29s
+NAME                             READY   STATUS      RESTARTS   AGE
+pod/final-app-64d777d655-55844   1/1     Running     0          9s
+pod/final-app-64d777d655-5m4hs   1/1     Running     0          13s
+pod/final-app-http-test          0/1     Completed   0          4s
+NAME                TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/final-app   ClusterIP   10.103.119.74   &lt;none&gt;        80/TCP    29s
+Exit code: 0</pre></html>

@@ -1,0 +1,15 @@
+$ kubectl --context devops-homework -n hw13 get hpa
+NAME         REFERENCE               TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+php-apache   Deployment/php-apache   cpu: 1%/50%   1         4         1          13m
+$ kubectl --context devops-homework -n hw13 get deployment php-apache
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+php-apache   1/1     1            1           13m
+$ kubectl --context devops-homework -n hw13 get pods
+NAME                          READY   STATUS      RESTARTS   AGE
+hostpath-demo                 0/1     Completed   0          13m
+php-apache-6c55796754-sh5l7   1/1     Running     0          7m18s
+volume-demo                   1/1     Running     0          6m30s
+$ kubectl --context devops-homework -n hw13 top pods
+NAME                          CPU(cores)   MEMORY(bytes)   
+php-apache-6c55796754-sh5l7   1m           12Mi            
+volume-demo                   0m           0Mi             

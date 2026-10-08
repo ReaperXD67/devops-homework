@@ -1,0 +1,14 @@
+$ kubectl --context devops-homework -n ingress-nginx port-forward service/ingress-nginx-controller 18012:80 (background)
+Forwarding from 127.0.0.1:18012 -> 80
+Forwarding from [::1]:18012 -> 80
+$ curl.exe -sS -i -H Host:homework.local http://127.0.0.1:18012
+HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2026 15:37:18 GMT
+Content-Type: text/html
+Content-Length: 28
+Connection: keep-alive
+Last-Modified: Thu, 08 Oct 2026 15:34:27 GMT
+ETag: "6ac7b803-1c"
+Accept-Ranges: bytes
+
+Hello ConfigMap and Ingress

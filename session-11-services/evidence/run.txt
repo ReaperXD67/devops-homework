@@ -1,0 +1,151 @@
+**********************
+PowerShell transcript start
+Start time: 20261008210348
+Username: AMANLAPTOP\Aman
+RunAs User: AMANLAPTOP\Aman
+Configuration Name: 
+Machine: AMANLAPTOP (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Users\Aman\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\pwsh.dll -Command try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}
+& .\Run-Lab.ps1
+Process ID: 29360
+PSVersion: 7.6.5
+PSEdition: Core
+GitCommitId: 7.6.5
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is evidence/run.txt
+$ kubectl --context devops-homework apply -f services.yaml
+namespace/hw11 unchanged
+deployment.apps/web unchanged
+service/clusterip unchanged
+service/nodeport unchanged
+service/loadbalancer unchanged
+service/headless unchanged
+service/externalname unchanged
+pod/dns-client unchanged
+$ kubectl --context devops-homework -n hw11 rollout status deployment/web --timeout=120s
+deployment "web" successfully rolled out
+$ kubectl --context devops-homework -n hw11 wait --for=condition=Ready pod/dns-client --timeout=120s
+pod/dns-client condition met
+$ kubectl --context devops-homework -n hw11 get services -o wide
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE     SELECTOR
+clusterip      ClusterIP      10.98.122.194    <none>        80/TCP         3m38s   app=web
+externalname   ExternalName   <none>           example.com   <none>         3m38s   <none>
+headless       ClusterIP      None             <none>        80/TCP         3m38s   app=web
+loadbalancer   LoadBalancer   10.110.185.240   <pending>     80:31505/TCP   3m38s   app=web
+nodeport       NodePort       10.109.221.243   <none>        80:32389/TCP   3m38s   app=web
+$ kubectl --context devops-homework -n hw11 get endpointslices -o wide
+NAME                 ADDRESSTYPE   PORTS   ENDPOINTS                 AGE
+clusterip-rrs2c      IPv4          80      10.244.0.21,10.244.0.20   3m39s
+headless-4dkfd       IPv4          80      10.244.0.21,10.244.0.20   3m39s
+loadbalancer-lb59k   IPv4          80      10.244.0.21,10.244.0.20   3m39s
+nodeport-ff6cr       IPv4          80      10.244.0.21,10.244.0.20   3m39s
+$ kubectl --context devops-homework -n hw11 exec dns-client -- nslookup clusterip.hw11.svc.cluster.local
+Server:		10.96.0.10
+Address:	10.96.0.10:53
+
+
+Name:	clusterip.hw11.svc.cluster.local
+Address: 10.98.122.194
+
+$ kubectl --context devops-homework -n hw11 exec dns-client -- nslookup headless.hw11.svc.cluster.local
+Server:		10.96.0.10
+Address:	10.96.0.10:53
+
+Name:	headless.hw11.svc.cluster.local
+Address: 10.244.0.21
+Name:	headless.hw11.svc.cluster.local
+Address: 10.244.0.20
+
+
+$ kubectl --context devops-homework -n hw11 exec dns-client -- nslookup externalname.hw11.svc.cluster.local
+Server:		10.96.0.10
+Address:	10.96.0.10:53
+
+externalname.hw11.svc.cluster.local	canonical name = example.com
+
+externalname.hw11.svc.cluster.local	canonical name = example.com
+Name:	example.com
+Address: 104.20.23.154
+Name:	example.com
+Address: 172.66.147.243
+
+$ kubectl --context devops-homework -n hw11 exec dns-client -- wget -qO- http://clusterip
+Hello from Kubernetes Services
+$ kubectl --context devops-homework -n hw11 exec dns-client -- wget -qO- http://headless
+Hello from Kubernetes Services
+$ kubectl --context devops-homework -n hw11 exec dns-client -- wget -qO- http://loadbalancer
+Hello from Kubernetes Services
+$ kubectl --context devops-homework -n hw11 exec dns-client -- wget -qO- http://192.168.49.2:32389
+Hello from Kubernetes Services
+$ kubectl --context devops-homework -n hw11 exec dns-client -- cat /etc/resolv.conf
+search hw11.svc.cluster.local svc.cluster.local cluster.local
+nameserver 10.96.0.10
+options ndots:5
+$ kubectl --context devops-homework -n kube-system get pods -l k8s-app=kube-dns -o wide
+NAME                       READY   STATUS    RESTARTS   AGE     IP           NODE              NOMINATED NODE   READINESS GATES
+coredns-66bc5c9577-xrl65   1/1     Running   0          8m31s   10.244.0.2   devops-homework   <none>           <none>
+$ kubectl --context devops-homework -n kube-system get configmap coredns -o yaml
+apiVersion: v1
+data:
+  Corefile: |
+    .:53 {
+        log
+        errors
+        health {
+           lameduck 5s
+        }
+        ready
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
+           pods insecure
+           fallthrough in-addr.arpa ip6.arpa
+           ttl 30
+        }
+        prometheus :9153
+        hosts {
+           192.168.65.254 host.minikube.internal
+           fallthrough
+        }
+        forward . /etc/resolv.conf {
+           max_concurrent 1000
+        }
+        cache 30 {
+           disable success cluster.local
+           disable denial cluster.local
+        }
+        loop
+        reload
+        loadbalance
+    }
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2026-10-08T15:25:18Z"
+  name: coredns
+  namespace: kube-system
+  resourceVersion: "350"
+  uid: ba544c1b-f9d1-4cc2-b4c0-2c8ca2df0503
+$ kubectl --context devops-homework -n kube-system logs deployment/coredns --tail=15
+[INFO] 10.244.0.65:58246 - 45657 "AAAA IN php-apache.hw13.svc.cluster.local. udp 51 false 512" NOERROR qr,aa,rd 144 0.000431723s
+[INFO] 10.244.0.22:59921 - 21321 "AAAA IN loadbalancer.hw11.svc.cluster.local. udp 53 false 512" NOERROR qr,aa,rd 146 0.000212552s
+[INFO] 10.244.0.22:59921 - 19530 "A IN loadbalancer.hw11.svc.cluster.local. udp 53 false 512" NOERROR qr,aa,rd 104 0.000241307s
+[INFO] 10.244.0.65:52571 - 12836 "AAAA IN php-apache.hw13.svc.cluster.local. udp 51 false 512" NOERROR qr,aa,rd 144 0.000246146s
+[INFO] 10.244.0.65:52571 - 59688 "A IN php-apache.hw13.svc.cluster.local. udp 51 false 512" NOERROR qr,aa,rd 100 0.000343149s
+[INFO] 10.244.0.89:36527 - 22116 "AAAA IN rolling.hw10.svc.cluster.local. udp 48 false 512" NOERROR qr,aa,rd 141 0.00170914s
+[INFO] 10.244.0.89:36527 - 21795 "A IN rolling.hw10.svc.cluster.local. udp 48 false 512" NOERROR qr,aa,rd 94 0.001790733s
+[INFO] 10.244.0.65:37556 - 18763 "AAAA IN php-apache.hw13.svc.cluster.local. udp 51 false 512" NOERROR qr,aa,rd 144 0.000294497s
+[INFO] 10.244.0.65:37556 - 57929 "A IN php-apache.hw13.svc.cluster.local. udp 51 false 512" NOERROR qr,aa,rd 100 0.000371125s
+[INFO] 10.244.0.65:45466 - 5283 "AAAA IN php-apache.hw13.svc.cluster.local. udp 51 false 512" NOERROR qr,aa,rd 144 0.000255884s
+[INFO] 10.244.0.65:45466 - 35745 "A IN php-apache.hw13.svc.cluster.local. udp 51 false 512" NOERROR qr,aa,rd 100 0.000331927s
+[INFO] 10.244.0.65:38187 - 26967 "AAAA IN php-apache.hw13.svc.cluster.local. udp 51 false 512" NOERROR qr,aa,rd 144 0.000267707s
+[INFO] 10.244.0.65:38187 - 36691 "A IN php-apache.hw13.svc.cluster.local. udp 51 false 512" NOERROR qr,aa,rd 100 0.000371593s
+[INFO] 10.244.0.65:38812 - 18709 "AAAA IN php-apache.hw13.svc.cluster.local. udp 51 false 512" NOERROR qr,aa,rd 144 0.000214186s
+[INFO] 10.244.0.65:38812 - 34327 "A IN php-apache.hw13.svc.cluster.local. udp 51 false 512" NOERROR qr,aa,rd 100 0.000278517s
+**********************
+PowerShell transcript end
+End time: 20261008210355
+**********************

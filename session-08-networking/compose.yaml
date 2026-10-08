@@ -1,0 +1,24 @@
+name: devops-network
+services:
+  frontend:
+    image: alpine:3.23
+    command: ["sleep", "infinity"]
+    networks: [front]
+  backend:
+    image: alpine:3.23
+    command: ["sleep", "infinity"]
+    networks: [front, data]
+  database:
+    image: mysql:8.4
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    networks: [data]
+    tmpfs: [/var/lib/mysql]
+  isolated:
+    image: alpine:3.23
+    command: ["sleep", "infinity"]
+    networks: [isolated]
+networks:
+  front: {}
+  data: {}
+  isolated: {}
