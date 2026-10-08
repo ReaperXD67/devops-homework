@@ -20,7 +20,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: app
-          image: ghcr.io/reaperxd67/devops-homework:latest
+          image: ghcr.io/reaperxd67/devops-homework@sha256:bddd87c63b22371d1724581bd475ae584f774199dd828f92eaf87201d115e041
           imagePullPolicy: IfNotPresent
           ports: [{name: http, containerPort: 8080}]
           envFrom:

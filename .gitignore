@@ -6,6 +6,8 @@ node_modules/
 *.tfstate
 *.tfstate.*
 *.tfplan
+local.auto.tfvars
+*.auto.tfvars.json
 crash.log
 *.pem
 *.key

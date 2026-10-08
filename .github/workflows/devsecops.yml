@@ -14,6 +14,10 @@ on:
 permissions:
   contents: read
 
+defaults:
+  run:
+    shell: bash
+
 concurrency:
   group: devops-${{ github.ref }}
   cancel-in-progress: false
@@ -96,7 +100,12 @@ jobs:
           kubectl -n devops-final rollout status deployment/devops-app --timeout=120s
           kubectl -n devops-final get pods,svc,hpa -o wide | tee reports/kubernetes.txt
           kubectl -n devops-final port-forward svc/devops-app 18080:80 > reports/port-forward.txt 2>&1 &
-          for i in $(seq 1 30); do curl --fail http://127.0.0.1:18080/healthz && break; sleep 2; done
+          healthy=false
+          for i in $(seq 1 30); do
+            if curl --fail http://127.0.0.1:18080/healthz; then healthy=true; break; fi
+            sleep 2
+          done
+          test "$healthy" = true
           curl --fail http://127.0.0.1:18080/api/info | tee reports/deployed-api.json
           curl --fail http://127.0.0.1:18080/metrics | tee reports/deployed-metrics.txt
           kubectl -n devops-final logs deployment/devops-app --tail=20 | tee reports/application-logs.txt
