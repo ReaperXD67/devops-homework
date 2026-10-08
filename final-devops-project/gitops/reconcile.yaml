@@ -1,0 +1,15 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: homework-demo
+  namespace: flux-system
+spec:
+  interval: 30s
+  retryInterval: 15s
+  timeout: 60s
+  path: ./final-devops-project/gitops/desired
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: devops-homework

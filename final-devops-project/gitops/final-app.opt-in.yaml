@@ -1,0 +1,18 @@
+# Apply this only after the published image is accessible and app-secret exists.
+# Starts suspended so the choice to hand the final app to Flux is explicit.
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: final-application
+  namespace: flux-system
+spec:
+  suspend: true
+  interval: 1m
+  retryInterval: 30s
+  timeout: 3m
+  path: ./final-devops-project/kubernetes
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: devops-homework

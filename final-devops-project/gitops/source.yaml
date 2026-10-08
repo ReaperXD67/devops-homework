@@ -1,0 +1,11 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: devops-homework
+  namespace: flux-system
+spec:
+  interval: 30s
+  timeout: 60s
+  url: https://github.com/ReaperXD67/devops-homework.git
+  ref:
+    branch: main
