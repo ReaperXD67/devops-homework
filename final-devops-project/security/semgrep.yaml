@@ -1,0 +1,15 @@
+rules:
+  - id: no-javascript-eval
+    languages: [javascript]
+    message: Never evaluate untrusted JavaScript dynamically.
+    severity: ERROR
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: new Function(...)
+  - id: no-shell-exec
+    languages: [javascript]
+    message: Shell execution must not be reachable from this HTTP service.
+    severity: ERROR
+    pattern-either:
+      - pattern: $CP.exec(...)
+      - pattern: $CP.execSync(...)
