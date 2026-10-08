@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+node_modules/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+*.pem
+*.key
+*credentials*
+__pycache__/
+.DS_Store
+.playwright-cli/
+.tools/
+output/playwright/.auth/
