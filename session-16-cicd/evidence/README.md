@@ -1,5 +1,15 @@
 # Successful CI/CD execution
 
+## Final validation after the complete repository was pushed
+
+[Run 37803461033](https://github.com/ReaperXD67/devops-homework/actions/runs/37803461033) passed every build, test, security, registry-publishing and Kubernetes verification step against source commit `44b0be1e146e91c0b01812cb51a55064e0245efc`. This run includes the hardened shell failure propagation, bounded health-check retry and main-only publishing conditions.
+
+![Final successful pipeline](../../output/playwright/github-actions-final.png)
+
+[Final run metadata](final-workflow-run.json) · [Final complete report set](reports/devops-evidence-4/)
+
+## Earlier successful run and pinned deployment image
+
 **Run:** [37801380225 — all gates and deployment succeeded](https://github.com/ReaperXD67/devops-homework/actions/runs/37801380225)  
 **Source commit:** `fc117d495fbe37568d8a72f06838d61e8946af1a`  
 **Date:** 8 October 2026  

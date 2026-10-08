@@ -47,3 +47,6 @@ The recorded run on 8 October 2026 returned `rolling-v2`; blue-green traffic cha
 This browser screenshot renders an excerpt from the linked actual command log. Full output remains available in the evidence files above.
 
 ![Pods, ReplicaSets & Deployments: actual captured output](../output/playwright/session-10-evidence.png)
+
+
+![Observed Pod lifecycle phases](../output/playwright/session-10-lifecycle.png)

@@ -6,7 +6,7 @@ One public repository for all course sessions, with source code, scripts, Docker
 
 **Non-AWS work is implemented and demonstrated locally and in GitHub Actions. Live AWS provisioning is pending account setup, as requested.** Terraform formatting, validation and seven mock-provider tests have passed; mock tests are not cloud execution.
 
-[AWS setup instructions](session-18-terraform/AWS-SETUP.md) | [Final project](final-devops-project/README.md) | [Successful CI/CD run](https://github.com/ReaperXD67/devops-homework/actions/runs/37801380225)
+[AWS setup instructions](session-18-terraform/AWS-SETUP.md) | [Final project](final-devops-project/README.md) | [Successful CI/CD run](https://github.com/ReaperXD67/devops-homework/actions/runs/37803461033)
 
 ## Submission README links
 
@@ -41,7 +41,7 @@ Recorded on **8 October 2026** using Windows, WSL Ubuntu, Docker Desktop, Kubern
 
 Browser screenshots show real applications, GitHub Actions and Prometheus. Screenshots titled command transcript are browser-rendered excerpts of linked raw logs, created by [the evidence renderer](scripts/render_evidence.py); no expected output is substituted. Sensitive runtime values are excluded. The failed first image scan and successful remediation remain visible in Actions history.
 
-![Successful GitHub Actions execution](output/playwright/github-actions-success.png)
+![Successful GitHub Actions execution](output/playwright/github-actions-final.png)
 
 ## Assignment references and limits
 

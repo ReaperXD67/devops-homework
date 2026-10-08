@@ -101,3 +101,6 @@ PASS: Flux automatically corrected manual drift to the value in Git.
 ```
 
 The controller log at `15:32:47.313Z` records the ConfigMap as `configured` using the same Git revision, proving that the controller performed the correction. The brief initial `Source artifact not found` message occurred while the Git source was first being fetched; the subsequent Ready status and successful apply show recovery.
+
+
+![Active final application GitOps handoff](../../output/playwright/gitops-application.png)

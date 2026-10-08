@@ -51,3 +51,6 @@ The four principles are declarative desired state, versioned/immutable history, 
 ![Actual GitOps drift recovery transcript](../output/playwright/gitops-evidence.png)
 
 Sources: [Prometheus alerting rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/), [OpenTelemetry signals](https://opentelemetry.io/docs/concepts/signals/), [Flux reconciliation](https://fluxcd.io/flux/concepts/), [OpenGitOps principles](https://opengitops.dev/).
+
+
+![Actual alert firing and recovery](../output/playwright/monitoring-alert-evidence.png)

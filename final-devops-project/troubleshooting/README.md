@@ -90,3 +90,6 @@ The final transcript also includes an HTTP 200 response from `/api/info`, provin
 - Keep fault injection scoped, preserve the original configuration and verify cleanup even when an intermediate command fails.
 
 References: [debug Pods](https://kubernetes.io/docs/tasks/debug/debug-application/debug-pods/), [debug Services](https://kubernetes.io/docs/tasks/debug/debug-application/debug-service/), [configure probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+
+
+![Final application failure and recovery output](../../output/playwright/final-troubleshooting-evidence.png)

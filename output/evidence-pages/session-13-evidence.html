@@ -2,31 +2,16 @@
 <style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
 <small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
 <h1>Storage and real HPA scaling</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
-<p>Source: <a href="../../session-13-storage-hpa/evidence/run.txt">session-13-storage-hpa/evidence/run.txt</a> · Last 52 nonempty lines of 208</p>
-<pre>hostpath-demo                 0/1     Completed   0          9m8s
-load-generator                1/1     Running     0          107s
-php-apache-6c55796754-6ltxl   1/1     Running     0          48s
-php-apache-6c55796754-8vb4n   1/1     Running     0          48s
-php-apache-6c55796754-sh5l7   1/1     Running     0          2m46s
-php-apache-6c55796754-sr9bm   1/1     Running     0          48s
-volume-demo                   1/1     Running     0          118s
-$ kubectl --context devops-homework -n hw13 top pods
-NAME                          CPU(cores)   MEMORY(bytes)
-load-generator                13m          1Mi
-php-apache-6c55796754-sh5l7   205m         11Mi
-volume-demo                   1m           0Mi
+<p>Source: <a href="../../session-13-storage-hpa/evidence/run-excerpt.txt">session-13-storage-hpa/evidence/run-excerpt.txt</a> · Last 33 nonempty lines of 33</p>
+<pre>Exact excerpts from actual run.txt and final-state.txt.
+$ kubectl --context devops-homework -n hw13 exec volume-demo -- cat /data/sentinel.txt
+survives-pod-deletion
+$ kubectl --context devops-homework -n hw13 get hpa
+NAME         REFERENCE               TARGETS              MINPODS   MAXPODS   REPLICAS   AGE
+php-apache   Deployment/php-apache   cpu: &lt;unknown&gt;/50%   1         4         1          7m16s
 $ kubectl --context devops-homework -n hw13 get hpa
 NAME         REFERENCE               TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
-php-apache   Deployment/php-apache   cpu: 176%/50%   1         4         4          9m18s
-$ kubectl --context devops-homework -n hw13 get pods
-NAME                          READY   STATUS      RESTARTS   AGE
-hostpath-demo                 0/1     Completed   0          9m23s
-load-generator                1/1     Running     0          2m2s
-php-apache-6c55796754-6ltxl   1/1     Running     0          63s
-php-apache-6c55796754-8vb4n   1/1     Running     0          63s
-php-apache-6c55796754-sh5l7   1/1     Running     0          3m1s
-php-apache-6c55796754-sr9bm   1/1     Running     0          63s
-volume-demo                   1/1     Running     0          2m13s
+php-apache   Deployment/php-apache   cpu: 205%/50%   1         4         4          8m32s
 $ kubectl --context devops-homework -n hw13 top pods
 NAME                          CPU(cores)   MEMORY(bytes)
 load-generator                15m          1Mi
@@ -35,23 +20,19 @@ php-apache-6c55796754-8vb4n   128m         11Mi
 php-apache-6c55796754-sh5l7   176m         12Mi
 php-apache-6c55796754-sr9bm   97m          11Mi
 volume-demo                   0m           0Mi
+After load removal and scale-down:
 $ kubectl --context devops-homework -n hw13 get hpa
-NAME         REFERENCE               TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
-php-apache   Deployment/php-apache   cpu: 176%/50%   1         4         4          9m34s
+NAME         REFERENCE               TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+php-apache   Deployment/php-apache   cpu: 1%/50%   1         4         1          13m
+$ kubectl --context devops-homework -n hw13 get deployment php-apache
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+php-apache   1/1     1            1           13m
 $ kubectl --context devops-homework -n hw13 get pods
 NAME                          READY   STATUS      RESTARTS   AGE
-hostpath-demo                 0/1     Completed   0          9m39s
-load-generator                1/1     Running     0          2m18s
-php-apache-6c55796754-6ltxl   1/1     Running     0          79s
-php-apache-6c55796754-8vb4n   1/1     Running     0          79s
-php-apache-6c55796754-sh5l7   1/1     Running     0          3m17s
-php-apache-6c55796754-sr9bm   1/1     Running     0          79s
-volume-demo                   1/1     Running     0          2m29s
+hostpath-demo                 0/1     Completed   0          13m
+php-apache-6c55796754-sh5l7   1/1     Running     0          7m18s
+volume-demo                   1/1     Running     0          6m30s
 $ kubectl --context devops-homework -n hw13 top pods
 NAME                          CPU(cores)   MEMORY(bytes)
-load-generator                15m          1Mi
-php-apache-6c55796754-6ltxl   105m         12Mi
-php-apache-6c55796754-8vb4n   128m         11Mi
-php-apache-6c55796754-sh5l7   176m         12Mi
-php-apache-6c55796754-sr9bm   97m          11Mi
+php-apache-6c55796754-sh5l7   1m           12Mi
 volume-demo                   0m           0Mi</pre></html>

@@ -2,56 +2,19 @@
 <style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
 <small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
 <h1>Deployment strategies and Pod lifecycle</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
-<p>Source: <a href="../../session-10-deployments/evidence/run.txt">session-10-deployments/evidence/run.txt</a> · Last 52 nonempty lines of 739</p>
-<pre>Labels:           &lt;none&gt;
-Annotations:      &lt;none&gt;
-Status:           Pending
-IP:
-IPs:              &lt;none&gt;
-Containers:
-  demo:
-    Image:      busybox:1.37
-    Port:       &lt;none&gt;
-    Host Port:  &lt;none&gt;
-    Command:
-      sh
-      -c
-      sleep 3600
-    Limits:
-      cpu:     100m
-      memory:  32Mi
-    Requests:
-      cpu:        5m
-      memory:     8Mi
-    Environment:  &lt;none&gt;
-    Mounts:
-      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-4df7t (ro)
-Conditions:
-  Type           Status
-  PodScheduled   False
-Volumes:
-  kube-api-access-4df7t:
-    Type:                    Projected (a volume that contains injected data from multiple sources)
-    TokenExpirationSeconds:  3607
-    ConfigMapName:           kube-root-ca.crt
-    Optional:                false
-    DownwardAPI:             true
-QoS Class:                   Burstable
-Node-Selectors:              homework/nonexistent=true
-Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
-                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
-Events:
-  Type     Reason            Age   From               Message
-  ----     ------            ----  ----               -------
-  Warning  FailedScheduling  8s    default-scheduler  0/1 nodes are available: 1 node(s) didn&#x27;t match Pod&#x27;s node affinity/selector. no new claims to deallocate, preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
-$ kubectl --context devops-homework -n hw10 logs life-succeeded
-success
-$ kubectl --context devops-homework -n hw10 logs life-failed
-intentional-failure
-$ kubectl --context devops-homework -n hw10 delete pod life-pending life-running
-pod &quot;life-pending&quot; deleted from hw10 namespace
-pod &quot;life-running&quot; deleted from hw10 namespace
-**********************
-PowerShell transcript end
-End time: 20261008210505
-**********************</pre></html>
+<p>Source: <a href="../../session-10-deployments/evidence/run-excerpt.txt">session-10-deployments/evidence/run-excerpt.txt</a> · Last 15 nonempty lines of 15</p>
+<pre>Exact excerpts from the real run.txt transcript. Full context is retained in run.txt.
+$ kubectl --context devops-homework -n hw10 exec deployment/rolling -- wget -qO- http://rolling
+rolling-v2
+$ kubectl --context devops-homework -n hw10 exec deployment/blue -- wget -qO- http://color
+blue-v1
+$ kubectl --context devops-homework -n hw10 exec deployment/green -- wget -qO- http://color
+green-v2
+$ kubectl --context devops-homework -n hw10 get endpointslices -l kubernetes.io/service-name=canary-demo -o wide
+NAME                ADDRESSTYPE   PORTS   ENDPOINTS                                         AGE
+canary-demo-j5w26   IPv4          80      10.244.0.55,10.244.0.56,10.244.0.53 + 2 more...   2m20s
+$ kubectl --context devops-homework -n hw10 get pods -l app=recreate -o wide
+NAME                        READY   STATUS        RESTARTS   AGE   IP             NODE              NOMINATED NODE   READINESS GATES
+recreate-7555c7c4b8-2lhr7   1/1     Terminating   0          6s    10.244.0.102   devops-homework   &lt;none&gt;           &lt;none&gt;
+recreate-7555c7c4b8-cj98l   1/1     Terminating   0          6s    10.244.0.103   devops-homework   &lt;none&gt;           &lt;none&gt;
+Count of exact HTTP response lines in the 100-request sample: stable-v1=76, canary-v2=24.</pre></html>

@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Pending, Running, Succeeded and Failed Pods</title>
+<style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
+<h1>Pending, Running, Succeeded and Failed Pods</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
+<p>Source: <a href="../../session-10-deployments/evidence/lifecycle-excerpt.txt">session-10-deployments/evidence/lifecycle-excerpt.txt</a> · Last 18 nonempty lines of 18</p>
+<pre>Exact Pod lifecycle state table from run.txt.
+$ kubectl --context devops-homework -n hw10 get pods -o wide
+NAME                        READY   STATUS      RESTARTS   AGE     IP             NODE              NOMINATED NODE   READINESS GATES
+blue-649c7cdf79-xkrhg       1/1     Running     0          2m47s   10.244.0.49    devops-homework   &lt;none&gt;           &lt;none&gt;
+canary-98459b7cb-5jkzq      1/1     Running     0          2m43s   10.244.0.56    devops-homework   &lt;none&gt;           &lt;none&gt;
+green-7bcc9d4cbd-nrdlb      1/1     Running     0          2m47s   10.244.0.50    devops-homework   &lt;none&gt;           &lt;none&gt;
+life-failed                 0/1     Error       0          2m33s   10.244.0.63    devops-homework   &lt;none&gt;           &lt;none&gt;
+life-pending                0/1     Pending     0          8s      &lt;none&gt;         &lt;none&gt;            &lt;none&gt;           &lt;none&gt;
+life-running                1/1     Running     0          9s      10.244.0.107   devops-homework   &lt;none&gt;           &lt;none&gt;
+life-succeeded              0/1     Completed   0          2m33s   10.244.0.62    devops-homework   &lt;none&gt;           &lt;none&gt;
+recreate-7759ff9f59-grf2s   1/1     Running     0          14s     10.244.0.106   devops-homework   &lt;none&gt;           &lt;none&gt;
+recreate-7759ff9f59-lfj45   1/1     Running     0          14s     10.244.0.105   devops-homework   &lt;none&gt;           &lt;none&gt;
+rolling-58c9685cdf-jqk6m    1/1     Running     0          45s     10.244.0.90    devops-homework   &lt;none&gt;           &lt;none&gt;
+rolling-58c9685cdf-ns2x6    1/1     Running     0          47s     10.244.0.89    devops-homework   &lt;none&gt;           &lt;none&gt;
+stable-6bdf5bfb77-2vm46     1/1     Running     0          2m43s   10.244.0.55    devops-homework   &lt;none&gt;           &lt;none&gt;
+stable-6bdf5bfb77-8tp2t     1/1     Running     0          2m43s   10.244.0.52    devops-homework   &lt;none&gt;           &lt;none&gt;
+stable-6bdf5bfb77-c7qb7     1/1     Running     0          2m43s   10.244.0.54    devops-homework   &lt;none&gt;           &lt;none&gt;
+stable-6bdf5bfb77-dmlgk     1/1     Running     0          2m43s   10.244.0.53    devops-homework   &lt;none&gt;           &lt;none&gt;</pre></html>

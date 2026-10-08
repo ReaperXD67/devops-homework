@@ -2,56 +2,28 @@
 <style>body{margin:0;padding:28px;background:#f4f6f8;color:#15222c;font-family:system-ui}small{color:#4c6473}h1{font-size:27px;margin:10px 0}p{font-size:14px}pre{background:white;border:1px solid #cad4db;padding:18px;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px}a{color:#07688b}</style>
 <small>AMAN KUMAR · ENROLLMENT 10275 · DEVOPS HOMEWORK</small>
 <h1>Helm upgrades and rollback</h1><p>Browser rendering of a real saved command transcript, shown as an excerpt. No expected output has been substituted.</p>
-<p>Source: <a href="../../session-15-helm/evidence/run.txt">session-15-helm/evidence/run.txt</a> · Last 52 nonempty lines of 356</p>
-<pre>v3
+<p>Source: <a href="../../session-15-helm/evidence/run-excerpt.txt">session-15-helm/evidence/run-excerpt.txt</a> · Last 24 nonempty lines of 24</p>
+<pre>Exact excerpts from the real run.txt transcript. Full context is retained in run.txt.
+$ kubectl --context devops-homework -n hw15 exec deployment/homework -- wget -qO- http://homework
+v1
+$ kubectl --context devops-homework -n hw15 exec deployment/homework -- wget -qO- http://homework
+v2
+$ kubectl --context devops-homework -n hw15 exec deployment/homework -- wget -qO- http://homework
+v3
 $ helm --kube-context devops-homework history homework --namespace hw15
 REVISION	UPDATED                 	STATUS    	CHART             	APP VERSION	DESCRIPTION
 1       	Thu Oct  8 21:03:32 2026	superseded	homework-web-0.1.0	1.0.0      	Install complete
 2       	Thu Oct  8 21:03:37 2026	superseded	homework-web-0.1.0	1.0.0      	Upgrade complete
 3       	Thu Oct  8 21:03:44 2026	deployed  	homework-web-0.1.0	1.0.0      	Upgrade complete
-$ helm --kube-context devops-homework rollback homework 1 --namespace hw15 --wait --timeout 180s
-Rollback was a success! Happy Helming!
 $ helm --kube-context devops-homework history homework --namespace hw15
 REVISION	UPDATED                 	STATUS    	CHART             	APP VERSION	DESCRIPTION
 1       	Thu Oct  8 21:03:32 2026	superseded	homework-web-0.1.0	1.0.0      	Install complete
 2       	Thu Oct  8 21:03:37 2026	superseded	homework-web-0.1.0	1.0.0      	Upgrade complete
 3       	Thu Oct  8 21:03:44 2026	superseded	homework-web-0.1.0	1.0.0      	Upgrade complete
 4       	Thu Oct  8 21:03:50 2026	deployed  	homework-web-0.1.0	1.0.0      	Rollback to 1
-$ helm --kube-context devops-homework get values homework --namespace hw15 --all
-COMPUTED VALUES:
-appVersion: v1
-image:
-  pullPolicy: IfNotPresent
-  repository: nginx
-  tag: 1.28-alpine
-replicaCount: 1
-resources:
-  limits:
-    cpu: 200m
-    memory: 64Mi
-  requests:
-    cpu: 10m
-    memory: 16Mi
-service:
-  port: 80
-$ kubectl --context devops-homework -n hw15 get deployment,pods,svc
-NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/homework   1/1     1            1           21s
-NAME                            READY   STATUS    RESTARTS   AGE
-pod/homework-5d5ffd97b9-plw6h   1/1     Running   0          2s
-NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
-service/homework   ClusterIP   10.101.98.101   &lt;none&gt;        80/TCP    21s
 $ kubectl --context devops-homework -n hw15 exec deployment/homework -- wget -qO- http://homework
 v1
 $ helm --kube-context devops-homework uninstall homework --namespace hw15 --wait
 release &quot;homework&quot; uninstalled
-$ helm --kube-context devops-homework list --namespace hw15
-NAME	NAMESPACE	REVISION	UPDATED	STATUS	CHART	APP VERSION
-$ kubectl --context devops-homework -n hw15 wait --for=delete pod -l app.kubernetes.io/instance=homework --timeout=60s
-pod/homework-5d5ffd97b9-plw6h condition met
 $ kubectl --context devops-homework -n hw15 get deployments,services,pods
-No resources found in hw15 namespace.
-**********************
-PowerShell transcript end
-End time: 20261008210356
-**********************</pre></html>
+No resources found in hw15 namespace.</pre></html>

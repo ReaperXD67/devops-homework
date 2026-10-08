@@ -16,6 +16,7 @@ sources = {
     'session-08-evidence': ('Docker connectivity and isolation', 'session-08-networking/evidence/summary.txt'),
     'session-09-evidence': ('Kubernetes fundamentals', 'session-09-kubernetes/evidence/run.txt'),
     'session-10-evidence': ('Deployment strategies and Pod lifecycle', 'session-10-deployments/evidence/run.txt'),
+    'session-10-lifecycle': ('Pending, Running, Succeeded and Failed Pods', 'session-10-deployments/evidence/lifecycle-excerpt.txt'),
     'session-11-evidence': ('Kubernetes Services and DNS', 'session-11-services/evidence/run.txt'),
     'session-12-evidence': ('ConfigMaps, Secrets and Ingress', 'session-12-config-ingress/evidence/run.txt'),
     'session-13-evidence': ('Storage and real HPA scaling', 'session-13-storage-hpa/evidence/run.txt'),
@@ -24,6 +25,7 @@ sources = {
     'session-18-evidence': ('Terraform S3 validation — mock provider', 'session-18-terraform/evidence/validation.txt'),
     'session-19-evidence': ('Terraform cloud validation — mock provider', 'session-19-cloud/evidence/validation.txt'),
     'gitops-evidence': ('Flux automatically repairs live drift', 'final-devops-project/gitops/evidence/drift.txt'),
+    'gitops-application': ('Flux deploys the verified registry image', 'final-devops-project/gitops/evidence/final-app-handoff.txt'),
     'final-helm-evidence': ('Final application Helm lifecycle', 'final-devops-project/helm/evidence/deployment.txt'),
     'final-troubleshooting-evidence': ('Final application failure recovery', 'final-devops-project/troubleshooting/evidence/output.txt'),
     'monitoring-alert-evidence': ('Prometheus alert firing and recovery', 'final-devops-project/monitoring/evidence/run.txt'),
@@ -31,6 +33,10 @@ sources = {
 ansi = re.compile(r'\x1b\[[0-9;]*[a-zA-Z]')
 for slug, (title, source) in sources.items():
     path = root / source
+    compact = path.with_name('run-excerpt.txt')
+    if path.name == 'run.txt' and compact.exists():
+        path = compact
+        source = path.relative_to(root).as_posix()
     if not path.exists():
         print('Pending:', source)
         continue

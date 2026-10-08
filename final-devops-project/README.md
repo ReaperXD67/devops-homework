@@ -108,3 +108,6 @@ Flux pulls this repository and continuously reconciles its desired state. The de
 ## Cleanup
 
 Use each session's cleanup instructions. Remove only the lab's namespaces/releases/Compose projects after retaining evidence. Do not delete a shared Kubernetes context or unrelated Docker containers. Cloud cleanup remains part of the future Terraform execution; resources must be destroyed from the same state that created them.
+
+
+![Final application reconciled by Flux](../output/playwright/gitops-application.png)

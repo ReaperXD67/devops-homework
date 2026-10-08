@@ -1,0 +1,80 @@
+Actual build from a fresh public Git clone. UTC: 2026-10-08T15:47:29.707199+00:00
+
+$ git clone --depth 1 https://github.com/ReaperXD67/devops-homework.git C:\Users\Aman\AppData\Local\Temp\devops-fresh-clone-u1g8_n_3\repo
+Cloning into 'C:\Users\Aman\AppData\Local\Temp\devops-fresh-clone-u1g8_n_3\repo'...
+
+Exit code: 0
+
+$ git rev-parse HEAD
+44b0be1e146e91c0b01812cb51a55064e0245efc
+
+Exit code: 0
+
+$ docker build -t devops-multistage:clone .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 277B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/golang:1.26-alpine
+#2 DONE 1.6s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [build 1/4] FROM docker.io/library/golang:1.26-alpine@sha256:8ac98ca534ac3f51e1f420a1dd2c15e74c75cfa0f23f3ad27eb5d7236c349a0c
+#4 resolve docker.io/library/golang:1.26-alpine@sha256:8ac98ca534ac3f51e1f420a1dd2c15e74c75cfa0f23f3ad27eb5d7236c349a0c 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 424B done
+#5 DONE 0.0s
+
+#6 [build 2/4] WORKDIR /src
+#6 CACHED
+
+#7 [build 3/4] COPY main.go .
+#7 DONE 0.0s
+
+#8 [build 4/4] RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /hello main.go
+#8 DONE 8.3s
+
+#9 [stage-1 1/1] COPY --from=build /hello /hello
+#9 DONE 0.0s
+
+#10 exporting to image
+#10 exporting layers
+#10 exporting layers 0.3s done
+#10 exporting manifest sha256:7908f3778f891b485adde24bbe93b1cf464a015f60e68574177161fdbe499fc4 0.0s done
+#10 exporting config sha256:25c5f3078608b6bc9fa1212feed95e40cc7adc786d59d3e07eb533bbf06950d8 0.0s done
+#10 exporting attestation manifest sha256:27fc24b009876d3ded50575876dcec96815c37c1befdf802a9884ee70d40bc6b 0.0s done
+#10 exporting manifest list sha256:3a52c3dfa7001f0a88dd4b5b53b6b22be8b5732dffd16c07f3ceb4c5750619e3 0.0s done
+#10 naming to docker.io/library/devops-multistage:clone done
+#10 unpacking to docker.io/library/devops-multistage:clone 0.0s done
+#10 DONE 0.4s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/xlytqxx6lyg5jad188co2mocx
+
+Exit code: 0
+
+$ docker run -d --name devops-multistage-clone -p 127.0.0.3:8080:8080 devops-multistage:clone
+76996e8bb5c72b1afd0ac21d1c79cda2c46a98c6599459c610f9cd85c4013e0e
+
+Exit code: 0
+
+$ curl.exe --retry 10 --retry-connrefused --retry-delay 1 --fail --silent http://127.0.0.3:8080
+<h1>Hello World from Docker multi-stage build</h1><p>Aman Kumar | 10275</p>
+Exit code: 0
+
+$ docker ps --filter name=devops-multistage-clone
+CONTAINER ID   IMAGE                     COMMAND    CREATED                  STATUS                  PORTS                      NAMES
+76996e8bb5c7   devops-multistage:clone   "/hello"   Less than a second ago   Up Less than a second   127.0.0.3:8080->8080/tcp   devops-multistage-clone
+
+Exit code: 0
+
+$ docker rm -f devops-multistage-clone
+devops-multistage-clone
+
+Exit code: 0

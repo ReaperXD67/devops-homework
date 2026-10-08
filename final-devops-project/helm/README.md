@@ -73,3 +73,6 @@ kubectl delete namespace devops-final-helm
 ```
 
 The namespace removal also removes the separately managed runtime Secret and retained completed test Pod. [Helm templates](https://helm.sh/docs/chart_template_guide/), [lint](https://helm.sh/docs/helm/helm_lint/) and [upgrade](https://helm.sh/docs/helm/helm_upgrade/) describe the packaging and release commands used here.
+
+
+![Helm upgrade and rollback output](../../output/playwright/final-helm-evidence.png)
