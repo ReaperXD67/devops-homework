@@ -52,3 +52,18 @@ run "reject_incompatible_arm_instance" {
   variables { instance_type = "t4g.micro" }
   expect_failures = [var.instance_type]
 }
+
+run "accept_final_project_x86_host" {
+  command = plan
+  variables { instance_type = "c7i-flex.large" }
+  assert {
+    condition     = aws_instance.web.instance_type == "c7i-flex.large"
+    error_message = "The final project must support the account-eligible x86_64 host."
+  }
+}
+
+run "reject_oversized_ec2_user_data" {
+  command = plan
+  variables { user_data_override = join("", [for item in range(1024) : "12345678901234567"]) }
+  expect_failures = [var.user_data_override]
+}

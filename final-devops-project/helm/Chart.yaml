@@ -2,7 +2,7 @@ apiVersion: v2
 name: devops-app
 description: Scaler final DevOps application with probes, configuration and optional HPA/Ingress.
 type: application
-version: 1.0.0
+version: 1.0.1
 appVersion: "1.0.0"
 maintainers:
   - name: Aman Kumar

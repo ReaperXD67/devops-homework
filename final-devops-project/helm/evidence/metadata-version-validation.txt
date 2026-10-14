@@ -1,0 +1,1 @@
+PASS: Flux build-metadata chart 1.0.1+ad0030e111ed; 26 valid metadata labels; helm.sh/chart=devops-app-1.0.1_ad0030e111ed

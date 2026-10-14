@@ -63,6 +63,8 @@ The recorded `/api/info` body changed `1.0.0 → 1.1.0 → 1.0.0`, verifying beh
 
 ## Troubleshooting lesson
 
+Chart `1.0.1` also fixes a cloud deployment issue: Flux's `Revision` reconciliation adds build metadata such as `1.0.1+ad0030e111ed` to the chart version. Kubernetes label values reject `+`, so the `helm.sh/chart` helper replaces it with `_`, limits the label to 63 characters and removes a trailing hyphen. The offline regression check renders a temporary chart with that build metadata and validates every rendered metadata label. [Validation output](evidence/metadata-version-validation.txt). The application version remains `1.0.0`; earlier local runtime evidence below predates this packaging fix.
+
 The initial test hook succeeded but used `hook-succeeded` deletion. Helm 3.19's `helm test --logs` then attempted to read a Pod that had already been removed and returned an error. [Actual before-fix evidence](evidence/test-log-before-fix.txt). The hook now uses `before-hook-creation`, retaining its completed Pod until the next test so logs can be read. The final evidence shows the successful readiness response and exit code 0.
 
 ## Cleanup

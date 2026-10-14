@@ -4,7 +4,7 @@
 
 One public repository for all course sessions, with source code, scripts, Dockerfiles, Kubernetes manifests, Helm charts, Terraform projects, actual command output and screenshots.
 
-**Non-AWS work is implemented and demonstrated locally and in GitHub Actions. Live AWS provisioning is pending account setup, as requested.** Terraform formatting, validation and seven mock-provider tests have passed; mock tests are not cloud execution.
+**Local and GitHub Actions exercises are demonstrated. Sessions 18 and 19 have now been provisioned, verified and destroyed on AWS. The final cloud integration is undergoing live verification.** Each session links its actual evidence; mock tests are labeled separately.
 
 [AWS setup instructions](session-18-terraform/AWS-SETUP.md) | [Final project](final-devops-project/README.md) | [Successful CI/CD run](https://github.com/ReaperXD67/devops-homework/actions/runs/37803461033)
 
@@ -30,14 +30,14 @@ Paste the corresponding **README file link** below into each session field in th
 | 15 - Helm | [README.md](https://github.com/ReaperXD67/devops-homework/blob/main/session-15-helm/README.md) | Install, two upgrades, rollback and uninstall |
 | 16 - CI/CD & GitHub Actions | [README.md](https://github.com/ReaperXD67/devops-homework/blob/main/session-16-cicd/README.md) | Successful hosted pipeline and preserved reports |
 | 17 - CI/CD & DevSecOps | [README.md](https://github.com/ReaperXD67/devops-homework/blob/main/session-17-devsecops/README.md) | Security gates, registry and Kubernetes |
-| 18 - Terraform & Infrastructure as Code | [README.md](https://github.com/ReaperXD67/devops-homework/blob/main/session-18-terraform/README.md) | S3 project + five AWS READMEs; live AWS pending |
-| 19 - Cloud & Terraform | [README.md](https://github.com/ReaperXD67/devops-homework/blob/main/session-19-cloud/README.md) | Validated VPC/EC2/S3 project; live AWS pending |
+| 18 - Terraform & Infrastructure as Code | [README.md](https://github.com/ReaperXD67/devops-homework/blob/main/session-18-terraform/README.md) | Live S3 lifecycle, five AWS READMEs and confirmed cleanup |
+| 19 - Cloud & Terraform | [README.md](https://github.com/ReaperXD67/devops-homework/blob/main/session-19-cloud/README.md) | Live VPC/EC2/S3, HTTP verification and confirmed cleanup |
 | 20 - Monitoring, Observability & GitOps | [README.md](https://github.com/ReaperXD67/devops-homework/blob/main/session-20-observability/README.md) | Metrics/logs/alerts and Flux reconciliation |
-| 21 - Final DevOps project | [README.md](https://github.com/ReaperXD67/devops-homework/blob/main/final-devops-project/README.md) | Integrated local/CI project; cloud stage pending |
+| 21 - Final DevOps project | [README.md](https://github.com/ReaperXD67/devops-homework/blob/main/final-devops-project/README.md) | Integrated local/CI project; cloud verification in progress |
 
 ## Evidence
 
-Recorded on **8 October 2026** using Windows, WSL Ubuntu, Docker Desktop, Kubernetes v1.34.0 on a dedicated Minikube profile, Helm, Terraform, GitHub Actions, Prometheus and Flux. Each session links to runnable files and raw output.
+Local/CI evidence recorded on **8 October 2026**, with live AWS exercises on **14 October 2026** using Windows, WSL Ubuntu, Docker Desktop, Kubernetes v1.34.0 on a dedicated Minikube profile, Helm, Terraform, GitHub Actions, Prometheus and Flux. Each session links to runnable files and raw output.
 
 Browser screenshots show real applications, GitHub Actions and Prometheus. Screenshots titled command transcript are browser-rendered excerpts of linked raw logs, created by [the evidence renderer](scripts/render_evidence.py); no expected output is substituted. Sensitive runtime values are excluded. The failed first image scan and successful remediation remain visible in Actions history.
 
@@ -47,4 +47,4 @@ Browser screenshots show real applications, GitHub Actions and Prometheus. Scree
 
 The [assignment document](https://docs.google.com/document/d/1cjXFYf2Thm8cBEN-0C48B-v02cj3jGLd47lcO18prHE/edit) contains the requirements. Its linked `Nency-kRavaliya/Kubernetes` repository returned 404, and some named mini-projects/example repositories were not linked. Affected READMEs identify original equivalent exercises covering the written requirements; they do not claim access to unavailable instructor files.
 
-AWS setup and actual `plan/apply/show/output/destroy` evidence are the remaining cloud work. Follow [AWS-SETUP.md](session-18-terraform/AWS-SETUP.md), configure the `scaler-lab` profile and verify `aws sts get-caller-identity`. No AWS credentials, live Terraform state or plan files belong in this public repository.
+Repeat cloud exercises using [AWS-SETUP.md](session-18-terraform/AWS-SETUP.md) and the temporary-credential Terraform wrapper. Sessions 18 and 19 include actual plan/apply/verification/destroy evidence. No AWS credentials, live Terraform state or plan files belong in this public repository.

@@ -23,8 +23,8 @@ variable "instance_type" {
   type        = string
   default     = "t3.micro"
   validation {
-    condition     = contains(["t3.micro", "t3.small", "t3.medium"], var.instance_type)
-    error_message = "Choose t3.micro, t3.small or t3.medium to match the x86_64 image."
+    condition     = contains(["t3.micro", "t3.small", "t3.medium", "c7i-flex.large"], var.instance_type)
+    error_message = "Choose t3.micro, t3.small, t3.medium or c7i-flex.large to match the x86_64 image."
   }
 }
 
@@ -35,5 +35,16 @@ variable "vpc_cidr" {
   validation {
     condition     = can(cidrsubnet(var.vpc_cidr, 8, 0)) && can(regex("/16$", var.vpc_cidr))
     error_message = "Supply a valid IPv4 /16 network."
+  }
+}
+
+variable "user_data_override" {
+  description = "Optional final-project bootstrap. Null preserves the Session 19 Nginx demo. No secrets should be embedded."
+  type        = string
+  default     = null
+  nullable    = true
+  validation {
+    condition     = var.user_data_override == null ? true : length(base64encode(var.user_data_override)) <= 21844
+    error_message = "Keep raw EC2 user data below 16 KiB (base64 length at most 21844)."
   }
 }

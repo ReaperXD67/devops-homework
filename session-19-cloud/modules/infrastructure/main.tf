@@ -94,7 +94,7 @@ resource "aws_instance" "web" {
   vpc_security_group_ids      = [aws_security_group.web.id]
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.ec2.name
-  user_data                   = file("${path.module}/user-data.sh")
+  user_data                   = replace(var.user_data_override == null ? file("${path.module}/user-data.sh") : var.user_data_override, "\r\n", "\n")
   user_data_replace_on_change = true
 
   root_block_device {

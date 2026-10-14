@@ -1,0 +1,69 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Session 19: live AWS network and EC2</title>
+<style>body{margin:0;padding:26px;background:#f4f6f8;color:#15222c;font-family:system-ui}h1{font-size:26px}small,p{font-size:13px}pre{background:white;border:1px solid #cad4db;border-radius:6px;padding:18px;font:12px/1.42 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · VERIFIED 14 OCTOBER 2026</small><h1>Session 19: live AWS network and EC2</h1>
+<p>Selected verbatim lines from real command output. Account ID and learner IP are redacted. This is a browser rendering of a transcript, not an AWS Console screenshot.</p>
+<p>Full source: session-19-cloud/evidence/aws-live.txt</p><pre>$ curl.exe --fail --silent --show-error --include --max-time 15 http://35.154.100.233/health
+HTTP/1.1 200 OK
+UTC 2026-10-14T13:07:20.111286+00:00
+HTTP/1.1 200 OK
+&lt;h1&gt;Hello World from Terraform on AWS&lt;/h1&gt;
+UTC 2026-10-14T13:07:20.231429+00:00
+        &quot;BlockPublicAcls&quot;: true,
+        &quot;IgnorePublicAcls&quot;: true,
+        &quot;BlockPublicPolicy&quot;: true,
+        &quot;RestrictPublicBuckets&quot;: true
+UTC 2026-10-14T13:07:23.538679+00:00
+    &quot;Status&quot;: &quot;Enabled&quot;
+UTC 2026-10-14T13:07:27.783096+00:00
+    instance_state                       = &quot;running&quot;
+    arn                    = &quot;arn:aws:ec2:ap-south-1:&lt;ACCOUNT_ID&gt;:security-group/sg-046cbb34771e0c324&quot;
+    default_security_group_id            = &quot;sg-05eb22a89a4e160b2&quot;
+    arn                    = &quot;arn:aws:ec2:ap-south-1:&lt;ACCOUNT_ID&gt;:security-group-rule/sgr-0d3c2fa416a2d0580&quot;
+    security_group_id      = &quot;sg-046cbb34771e0c324&quot;
+    security_group_rule_id = &quot;sgr-0d3c2fa416a2d0580&quot;
+    security_group_id      = &quot;sg-046cbb34771e0c324&quot;
+    arn                    = &quot;arn:aws:ec2:ap-south-1:&lt;ACCOUNT_ID&gt;:security-group-rule/sgr-08db2251364ccd533&quot;
+    security_group_id      = &quot;sg-046cbb34771e0c324&quot;
+    security_group_rule_id = &quot;sgr-08db2251364ccd533&quot;
+UTC 2026-10-14T13:07:31.498744+00:00
+module.infrastructure.aws_security_group.web: Refreshing state... [id=sg-046cbb34771e0c324]
+module.infrastructure.aws_vpc_security_group_ingress_rule.http: Refreshing state... [id=sgr-08db2251364ccd533]
+module.infrastructure.aws_vpc_security_group_egress_rule.web[&quot;443&quot;]: Refreshing state... [id=sgr-0d3c2fa416a2d0580]
+No changes. Your infrastructure matches the configuration.
+UTC 2026-10-14T13:08:20.606201+00:00
+$ C:\Users\Aman\AppData\Local\Programs\Amazon\AWSCLIV2\aws.exe ssm send-command --instance-ids i-0502a2efaa5368759 --document-name AWS-RunShellScript --comment &quot;Scaler homework s19-verify&quot; --parameters file://C:\Users\Aman\AppData\Local\Temp\scaler-ssm-s19-verify.json --query Command.CommandId --output text
+UTC 2026-10-14T13:08:34.163749+00:00
+    &quot;Status&quot;: &quot;Success&quot;,
+    &quot;StatusDetails&quot;: &quot;Success&quot;,
+SSM status: Success
+UTC 2026-10-14T13:08:38.815792+00:00
+module.infrastructure.aws_security_group.web: Refreshing state... [id=sg-046cbb34771e0c324]
+module.infrastructure.aws_vpc_security_group_ingress_rule.http: Refreshing state... [id=sgr-08db2251364ccd533]
+module.infrastructure.aws_vpc_security_group_egress_rule.web[&quot;443&quot;]: Refreshing state... [id=sgr-0d3c2fa416a2d0580]
+      - instance_state                       = &quot;running&quot; -&gt; null
+      - arn                    = &quot;arn:aws:ec2:ap-south-1:&lt;ACCOUNT_ID&gt;:security-group/sg-046cbb34771e0c324&quot; -&gt; null
+      - default_security_group_id            = &quot;sg-05eb22a89a4e160b2&quot; -&gt; null
+      - arn                    = &quot;arn:aws:ec2:ap-south-1:&lt;ACCOUNT_ID&gt;:security-group-rule/sgr-0d3c2fa416a2d0580&quot; -&gt; null
+      - security_group_id      = &quot;sg-046cbb34771e0c324&quot; -&gt; null
+      - security_group_rule_id = &quot;sgr-0d3c2fa416a2d0580&quot; -&gt; null
+      - security_group_id      = &quot;sg-046cbb34771e0c324&quot; -&gt; null
+      - arn                    = &quot;arn:aws:ec2:ap-south-1:&lt;ACCOUNT_ID&gt;:security-group-rule/sgr-08db2251364ccd533&quot; -&gt; null
+      - security_group_id      = &quot;sg-046cbb34771e0c324&quot; -&gt; null
+      - security_group_rule_id = &quot;sgr-08db2251364ccd533&quot; -&gt; null
+Plan: 0 to add, 0 to change, 20 to destroy.
+module.infrastructure.aws_vpc_security_group_ingress_rule.http: Destroying... [id=sgr-08db2251364ccd533]
+module.infrastructure.aws_vpc_security_group_ingress_rule.http: Destruction complete after 1s
+module.infrastructure.aws_vpc_security_group_egress_rule.web[&quot;443&quot;]: Destroying... [id=sgr-0d3c2fa416a2d0580]
+module.infrastructure.aws_security_group.web: Destroying... [id=sg-046cbb34771e0c324]
+module.infrastructure.aws_security_group.web: Destruction complete after 1s
+Destroy complete! Resources: 20 destroyed.
+UTC 2026-10-14T13:09:55.155455+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe state list
+UTC 2026-10-14T13:09:55.900108+00:00
+$ C:\Users\Aman\AppData\Local\Programs\Amazon\AWSCLIV2\aws.exe ec2 describe-instances --instance-ids i-0502a2efaa5368759 --query Reservations[].Instances[].{Instance:InstanceId,State:State.Name}
+        &quot;State&quot;: &quot;terminated&quot;
+UTC 2026-10-14T13:09:59.054429+00:00
+$ C:\Users\Aman\AppData\Local\Programs\Amazon\AWSCLIV2\aws.exe ec2 describe-vpcs --filters Name=vpc-id,Values=vpc-07e06bd1033636148 --query Vpcs
+UTC 2026-10-14T13:10:02.271421+00:00
+$ C:\Users\Aman\AppData\Local\Programs\Amazon\AWSCLIV2\aws.exe s3api head-bucket --bucket aman-scaler-s19-20261014130535491400000002
+aws: [ERROR]: An error occurred (404) when calling the HeadBucket operation: Not Found</pre></html>

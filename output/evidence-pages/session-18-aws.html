@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Session 18: live AWS S3 lifecycle</title>
+<style>body{margin:0;padding:26px;background:#f4f6f8;color:#15222c;font-family:system-ui}h1{font-size:26px}small,p{font-size:13px}pre{background:white;border:1px solid #cad4db;border-radius:6px;padding:18px;font:12px/1.42 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}</style>
+<small>AMAN KUMAR · ENROLLMENT 10275 · VERIFIED 14 OCTOBER 2026</small><h1>Session 18: live AWS S3 lifecycle</h1>
+<p>Selected verbatim lines from real command output. Account ID and learner IP are redacted. This is a browser rendering of a transcript, not an AWS Console screenshot.</p>
+<p>Full source: session-18-terraform/evidence/aws-live.txt</p><pre>UTC 2026-10-14T13:01:47.926778+00:00
+UTC 2026-10-14T13:01:50.103218+00:00
+Success! The configuration is valid.
+UTC 2026-10-14T13:02:15.856386+00:00
+UTC 2026-10-14T13:02:46.123107+00:00
+UTC 2026-10-14T13:02:51.085160+00:00
+UTC 2026-10-14T13:03:20.082638+00:00
+Plan: 6 to add, 0 to change, 0 to destroy.
+UTC 2026-10-14T13:03:43.884070+00:00
+UTC 2026-10-14T13:03:44.733358+00:00
+Plan: 6 to add, 0 to change, 0 to destroy.
+UTC 2026-10-14T13:03:47.609743+00:00
+Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
+UTC 2026-10-14T13:03:55.215004+00:00
+UTC 2026-10-14T13:03:58.723989+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe output -json
+UTC 2026-10-14T13:03:59.451921+00:00
+        &quot;BlockPublicAcls&quot;: true,
+        &quot;IgnorePublicAcls&quot;: true,
+        &quot;BlockPublicPolicy&quot;: true,
+        &quot;RestrictPublicBuckets&quot;: true
+UTC 2026-10-14T13:04:03.059885+00:00
+    &quot;Status&quot;: &quot;Enabled&quot;
+UTC 2026-10-14T13:04:06.342020+00:00
+                    &quot;SSEAlgorithm&quot;: &quot;AES256&quot;
+UTC 2026-10-14T13:04:10.199748+00:00
+                &quot;ObjectOwnership&quot;: &quot;BucketOwnerEnforced&quot;
+UTC 2026-10-14T13:04:13.660933+00:00
+UTC 2026-10-14T13:04:17.510118+00:00
+No changes. Your infrastructure matches the configuration.
+UTC 2026-10-14T13:04:23.626006+00:00
+Plan: 0 to add, 0 to change, 6 to destroy.
+UTC 2026-10-14T13:04:29.926308+00:00
+Plan: 0 to add, 0 to change, 6 to destroy.
+UTC 2026-10-14T13:05:02.484025+00:00
+Apply complete! Resources: 0 added, 0 changed, 6 destroyed.
+UTC 2026-10-14T13:05:08.191111+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe state list
+UTC 2026-10-14T13:05:08.791646+00:00
+$ C:\Users\Aman\AppData\Local\Programs\Amazon\AWSCLIV2\aws.exe s3api head-bucket --bucket aman-scaler-s18-20261014130350037300000001
+aws: [ERROR]: An error occurred (404) when calling the HeadBucket operation: Not Found
+UTC 2026-10-14T13:05:58.234007+00:00
+No changes. No objects need to be destroyed.
+Destroy complete! Resources: 0 destroyed.</pre></html>

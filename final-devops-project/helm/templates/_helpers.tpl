@@ -8,5 +8,5 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- define "devops.labels" -}}
 {{ include "devops.selector" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | quote }}
+helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" | quote }}
 {{- end -}}

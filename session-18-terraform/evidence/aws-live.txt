@@ -1,0 +1,943 @@
+Real AWS execution; account ID and learner public IP redacted.
+
+UTC 2026-10-14T13:01:47.926778+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe init -input=false -no-color
+Initializing the backend...
+Initializing provider plugins...
+- Reusing previous version of hashicorp/aws from the dependency lock file
+- Using previously-installed hashicorp/aws v5.100.0
+
+Terraform has been successfully initialized!
+
+Exit code: 0
+
+UTC 2026-10-14T13:01:50.103218+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe validate -no-color
+Success! The configuration is valid.
+
+
+Exit code: 0
+
+UTC 2026-10-14T13:02:15.856386+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe plan -input=false -no-color -out=live.tfplan
+
+Changes to Outputs:
+  + region = "ap-south-1"
+
+You can apply this plan to save these new output values to the Terraform
+state, without changing any real infrastructure.
+
+Error: No valid credential sources found
+
+  with provider["registry.terraform.io/hashicorp/aws"],
+  on provider.tf line 11, in provider "aws":
+  11: provider "aws" {
+
+Please see https://registry.terraform.io/providers/hashicorp/aws
+for more information about providing credentials.
+
+Error: failed to refresh cached credentials, process provider error: error in
+credential_process: exit status 1
+
+
+Exit code: 1
+
+UTC 2026-10-14T13:02:46.123107+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe plan -input=false -no-color -out=live .tfplan
+
+Error: Too many command line arguments
+
+To specify a working directory for the plan, use the global -chdir flag.
+
+For more help on using this command, run:
+  terraform plan -help
+
+Exit code: 1
+
+UTC 2026-10-14T13:02:51.085160+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe plan -input=false -no-color -out=live.tfplan
+
+Changes to Outputs:
+  + region = "ap-south-1"
+
+You can apply this plan to save these new output values to the Terraform
+state, without changing any real infrastructure.
+
+Error: No valid credential sources found
+
+  with provider["registry.terraform.io/hashicorp/aws"],
+  on provider.tf line 11, in provider "aws":
+  11: provider "aws" {
+
+Please see https://registry.terraform.io/providers/hashicorp/aws
+for more information about providing credentials.
+
+Error: failed to refresh cached credentials, process provider error: error in
+credential_process: exit status 1
+
+
+Exit code: 1
+
+UTC 2026-10-14T13:03:20.082638+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe plan -input=false -no-color -out=live.tfplan
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_s3_bucket.demo will be created
+  + resource "aws_s3_bucket" "demo" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = (known after apply)
+      + bucket_domain_name          = (known after apply)
+      + bucket_prefix               = "aman-scaler-s18-"
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = (known after apply)
+      + request_payer               = (known after apply)
+      + tags_all                    = {
+          + "Environment" = "learning"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "scaler-devops-homework"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # aws_s3_bucket_ownership_controls.demo will be created
+  + resource "aws_s3_bucket_ownership_controls" "demo" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+
+      + rule {
+          + object_ownership = "BucketOwnerEnforced"
+        }
+    }
+
+  # aws_s3_bucket_policy.tls_only will be created
+  + resource "aws_s3_bucket_policy" "tls_only" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + policy = (known after apply)
+    }
+
+  # aws_s3_bucket_public_access_block.demo will be created
+  + resource "aws_s3_bucket_public_access_block" "demo" {
+      + block_public_acls       = true
+      + block_public_policy     = true
+      + bucket                  = (known after apply)
+      + id                      = (known after apply)
+      + ignore_public_acls      = true
+      + restrict_public_buckets = true
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.demo will be created
+  + resource "aws_s3_bucket_server_side_encryption_configuration" "demo" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+
+      + rule {
+          + apply_server_side_encryption_by_default {
+              + sse_algorithm     = "AES256"
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+  # aws_s3_bucket_versioning.demo will be created
+  + resource "aws_s3_bucket_versioning" "demo" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+
+      + versioning_configuration {
+          + mfa_delete = (known after apply)
+          + status     = "Enabled"
+        }
+    }
+
+Plan: 6 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + bucket_arn  = (known after apply)
+  + bucket_name = (known after apply)
+  + region      = "ap-south-1"
+
+Exit code: 0
+
+UTC 2026-10-14T13:03:43.884070+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe fmt -check -recursive
+
+Exit code: 0
+
+UTC 2026-10-14T13:03:44.733358+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe show -no-color live.tfplan
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_s3_bucket.demo will be created
+  + resource "aws_s3_bucket" "demo" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = (known after apply)
+      + bucket_domain_name          = (known after apply)
+      + bucket_prefix               = "aman-scaler-s18-"
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = (known after apply)
+      + request_payer               = (known after apply)
+      + tags_all                    = {
+          + "Environment" = "learning"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "scaler-devops-homework"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # aws_s3_bucket_ownership_controls.demo will be created
+  + resource "aws_s3_bucket_ownership_controls" "demo" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+
+      + rule {
+          + object_ownership = "BucketOwnerEnforced"
+        }
+    }
+
+  # aws_s3_bucket_policy.tls_only will be created
+  + resource "aws_s3_bucket_policy" "tls_only" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + policy = (known after apply)
+    }
+
+  # aws_s3_bucket_public_access_block.demo will be created
+  + resource "aws_s3_bucket_public_access_block" "demo" {
+      + block_public_acls       = true
+      + block_public_policy     = true
+      + bucket                  = (known after apply)
+      + id                      = (known after apply)
+      + ignore_public_acls      = true
+      + restrict_public_buckets = true
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.demo will be created
+  + resource "aws_s3_bucket_server_side_encryption_configuration" "demo" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+
+      + rule {
+          + apply_server_side_encryption_by_default {
+              + sse_algorithm     = "AES256"
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+  # aws_s3_bucket_versioning.demo will be created
+  + resource "aws_s3_bucket_versioning" "demo" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+
+      + versioning_configuration {
+          + mfa_delete = (known after apply)
+          + status     = "Enabled"
+        }
+    }
+
+Plan: 6 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + bucket_arn  = (known after apply)
+  + bucket_name = (known after apply)
+  + region      = "ap-south-1"
+
+Exit code: 0
+
+UTC 2026-10-14T13:03:47.609743+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe apply -input=false -no-color live.tfplan
+aws_s3_bucket.demo: Creating...
+aws_s3_bucket.demo: Creation complete after 3s [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_public_access_block.demo: Creating...
+aws_s3_bucket_ownership_controls.demo: Creating...
+aws_s3_bucket_versioning.demo: Creating...
+aws_s3_bucket_server_side_encryption_configuration.demo: Creating...
+aws_s3_bucket_policy.tls_only: Creating...
+aws_s3_bucket_public_access_block.demo: Creation complete after 0s [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_ownership_controls.demo: Creation complete after 0s [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_policy.tls_only: Creation complete after 1s [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_server_side_encryption_configuration.demo: Creation complete after 1s [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_versioning.demo: Creation complete after 1s [id=aman-scaler-s18-20261014130350037300000001]
+
+Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+bucket_arn = "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001"
+bucket_name = "aman-scaler-s18-20261014130350037300000001"
+region = "ap-south-1"
+
+Exit code: 0
+
+UTC 2026-10-14T13:03:55.215004+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe show -no-color
+# aws_s3_bucket.demo:
+resource "aws_s3_bucket" "demo" {
+    acceleration_status         = null
+    arn                         = "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001"
+    bucket                      = "aman-scaler-s18-20261014130350037300000001"
+    bucket_domain_name          = "aman-scaler-s18-20261014130350037300000001.s3.amazonaws.com"
+    bucket_prefix               = "aman-scaler-s18-"
+    bucket_regional_domain_name = "aman-scaler-s18-20261014130350037300000001.s3.ap-south-1.amazonaws.com"
+    force_destroy               = false
+    hosted_zone_id              = "Z11RGJOFQNVJUP"
+    id                          = "aman-scaler-s18-20261014130350037300000001"
+    object_lock_enabled         = false
+    policy                      = null
+    region                      = "ap-south-1"
+    request_payer               = "BucketOwner"
+    tags_all                    = {
+        "Environment" = "learning"
+        "ManagedBy"   = "Terraform"
+        "Project"     = "scaler-devops-homework"
+    }
+
+    grant {
+        id          = "fa24f2d46566dce2fb9420efc6b0b9e80dde3e044aac8f7927b86fcfada0e6db"
+        permissions = [
+            "FULL_CONTROL",
+        ]
+        type        = "CanonicalUser"
+        uri         = null
+    }
+
+    server_side_encryption_configuration {
+        rule {
+            bucket_key_enabled = false
+
+            apply_server_side_encryption_by_default {
+                kms_master_key_id = null
+                sse_algorithm     = "AES256"
+            }
+        }
+    }
+
+    versioning {
+        enabled    = false
+        mfa_delete = false
+    }
+}
+
+# aws_s3_bucket_ownership_controls.demo:
+resource "aws_s3_bucket_ownership_controls" "demo" {
+    bucket = "aman-scaler-s18-20261014130350037300000001"
+    id     = "aman-scaler-s18-20261014130350037300000001"
+
+    rule {
+        object_ownership = "BucketOwnerEnforced"
+    }
+}
+
+# aws_s3_bucket_policy.tls_only:
+resource "aws_s3_bucket_policy" "tls_only" {
+    bucket = "aman-scaler-s18-20261014130350037300000001"
+    id     = "aman-scaler-s18-20261014130350037300000001"
+    policy = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "s3:*"
+                    Condition = {
+                        Bool = {
+                            "aws:SecureTransport" = "false"
+                        }
+                    }
+                    Effect    = "Deny"
+                    Principal = "*"
+                    Resource  = [
+                        "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001",
+                        "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001/*",
+                    ]
+                    Sid       = "DenyInsecureTransport"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+}
+
+# aws_s3_bucket_public_access_block.demo:
+resource "aws_s3_bucket_public_access_block" "demo" {
+    block_public_acls       = true
+    block_public_policy     = true
+    bucket                  = "aman-scaler-s18-20261014130350037300000001"
+    id                      = "aman-scaler-s18-20261014130350037300000001"
+    ignore_public_acls      = true
+    restrict_public_buckets = true
+}
+
+# aws_s3_bucket_server_side_encryption_configuration.demo:
+resource "aws_s3_bucket_server_side_encryption_configuration" "demo" {
+    bucket                = "aman-scaler-s18-20261014130350037300000001"
+    expected_bucket_owner = null
+    id                    = "aman-scaler-s18-20261014130350037300000001"
+
+    rule {
+        apply_server_side_encryption_by_default {
+            kms_master_key_id = null
+            sse_algorithm     = "AES256"
+        }
+    }
+}
+
+# aws_s3_bucket_versioning.demo:
+resource "aws_s3_bucket_versioning" "demo" {
+    bucket                = "aman-scaler-s18-20261014130350037300000001"
+    expected_bucket_owner = null
+    id                    = "aman-scaler-s18-20261014130350037300000001"
+
+    versioning_configuration {
+        mfa_delete = null
+        status     = "Enabled"
+    }
+}
+
+
+Outputs:
+
+bucket_arn = "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001"
+bucket_name = "aman-scaler-s18-20261014130350037300000001"
+region = "ap-south-1"
+
+Exit code: 0
+
+UTC 2026-10-14T13:03:58.723989+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe output -json
+{
+  "bucket_arn": {
+    "sensitive": false,
+    "type": "string",
+    "value": "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001"
+  },
+  "bucket_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "aman-scaler-s18-20261014130350037300000001"
+  },
+  "region": {
+    "sensitive": false,
+    "type": "string",
+    "value": "ap-south-1"
+  }
+}
+
+Exit code: 0
+
+UTC 2026-10-14T13:03:59.451921+00:00
+$ C:\Users\Aman\AppData\Local\Programs\Amazon\AWSCLIV2\aws.exe s3api get-public-access-block --bucket aman-scaler-s18-20261014130350037300000001
+{
+    "PublicAccessBlockConfiguration": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": true,
+        "RestrictPublicBuckets": true
+    }
+}
+
+Exit code: 0
+
+UTC 2026-10-14T13:04:03.059885+00:00
+$ C:\Users\Aman\AppData\Local\Programs\Amazon\AWSCLIV2\aws.exe s3api get-bucket-versioning --bucket aman-scaler-s18-20261014130350037300000001
+{
+    "Status": "Enabled"
+}
+
+Exit code: 0
+
+UTC 2026-10-14T13:04:06.342020+00:00
+$ C:\Users\Aman\AppData\Local\Programs\Amazon\AWSCLIV2\aws.exe s3api get-bucket-encryption --bucket aman-scaler-s18-20261014130350037300000001
+{
+    "ServerSideEncryptionConfiguration": {
+        "Rules": [
+            {
+                "ApplyServerSideEncryptionByDefault": {
+                    "SSEAlgorithm": "AES256"
+                },
+                "BucketKeyEnabled": false,
+                "BlockedEncryptionTypes": {
+                    "EncryptionType": [
+                        "SSE-C"
+                    ]
+                }
+            }
+        ]
+    }
+}
+
+Exit code: 0
+
+UTC 2026-10-14T13:04:10.199748+00:00
+$ C:\Users\Aman\AppData\Local\Programs\Amazon\AWSCLIV2\aws.exe s3api get-bucket-ownership-controls --bucket aman-scaler-s18-20261014130350037300000001
+{
+    "OwnershipControls": {
+        "Rules": [
+            {
+                "ObjectOwnership": "BucketOwnerEnforced"
+            }
+        ]
+    }
+}
+
+Exit code: 0
+
+UTC 2026-10-14T13:04:13.660933+00:00
+$ C:\Users\Aman\AppData\Local\Programs\Amazon\AWSCLIV2\aws.exe s3api get-bucket-policy --bucket aman-scaler-s18-20261014130350037300000001
+{
+    "Policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"DenyInsecureTransport\",\"Effect\":\"Deny\",\"Principal\":\"*\",\"Action\":\"s3:*\",\"Resource\":[\"arn:aws:s3:::aman-scaler-s18-20261014130350037300000001\",\"arn:aws:s3:::aman-scaler-s18-20261014130350037300000001/*\"],\"Condition\":{\"Bool\":{\"aws:SecureTransport\":\"false\"}}}]}"
+}
+
+Exit code: 0
+
+UTC 2026-10-14T13:04:17.510118+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe plan -input=false -no-color -detailed-exitcode
+aws_s3_bucket.demo: Refreshing state... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_public_access_block.demo: Refreshing state... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_policy.tls_only: Refreshing state... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_ownership_controls.demo: Refreshing state... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_versioning.demo: Refreshing state... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_server_side_encryption_configuration.demo: Refreshing state... [id=aman-scaler-s18-20261014130350037300000001]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.
+
+Exit code: 0
+
+UTC 2026-10-14T13:04:23.626006+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe plan -destroy -input=false -no-color -out=destroy.tfplan
+aws_s3_bucket.demo: Refreshing state... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_policy.tls_only: Refreshing state... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_ownership_controls.demo: Refreshing state... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_server_side_encryption_configuration.demo: Refreshing state... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_public_access_block.demo: Refreshing state... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_versioning.demo: Refreshing state... [id=aman-scaler-s18-20261014130350037300000001]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_s3_bucket.demo will be destroyed
+  - resource "aws_s3_bucket" "demo" {
+      - arn                         = "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001" -> null
+      - bucket                      = "aman-scaler-s18-20261014130350037300000001" -> null
+      - bucket_domain_name          = "aman-scaler-s18-20261014130350037300000001.s3.amazonaws.com" -> null
+      - bucket_prefix               = "aman-scaler-s18-" -> null
+      - bucket_regional_domain_name = "aman-scaler-s18-20261014130350037300000001.s3.ap-south-1.amazonaws.com" -> null
+      - force_destroy               = false -> null
+      - hosted_zone_id              = "Z11RGJOFQNVJUP" -> null
+      - id                          = "aman-scaler-s18-20261014130350037300000001" -> null
+      - object_lock_enabled         = false -> null
+      - policy                      = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "s3:*"
+                      - Condition = {
+                          - Bool = {
+                              - "aws:SecureTransport" = "false"
+                            }
+                        }
+                      - Effect    = "Deny"
+                      - Principal = "*"
+                      - Resource  = [
+                          - "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001",
+                          - "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001/*",
+                        ]
+                      - Sid       = "DenyInsecureTransport"
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - region                      = "ap-south-1" -> null
+      - request_payer               = "BucketOwner" -> null
+      - tags                        = {} -> null
+      - tags_all                    = {
+          - "Environment" = "learning"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "scaler-devops-homework"
+        } -> null
+        # (1 unchanged attribute hidden)
+
+      - grant {
+          - id          = "fa24f2d46566dce2fb9420efc6b0b9e80dde3e044aac8f7927b86fcfada0e6db" -> null
+          - permissions = [
+              - "FULL_CONTROL",
+            ] -> null
+          - type        = "CanonicalUser" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - server_side_encryption_configuration {
+          - rule {
+              - bucket_key_enabled = false -> null
+
+              - apply_server_side_encryption_by_default {
+                  - sse_algorithm     = "AES256" -> null
+                    # (1 unchanged attribute hidden)
+                }
+            }
+        }
+
+      - versioning {
+          - enabled    = true -> null
+          - mfa_delete = false -> null
+        }
+    }
+
+  # aws_s3_bucket_ownership_controls.demo will be destroyed
+  - resource "aws_s3_bucket_ownership_controls" "demo" {
+      - bucket = "aman-scaler-s18-20261014130350037300000001" -> null
+      - id     = "aman-scaler-s18-20261014130350037300000001" -> null
+
+      - rule {
+          - object_ownership = "BucketOwnerEnforced" -> null
+        }
+    }
+
+  # aws_s3_bucket_policy.tls_only will be destroyed
+  - resource "aws_s3_bucket_policy" "tls_only" {
+      - bucket = "aman-scaler-s18-20261014130350037300000001" -> null
+      - id     = "aman-scaler-s18-20261014130350037300000001" -> null
+      - policy = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "s3:*"
+                      - Condition = {
+                          - Bool = {
+                              - "aws:SecureTransport" = "false"
+                            }
+                        }
+                      - Effect    = "Deny"
+                      - Principal = "*"
+                      - Resource  = [
+                          - "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001",
+                          - "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001/*",
+                        ]
+                      - Sid       = "DenyInsecureTransport"
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+    }
+
+  # aws_s3_bucket_public_access_block.demo will be destroyed
+  - resource "aws_s3_bucket_public_access_block" "demo" {
+      - block_public_acls       = true -> null
+      - block_public_policy     = true -> null
+      - bucket                  = "aman-scaler-s18-20261014130350037300000001" -> null
+      - id                      = "aman-scaler-s18-20261014130350037300000001" -> null
+      - ignore_public_acls      = true -> null
+      - restrict_public_buckets = true -> null
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.demo will be destroyed
+  - resource "aws_s3_bucket_server_side_encryption_configuration" "demo" {
+      - bucket                = "aman-scaler-s18-20261014130350037300000001" -> null
+      - id                    = "aman-scaler-s18-20261014130350037300000001" -> null
+        # (1 unchanged attribute hidden)
+
+      - rule {
+          - bucket_key_enabled = false -> null
+
+          - apply_server_side_encryption_by_default {
+              - sse_algorithm     = "AES256" -> null
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+  # aws_s3_bucket_versioning.demo will be destroyed
+  - resource "aws_s3_bucket_versioning" "demo" {
+      - bucket                = "aman-scaler-s18-20261014130350037300000001" -> null
+      - id                    = "aman-scaler-s18-20261014130350037300000001" -> null
+        # (1 unchanged attribute hidden)
+
+      - versioning_configuration {
+          - status     = "Enabled" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+Plan: 0 to add, 0 to change, 6 to destroy.
+
+Changes to Outputs:
+  - bucket_arn  = "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001" -> null
+  - bucket_name = "aman-scaler-s18-20261014130350037300000001" -> null
+  - region      = "ap-south-1" -> null
+
+Exit code: 0
+
+UTC 2026-10-14T13:04:29.926308+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe show -no-color destroy.tfplan
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_s3_bucket.demo will be destroyed
+  - resource "aws_s3_bucket" "demo" {
+      - arn                         = "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001" -> null
+      - bucket                      = "aman-scaler-s18-20261014130350037300000001" -> null
+      - bucket_domain_name          = "aman-scaler-s18-20261014130350037300000001.s3.amazonaws.com" -> null
+      - bucket_prefix               = "aman-scaler-s18-" -> null
+      - bucket_regional_domain_name = "aman-scaler-s18-20261014130350037300000001.s3.ap-south-1.amazonaws.com" -> null
+      - force_destroy               = false -> null
+      - hosted_zone_id              = "Z11RGJOFQNVJUP" -> null
+      - id                          = "aman-scaler-s18-20261014130350037300000001" -> null
+      - object_lock_enabled         = false -> null
+      - policy                      = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "s3:*"
+                      - Condition = {
+                          - Bool = {
+                              - "aws:SecureTransport" = "false"
+                            }
+                        }
+                      - Effect    = "Deny"
+                      - Principal = "*"
+                      - Resource  = [
+                          - "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001",
+                          - "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001/*",
+                        ]
+                      - Sid       = "DenyInsecureTransport"
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - region                      = "ap-south-1" -> null
+      - request_payer               = "BucketOwner" -> null
+      - tags                        = {} -> null
+      - tags_all                    = {
+          - "Environment" = "learning"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "scaler-devops-homework"
+        } -> null
+        # (1 unchanged attribute hidden)
+
+      - grant {
+          - id          = "fa24f2d46566dce2fb9420efc6b0b9e80dde3e044aac8f7927b86fcfada0e6db" -> null
+          - permissions = [
+              - "FULL_CONTROL",
+            ] -> null
+          - type        = "CanonicalUser" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - server_side_encryption_configuration {
+          - rule {
+              - bucket_key_enabled = false -> null
+
+              - apply_server_side_encryption_by_default {
+                  - sse_algorithm     = "AES256" -> null
+                    # (1 unchanged attribute hidden)
+                }
+            }
+        }
+
+      - versioning {
+          - enabled    = true -> null
+          - mfa_delete = false -> null
+        }
+    }
+
+  # aws_s3_bucket_ownership_controls.demo will be destroyed
+  - resource "aws_s3_bucket_ownership_controls" "demo" {
+      - bucket = "aman-scaler-s18-20261014130350037300000001" -> null
+      - id     = "aman-scaler-s18-20261014130350037300000001" -> null
+
+      - rule {
+          - object_ownership = "BucketOwnerEnforced" -> null
+        }
+    }
+
+  # aws_s3_bucket_policy.tls_only will be destroyed
+  - resource "aws_s3_bucket_policy" "tls_only" {
+      - bucket = "aman-scaler-s18-20261014130350037300000001" -> null
+      - id     = "aman-scaler-s18-20261014130350037300000001" -> null
+      - policy = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "s3:*"
+                      - Condition = {
+                          - Bool = {
+                              - "aws:SecureTransport" = "false"
+                            }
+                        }
+                      - Effect    = "Deny"
+                      - Principal = "*"
+                      - Resource  = [
+                          - "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001",
+                          - "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001/*",
+                        ]
+                      - Sid       = "DenyInsecureTransport"
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+    }
+
+  # aws_s3_bucket_public_access_block.demo will be destroyed
+  - resource "aws_s3_bucket_public_access_block" "demo" {
+      - block_public_acls       = true -> null
+      - block_public_policy     = true -> null
+      - bucket                  = "aman-scaler-s18-20261014130350037300000001" -> null
+      - id                      = "aman-scaler-s18-20261014130350037300000001" -> null
+      - ignore_public_acls      = true -> null
+      - restrict_public_buckets = true -> null
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.demo will be destroyed
+  - resource "aws_s3_bucket_server_side_encryption_configuration" "demo" {
+      - bucket                = "aman-scaler-s18-20261014130350037300000001" -> null
+      - id                    = "aman-scaler-s18-20261014130350037300000001" -> null
+        # (1 unchanged attribute hidden)
+
+      - rule {
+          - bucket_key_enabled = false -> null
+
+          - apply_server_side_encryption_by_default {
+              - sse_algorithm     = "AES256" -> null
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+  # aws_s3_bucket_versioning.demo will be destroyed
+  - resource "aws_s3_bucket_versioning" "demo" {
+      - bucket                = "aman-scaler-s18-20261014130350037300000001" -> null
+      - id                    = "aman-scaler-s18-20261014130350037300000001" -> null
+        # (1 unchanged attribute hidden)
+
+      - versioning_configuration {
+          - status     = "Enabled" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+Plan: 0 to add, 0 to change, 6 to destroy.
+
+Changes to Outputs:
+  - bucket_arn  = "arn:aws:s3:::aman-scaler-s18-20261014130350037300000001" -> null
+  - bucket_name = "aman-scaler-s18-20261014130350037300000001" -> null
+  - region      = "ap-south-1" -> null
+
+Exit code: 0
+
+UTC 2026-10-14T13:05:02.484025+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe apply -input=false -no-color destroy.tfplan
+aws_s3_bucket_versioning.demo: Destroying... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_policy.tls_only: Destroying... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_public_access_block.demo: Destroying... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_ownership_controls.demo: Destroying... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_server_side_encryption_configuration.demo: Destroying... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket_versioning.demo: Destruction complete after 1s
+aws_s3_bucket_public_access_block.demo: Destruction complete after 1s
+aws_s3_bucket_ownership_controls.demo: Destruction complete after 1s
+aws_s3_bucket_policy.tls_only: Destruction complete after 1s
+aws_s3_bucket_server_side_encryption_configuration.demo: Destruction complete after 1s
+aws_s3_bucket.demo: Destroying... [id=aman-scaler-s18-20261014130350037300000001]
+aws_s3_bucket.demo: Destruction complete after 0s
+
+Apply complete! Resources: 0 added, 0 changed, 6 destroyed.
+
+Exit code: 0
+
+UTC 2026-10-14T13:05:08.191111+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe state list
+
+Exit code: 0
+
+UTC 2026-10-14T13:05:08.791646+00:00
+$ C:\Users\Aman\AppData\Local\Programs\Amazon\AWSCLIV2\aws.exe s3api head-bucket --bucket aman-scaler-s18-20261014130350037300000001
+
+aws: [ERROR]: An error occurred (404) when calling the HeadBucket operation: Not Found
+
+Exit code: 254
+
+UTC 2026-10-14T13:05:58.234007+00:00
+$ C:\Users\Aman\AppData\Local\Temp\scaler-devops-tools\terraform.exe destroy -input=false -auto-approve -no-color
+
+No changes. No objects need to be destroyed.
+
+Either you have not created any objects yet or the existing objects were
+already deleted outside of Terraform.
+
+Destroy complete! Resources: 0 destroyed.
+
+Exit code: 0
