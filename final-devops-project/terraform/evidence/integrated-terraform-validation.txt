@@ -1,0 +1,19 @@
+Success! The configuration is valid.
+
+tests\infrastructure.tftest.hcl... in progress
+  run "final_infrastructure_contract"... pass
+  run "reject_mutable_image_reference"... pass
+  run "reject_unpinned_chart_source"... pass
+tests\infrastructure.tftest.hcl... tearing down
+tests\infrastructure.tftest.hcl... pass
+
+Success! 3 passed, 0 failed.
+tests\security.tftest.hcl... in progress
+  run "network_compute_storage_security"... pass
+  run "reject_world_open_http"... pass
+  run "reject_incompatible_arm_instance"... pass
+  run "reject_oversized_ec2_user_data"... pass
+tests\security.tftest.hcl... tearing down
+tests\security.tftest.hcl... pass
+
+Success! 4 passed, 0 failed.

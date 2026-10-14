@@ -2,6 +2,12 @@
 
 This demo uses the public [devops-homework repository](https://github.com/ReaperXD67/devops-homework) as the desired-state source for the `devops-homework` Minikube cluster. Two Flux controllers reconcile a ConfigMap in the isolated `devops-gitops` namespace and the complete final application in `devops-final`. Both reconciliations were verified Ready with real Git revisions and HTTP responses.
 
+The separate [AWS final deployment](../terraform/README.md) was verified on 14 October 2026 on K3s `v1.35.9+k3s1`. Its Flux GitRepository and HelmRelease were Ready at source revision `77166ce59eff`, with chart `1.0.1+77166ce59eff`, two Ready application Pods in `cloud-final`, and the scanned image digest. The [actual cloud transcript](../terraform/evidence/aws-live.txt) records this Helm-controller deployment; the Minikube instructions and Kustomization drift evidence below describe the local environment.
+
+Cloud drift recovery was verified too: the live `cloud-app-config` ConfigMap changed to `APP_VERSION=drift-demo` at `13:24:27 UTC` and returned to `1.0.0-cloud` by `13:24:57 UTC`, through normal controller reconciliation. The same transcript records the Helm-controller's detected change, correction and subsequent in-sync state; no forced reconciliation or manual restoration was used.
+
+After verification, Terraform destroyed all 20 cloud resources and state was empty. The cloud transcript confirms terminated instances and removal of the VPC, bucket and tagged lab EBS volumes. The AWS cluster is no longer running; the evidence preserves the completed deployment and recovery.
+
 ## Architecture
 
 ```mermaid

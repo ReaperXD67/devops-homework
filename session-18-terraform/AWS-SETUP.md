@@ -72,7 +72,20 @@ This checklist comes from [the S3 configuration](terraform-s3-demo/main.tf) and 
 
 Some EC2 discovery/create operations require `Resource: "*"`; apply supported Region, request-tag and resource-tag conditions where possible. Account SCPs and permission boundaries may further restrict access. The **instance role** differs from the operator's provisioning role: the module gives EC2 Systems Manager access and read-only access to its own artifact bucket, without embedded keys.
 
-## 4. Follow each project's deployment and cleanup workflow
+## 4. Check the Free plan before repeating cloud work
+
+This lab remained on an active Free plan and all lab resources were removed after verification. Before a new run, inspect the current plan and available credits privately:
+
+```powershell
+& $awsCliPath freetier get-account-plan-state --profile scaler-lab --region us-east-1 `
+  --query '{Plan:accountPlanType,Status:accountPlanStatus,Credits:accountPlanRemainingCredits,Expires:accountPlanExpirationDate}'
+```
+
+Continue this credits-only exercise only while the plan is `FREE`, its status is `ACTIVE` and credits remain. Do not upgrade the plan or join an AWS Organization for this lab. The selected instance was reported eligible by AWS during this run; verify eligibility again before repeating it. Destroy each environment after collecting evidence. [AWS Free plan rules](https://docs.aws.amazon.com/en_en/awsaccountbilling/latest/aboutv2/free-tier-plans.html).
+
+For Unicode SSM output on Windows, set `$env:AWS_CLI_OUTPUT_ENCODING = 'utf-8'` before reading command results.
+
+## 5. Follow each project's deployment and cleanup workflow
 
 Continue with [Session 18](terraform-s3-demo/README.md), [Session 19](../session-19-cloud/README.md) and [the final project](../final-devops-project/terraform/README.md). For Session 19/final, set your real public IPv4 `/32` as `allowed_http_cidr` in an ignored `local.auto.tfvars`; the checked-in documentation address is not a usable client address.
 

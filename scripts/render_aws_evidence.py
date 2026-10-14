@@ -16,6 +16,13 @@ for slug, (title, relative) in SOURCES.items():
     lines = [x for x in source.read_text(encoding="utf-8").splitlines() if len(x) < 500 and patterns.search(x)]
     # Drop generic exit markers; command timestamps and actual outcomes stay visible.
     lines = [x for x in lines if not x.startswith("Exit code:")]
+    if slug == "final-cloud-aws":
+        important = re.compile(r"BOOTSTRAP_COMPLETE|READ_ONLY_CLOUD_CHECKS_COMPLETE|AUTOMATIC_FLUX|^Immediately|observed APP_VERSION|^targets |^up |^rules |^PASS: Prometheus|^HTTP/1.1 200|^\{\"application\"|^Destroy complete|^.*control-plane.*Ready|^.*Ready.*control-plane|^deployment.apps/(?:cloud-app|prometheus)|^\s*\"State\": \"terminated|^\$.*(?:state list|describe-vpcs|describe-volumes|head-bucket)|^\[\]$|404.*Not Found")
+        content = source.read_text(encoding="utf-8")
+        completed_bootstrap = content.rfind("\nstatus: done\n")
+        if completed_bootstrap >= 0:
+            content = content[completed_bootstrap:]
+        lines = [line for line in content.splitlines() if len(line) < 500 and important.search(line)]
     excerpt = "\n".join(lines[-65:])
     page = f'''<!doctype html><html lang="en"><meta charset="utf-8"><title>{html.escape(title)}</title>
 <style>body{{margin:0;padding:26px;background:#f4f6f8;color:#15222c;font-family:system-ui}}h1{{font-size:26px}}small,p{{font-size:13px}}pre{{background:white;border:1px solid #cad4db;border-radius:6px;padding:18px;font:12px/1.42 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}}</style>

@@ -1,0 +1,10 @@
+PASS: Terraform template rendering; Bash syntax; raw user data 9050/16384 bytes
+PASS: Node registration polling handles API startup failure, empty node list, later registration and bounded timeout
+PASS: YAML parsing (2 GitOps, 6 monitoring documents); network/discovery contracts
+==> Linting C:\Users\Aman\OneDrive\Desktop\Scaler\devops-homework\final-devops-project\helm
+[INFO] Chart.yaml: icon is recommended
+
+1 chart(s) linted, 0 chart(s) failed
+PASS: Flux build-metadata chart 1.0.1+ad0030e111ed; 26 valid metadata labels; helm.sh/chart=devops-app-1.0.1_ad0030e111ed
+PASS: Helm render, digest transformation for application and test hook, Traefik catch-all, non-root application
+OFFLINE ONLY: no live cloud, bootstrap execution, PromQL evaluation or Kubernetes API validation is claimed.

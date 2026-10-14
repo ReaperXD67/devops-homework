@@ -24,7 +24,11 @@ curl http://localhost:8200/metrics
 
 The [verification script](../final-devops-project/monitoring/verify.ps1) deliberately stopped the app. Prometheus recorded the `ApplicationDown` alert as **firing**. Restarting the app restored the target and the alert list became empty. See the [complete actual transcript](../final-devops-project/monitoring/evidence/run.txt) and [metrics/log state](../final-devops-project/monitoring/evidence/state.txt).
 
-Alert evaluation is demonstrated locally. Alertmanager/email/pager delivery is not configured and no notification to another person was sent.
+The outage, firing alert and recovery exercise was executed locally. Alertmanager/email/pager delivery is not configured and no notification to another person was sent.
+
+The [AWS final deployment](../final-devops-project/terraform/README.md) was also verified on 14 October 2026: two application Pods were Ready, Prometheus discovered two healthy targets with `up=1`, both alert rules were inactive, and Kubernetes returned Pod CPU/memory usage. The [cloud transcript](../final-devops-project/terraform/evidence/aws-live.txt) records these observations. The controlled outage and HPA load exercises retain their separate local evidence; this cloud health snapshot does not demonstrate those experiments.
+
+The ephemeral AWS lab was then removed: Terraform destroyed 20 resources and its state was empty. The same transcript verifies terminated instances, removal of the VPC and bucket, and no remaining tagged lab EBS volumes. The recorded cloud endpoint is no longer running.
 
 ## The three pillars
 
@@ -40,7 +44,9 @@ Observability lets an operator ask why a system behaves unexpectedly, rather tha
 
 [GitOps README](gitops/README.md) · [Flux manifests and actual evidence](../final-devops-project/gitops/README.md)
 
-Flux continuously pulls this public Git repository and applies its declarative desired state. The live ConfigMap was manually changed; Flux automatically restored the value from Git at the next reconciliation. This demonstrates Git as the source of truth and self-healing, with the commit revision and timestamps preserved in the logs.
+In the local Minikube demo, Flux continuously pulls this public Git repository and applies its declarative desired state. The live ConfigMap was manually changed; Flux automatically restored the value from Git at the next reconciliation. This demonstrates Git as the source of truth and self-healing, with the commit revision and timestamps preserved in the logs.
+
+The AWS HelmRelease also corrected a manual `APP_VERSION=drift-demo` change to `1.0.0-cloud` automatically in 30 seconds, from `13:24:27` to `13:24:57 UTC` on 14 October 2026. No manual reconciliation or restoration was used; the [cloud transcript](../final-devops-project/terraform/evidence/aws-live.txt) includes the observed values and Helm-controller correction logs.
 
 The four principles are declarative desired state, versioned/immutable history, automatic pulling, and continuous reconciliation. A Git review changes desired state; controllers reconcile it to the cluster. CI tests/builds artifacts while GitOps controllers handle desired-state delivery. Secrets should be supplied through a secret manager or encrypted workflow, never plaintext Git.
 
